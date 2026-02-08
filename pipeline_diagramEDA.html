@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EpiForecast-MX — Pipeline de Datos</title>
+<style>
+  /* ═══════════════════════════════════════════
+     CSS VARIABLES — IMSS Institutional Palette
+     ═══════════════════════════════════════════ */
+  :root {
+    --black: #231F20;
+    --burgundy: #9B2242;
+    --dark-burgundy: #6F1D46;
+    --cool-gray: #97999B;
+    --teal: #00524E;
+    --dark-teal: #173F35;
+    --cream: #E8D5B5;
+    --gold: #B58500;
+    --bg: #FDFBF7;
+    --card-bg: #FFFEFA;
+    --cream-light: #F5EDE0;
+  }
+
+  /* ═══════════════════════════════
+     RESET & BASE
+     ═══════════════════════════════ */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Geneva, sans-serif;
+    background: var(--bg);
+    color: var(--black);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ═══════════════════════════════
+     BACKGROUND TEXTURE
+     ═══════════════════════════════ */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 15% 10%, rgba(0, 82, 78, 0.04) 0%, transparent 50%),
+      radial-gradient(ellipse at 85% 90%, rgba(155, 34, 66, 0.03) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 50%, rgba(232, 213, 181, 0.15) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ═══════════════════════════════
+     HEADER
+     ═══════════════════════════════ */
+  .header {
+    position: relative;
+    background: linear-gradient(135deg, var(--dark-teal) 0%, var(--teal) 40%, #007A73 100%);
+    padding: 2.5rem 2rem 2rem;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 60px,
+        rgba(255,255,255,0.02) 60px,
+        rgba(255,255,255,0.02) 61px
+      ),
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 60px,
+        rgba(255,255,255,0.02) 60px,
+        rgba(255,255,255,0.02) 61px
+      );
+    pointer-events: none;
+  }
+
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, var(--burgundy), var(--gold), var(--burgundy));
+  }
+
+  .header-institutions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 1.2rem;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+  }
+
+  .institution-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px;
+    padding: 0.4rem 1rem;
+    color: rgba(255,255,255,0.9);
+    font-size: 0.85rem;
+    letter-spacing: 0.03em;
+    font-weight: 500;
+  }
+
+  .institution-badge svg { flex-shrink: 0; }
+
+  .header-divider {
+    width: 2px;
+    height: 24px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 1px;
+  }
+
+  .header h1 {
+    position: relative;
+    z-index: 1;
+    font-size: clamp(1.6rem, 4vw, 2.6rem);
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.02em;
+    margin-bottom: 0.3rem;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.2);
+  }
+
+  .header h1 span {
+    color: var(--gold);
+    font-weight: 300;
+  }
+
+  .header-subtitle {
+    position: relative;
+    z-index: 1;
+    color: rgba(255,255,255,0.75);
+    font-size: clamp(0.85rem, 2vw, 1.05rem);
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* ═══════════════════════════════
+     PIPELINE CONTAINER
+     ═══════════════════════════════ */
+  .pipeline-wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 2rem;
+  }
+
+  .pipeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    align-items: center;
+  }
+
+  /* ═══════════════════════════════
+     STAGE CARD — STATIC
+     ═══════════════════════════════ */
+  .stage {
+    position: relative;
+    width: 100%;
+    max-width: 720px;
+    background: var(--card-bg);
+    border: 1px solid rgba(151, 153, 155, 0.2);
+    border-radius: 16px;
+    padding: 1.8rem 2rem;
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 1.5rem;
+    align-items: start;
+    box-shadow:
+      0 1px 3px rgba(35, 31, 32, 0.04),
+      0 4px 16px rgba(35, 31, 32, 0.03);
+  }
+
+  /* Left accent bar */
+  .stage::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 5px;
+    height: 100%;
+    border-radius: 16px 0 0 16px;
+  }
+
+  .stage[data-stage="source"]::before    { background: var(--burgundy); }
+  .stage[data-stage="extract"]::before   { background: var(--dark-burgundy); }
+  .stage[data-stage="eda"]::before       { background: var(--gold); }
+  .stage[data-stage="clean"]::before     { background: var(--teal); }
+  .stage[data-stage="transform"]::before { background: var(--dark-teal); }
+  .stage[data-stage="dataset"]::before   { background: var(--teal); }
+  .stage[data-stage="model"]::before     { background: linear-gradient(180deg, var(--cool-gray), var(--burgundy)); }
+
+  /* ═══════════════════════════════
+     ICON BOX
+     ═══════════════════════════════ */
+  .stage-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  .stage-icon svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  .stage[data-stage="source"] .stage-icon    { background: linear-gradient(135deg, #9B2242, #B83A5A); }
+  .stage[data-stage="extract"] .stage-icon   { background: linear-gradient(135deg, #6F1D46, #8B3060); }
+  .stage[data-stage="eda"] .stage-icon       { background: linear-gradient(135deg, #B58500, #D4A017); }
+  .stage[data-stage="clean"] .stage-icon     { background: linear-gradient(135deg, #00524E, #007A73); }
+  .stage[data-stage="transform"] .stage-icon { background: linear-gradient(135deg, #173F35, #1E5A4C); }
+  .stage[data-stage="dataset"] .stage-icon   { background: linear-gradient(135deg, #00524E, #00796F); }
+  .stage[data-stage="model"] .stage-icon     { background: linear-gradient(135deg, #97999B, #B0B2B4); }
+
+  /* Number badge */
+  .stage-number {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--black);
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--card-bg);
+    z-index: 2;
+  }
+
+  /* ═══════════════════════════════
+     STAGE CONTENT
+     ═══════════════════════════════ */
+  .stage-content { min-width: 0; }
+
+  .stage-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--dark-teal);
+    margin-bottom: 0.6rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+
+  .stage-title .tag {
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 0.15rem 0.55rem;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .tag-output {
+    background: rgba(0, 82, 78, 0.1);
+    color: var(--teal);
+  }
+
+  .tag-future {
+    background: rgba(155, 34, 66, 0.1);
+    color: var(--burgundy);
+    animation: pulseBadge 2.5s ease-in-out infinite;
+  }
+
+  @keyframes pulseBadge {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.6; }
+  }
+
+  .stage-bullets {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .stage-bullets li {
+    position: relative;
+    padding-left: 1.2rem;
+    font-size: 0.88rem;
+    color: #4A4547;
+    line-height: 1.55;
+  }
+
+  .stage-bullets li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--cool-gray);
+  }
+
+  .stage-bullets li strong {
+    color: var(--black);
+    font-weight: 600;
+  }
+
+  .stage-bullets li code {
+    font-family: 'Consolas', 'SF Mono', 'Fira Code', monospace;
+    background: rgba(0, 82, 78, 0.07);
+    color: var(--dark-teal);
+    padding: 0.1em 0.4em;
+    border-radius: 4px;
+    font-size: 0.82em;
+    font-weight: 500;
+  }
+
+  /* ═══════════════════════════════
+     DETAIL BOX — ALWAYS VISIBLE
+     ═══════════════════════════════ */
+  .stage-detail {
+    margin-top: 0.7rem;
+  }
+
+  .stage-detail-inner {
+    background: var(--cream-light);
+    border-radius: 8px;
+    padding: 0.7rem 1rem;
+    font-size: 0.8rem;
+    color: #5A5658;
+    border-left: 3px solid var(--gold);
+    line-height: 1.5;
+  }
+
+  .stage-detail-inner strong {
+    color: var(--dark-teal);
+  }
+
+  /* ═══════════════════════════════
+     CONNECTOR ARROWS
+     ═══════════════════════════════ */
+  .connector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 52px;
+    position: relative;
+    width: 100%;
+    max-width: 720px;
+  }
+
+  .connector-line {
+    width: 2px;
+    flex: 1;
+    background: linear-gradient(180deg, var(--cool-gray), rgba(151, 153, 155, 0.3));
+    position: relative;
+    overflow: hidden;
+  }
+
+  .connector-line::after {
+    content: '';
+    position: absolute;
+    top: -100%;
+    left: -1px;
+    width: 4px;
+    height: 40%;
+    background: linear-gradient(180deg, transparent, var(--teal), transparent);
+    border-radius: 2px;
+    animation: flowDown 2s ease-in-out infinite;
+  }
+
+  @keyframes flowDown {
+    0%   { top: -40%; opacity: 0; }
+    20%  { opacity: 1; }
+    80%  { opacity: 1; }
+    100% { top: 100%; opacity: 0; }
+  }
+
+  .connector:nth-of-type(1) .connector-line::after { animation-delay: 0s; }
+  .connector:nth-of-type(2) .connector-line::after { animation-delay: 0.3s; }
+  .connector:nth-of-type(3) .connector-line::after { animation-delay: 0.6s; }
+  .connector:nth-of-type(4) .connector-line::after { animation-delay: 0.9s; }
+  .connector:nth-of-type(5) .connector-line::after { animation-delay: 1.2s; }
+  .connector:nth-of-type(6) .connector-line::after { animation-delay: 1.5s; }
+
+  .connector-arrow {
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 8px solid var(--cool-gray);
+  }
+
+  /* ═══════════════════════════════
+     DASHED CONNECTOR (before future)
+     ═══════════════════════════════ */
+  .connector--dashed .connector-line {
+    background: repeating-linear-gradient(
+      180deg,
+      var(--cool-gray) 0px,
+      var(--cool-gray) 4px,
+      transparent 4px,
+      transparent 10px
+    );
+  }
+
+  .connector--dashed .connector-line::after { display: none; }
+
+  .connector--dashed .connector-arrow { opacity: 0.45; }
+
+  /* ═══════════════════════════════
+     MODEL STAGE (FUTURE) — STATIC
+     ═══════════════════════════════ */
+  .stage--future {
+    border-style: dashed;
+    border-color: rgba(151, 153, 155, 0.35);
+    border-width: 2px;
+    opacity: 0.75;
+    background: repeating-linear-gradient(
+      -45deg,
+      var(--card-bg),
+      var(--card-bg) 12px,
+      rgba(151, 153, 155, 0.03) 12px,
+      rgba(151, 153, 155, 0.03) 24px
+    );
+  }
+
+  .stage--future .stage-title {
+    color: var(--cool-gray);
+  }
+
+  /* ═══════════════════════════════
+     STATS BAR
+     ═══════════════════════════════ */
+  .stats-bar {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    max-width: 720px;
+    margin: 2.5rem auto 0;
+    padding: 1.2rem 1.5rem;
+    background: linear-gradient(135deg, var(--dark-teal), var(--teal));
+    border-radius: 12px;
+  }
+
+  .stat-item {
+    text-align: center;
+    color: #fff;
+    min-width: 100px;
+  }
+
+  .stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    display: block;
+    letter-spacing: -0.02em;
+  }
+
+  .stat-value .accent { color: var(--gold); }
+
+  .stat-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    opacity: 0.75;
+    margin-top: 0.15rem;
+    display: block;
+  }
+
+  /* ═══════════════════════════════
+     FOOTER
+     ═══════════════════════════════ */
+  .footer {
+    text-align: center;
+    padding: 2rem 1rem;
+    color: var(--cool-gray);
+    font-size: 0.8rem;
+    letter-spacing: 0.04em;
+    border-top: 1px solid rgba(151, 153, 155, 0.15);
+    margin-top: 3rem;
+  }
+
+  .footer span {
+    color: var(--dark-teal);
+    font-weight: 600;
+  }
+
+  .footer-line {
+    display: inline-block;
+    width: 24px;
+    height: 2px;
+    background: var(--gold);
+    vertical-align: middle;
+    margin: 0 0.6rem;
+    border-radius: 1px;
+  }
+
+  /* ═══════════════════════════════
+     RESPONSIVE
+     ═══════════════════════════════ */
+  @media (max-width: 768px) {
+    .stage {
+      grid-template-columns: 48px 1fr;
+      gap: 1rem;
+      padding: 1.3rem 1.2rem;
+    }
+
+    .stage-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+    }
+
+    .stage-icon svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .stage-number {
+      width: 18px;
+      height: 18px;
+      font-size: 0.6rem;
+      top: -4px;
+      right: -4px;
+    }
+
+    .stage-title { font-size: 1rem; }
+
+    .stage-bullets li { font-size: 0.82rem; }
+
+    .pipeline-wrapper { padding: 2rem 1rem 1rem; }
+
+    .header { padding: 1.8rem 1rem 1.5rem; }
+
+    .stats-bar {
+      gap: 1.2rem;
+      padding: 1rem;
+    }
+
+    .stat-value { font-size: 1.2rem; }
+
+    .header-institutions { gap: 0.8rem; }
+
+    .header-divider { display: none; }
+  }
+
+  @media (max-width: 480px) {
+    .stage {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+
+    .stage-icon { margin: 0 auto; }
+
+    .stage-bullets li { text-align: left; }
+
+    .stats-bar { gap: 1rem; }
+
+    .stat-item { min-width: 80px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════ HEADER ══════════════ -->
+<header class="header">
+  <div class="header-institutions">
+    <div class="institution-badge">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 10l10-7 10 7"/><path d="M4 10v10h16V10"/><path d="M10 20v-6h4v6"/><path d="M3 10h18"/></svg>
+      Tecnológico de Monterrey
+    </div>
+    <div class="header-divider"></div>
+    <div class="institution-badge">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      IMSS — Instituto Mexicano del Seguro Social
+    </div>
+  </div>
+  <h1>EpiForecast-MX <span>—</span> Pipeline de Datos</h1>
+  <p class="header-subtitle">Pronóstico Epidemiológico de Enfermedades Neurológicas y de Salud Mental</p>
+</header>
+
+<!-- ══════════════ PIPELINE ══════════════ -->
+<div class="pipeline-wrapper">
+  <div class="pipeline">
+
+    <!-- ────── 1. FUENTE DE DATOS ────── -->
+    <div class="stage" data-stage="source">
+      <div class="stage-icon">
+        <span class="stage-number">1</span>
+        <svg viewBox="0 0 32 32" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="6" y="3" width="20" height="26" rx="2"/>
+          <path d="M10 8h12M10 12h12M10 16h8"/>
+          <path d="M6 22h20" stroke-opacity="0.4"/>
+          <path d="M13 25h6" stroke-opacity="0.3"/>
+        </svg>
+      </div>
+      <div class="stage-content">
+        <h3 class="stage-title">Fuente de Datos</h3>
+        <ul class="stage-bullets">
+          <li>Boletines Epidemiológicos (<strong>PDFs no estructurados</strong>) del SINAVE</li>
+          <li><strong>Cuadro 17</strong>: Enfermedades Neurológicas y de Salud Mental</li>
+          <li>Periodo: <strong>2012–2025</strong>, cobertura nacional de 32 entidades federativas</li>
+          <li>Publicación semanal por la Dirección General de Epidemiología</li>
+        </ul>
+        <div class="stage-detail">
+          <div class="stage-detail-inner">
+            <strong>Formato:</strong> Cada boletín contiene múltiples cuadros estadísticos. El Cuadro 17 reporta casos acumulados por entidad, sexo y padecimiento.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="connector"><div class="connector-line"></div><div class="connector-arrow"></div></div>
+
+    <!-- ────── 2. EXTRACCIÓN ────── -->
+    <div class="stage" data-stage="extract">
+      <div class="stage-icon">
+        <span class="stage-number">2</span>
+        <svg viewBox="0 0 32 32" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="16" cy="16" r="6"/>
+          <path d="M16 6v2M16 24v2M6 16h2M24 16h2"/>
+          <path d="M9.5 9.5l1.4 1.4M21.1 21.1l1.4 1.4M9.5 22.5l1.4-1.4M21.1 10.9l1.4-1.4"/>
+          <circle cx="16" cy="16" r="2" fill="#fff"/>
+        </svg>
+      </div>
+      <div class="stage-content">
+        <h3 class="stage-title">
+          Extracción
+          <span class="tag tag-output">~60K registros</span>
+        </h3>
+        <ul class="stage-bullets">
+          <li>Lectura de tablas desde PDF con <code>camelot-py</code> + <code>OpenCV</code></li>
+          <li>Identificación automática del Cuadro 17 en cada boletín semanal</li>
+          <li>Construcción del DataFrame base consolidado</li>
+          <li>Output: <strong>~60,000 registros × 8 columnas</strong></li>
+        </ul>
+        <div class="stage-detail">
+          <div class="stage-detail-inner">
+            <strong>Columnas:</strong> Padecimiento, Entidad, Semana Epidemiológica, Año, Hombres, Mujeres, Casos Semana, Acumulado Año Anterior.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="connector"><div class="connector-line"></div><div class="connector-arrow"></div></div>
+
+    <!-- ────── 3. EDA ────── -->
+    <div class="stage" data-stage="eda">
+      <div class="stage-icon">
+        <span class="stage-number">3</span>
+        <svg viewBox="0 0 32 32" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="13" cy="13" r="8"/>
+          <path d="M19 19l7 7"/>
+          <path d="M9 13h8M13 9v8" stroke-opacity="0.5"/>
+        </svg>
+      </div>
+      <div class="stage-content">
+        <h3 class="stage-title">Análisis Exploratorio (EDA)</h3>
+        <ul class="stage-bullets">
+          <li>Evaluación de calidad: nulos (<strong>~1%</strong>), duplicados, tipos de datos</li>
+          <li>Estadísticas descriptivas extendidas (sesgo, curtosis, CV)</li>
+          <li>Análisis univariante, bivariante, temporal y geográfico</li>
+          <li>Anomalías detectadas: <strong>33 entidades</strong> (esperadas 32), semana 53, pico 2016</li>
+        </ul>
+        <div class="stage-detail">
+          <div class="stage-detail-inner">
+            <strong>Hallazgo clave:</strong> "Distrito Federal" aparece como entidad separada de "Ciudad de México", generando 33 entidades en lugar de 32.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="connector"><div class="connector-line"></div><div class="connector-arrow"></div></div>
+
+    <!-- ────── 4. LIMPIEZA ────── -->
+    <div class="stage" data-stage="clean">
+      <div class="stage-icon">
+        <span class="stage-number">4</span>
+        <svg viewBox="0 0 32 32" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8 6l2 20h12l2-20"/>
+          <path d="M5 6h22"/>
+          <path d="M12 6V4h8v2"/>
+          <path d="M13 11v10M19 11v10" stroke-opacity="0.5"/>
+        </svg>
+      </div>
+      <div class="stage-content">
+        <h3 class="stage-title">Limpieza</h3>
+        <ul class="stage-bullets">
+          <li>Normalización de entidades: "Distrito Federal" → "Ciudad de México" (<strong>33 → 32</strong>)</li>
+          <li>Filtrado por padecimiento: Depresión, Parkinson, Alzheimer</li>
+          <li>Eliminación de <code>Acumulado_anio_anterior</code> (correlación <strong>0.97</strong>)</li>
+          <li>Eliminación de <code>Casos_semana</code> por inconsistencias detectadas</li>
+        </ul>
+        <div class="stage-detail">
+          <div class="stage-detail-inner">
+            <strong>Criterio:</strong> Columnas con correlación &gt; 0.95 o con inconsistencias verificadas se eliminan para evitar multicolinealidad y ruido.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="connector"><div class="connector-line"></div><div class="connector-arrow"></div></div>
+
+    <!-- ────── 5. TRANSFORMACIÓN ────── -->
+    <div class="stage" data-stage="transform">
+      <div class="stage-icon">
+        <span class="stage-number">5</span>
+        <svg viewBox="0 0 32 32" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 10h10l-4-4"/>
+          <path d="M6 10l4 4" stroke-opacity="0.5"/>
+          <path d="M26 22H16l4 4"/>
+          <path d="M26 22l-4-4" stroke-opacity="0.5"/>
+          <path d="M16 6v6M16 20v6" stroke-dasharray="2 2" stroke-opacity="0.3"/>
+        </svg>
+      </div>
+      <div class="stage-content">
+        <h3 class="stage-title">Transformación</h3>
+        <ul class="stage-bullets">
+          <li>Corrimiento de semanas epidemiológicas (datos reportados = semana anterior)</li>
+          <li>Conversión de <strong>acumulados a incrementos semanales</strong> por sexo</li>
+          <li>Asignación de fechas con estándar ISO; corrección de valores negativos</li>
+          <li>Tratamiento de outliers con <strong>IQR</strong>; feature engineering: <strong>Región geográfica</strong></li>
+        </ul>
+        <div class="stage-detail">
+          <div class="stage-detail-inner">
+            <strong>Regiones:</strong> Norte, Occidente, Centro y Sureste — agrupación geográfica para análisis subnacional.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="connector"><div class="connector-line"></div><div class="connector-arrow"></div></div>
+
+    <!-- ────── 6. DATASET LIMPIO ────── -->
+    <div class="stage" data-stage="dataset">
+      <div class="stage-icon">
+        <span class="stage-number">6</span>
+        <svg viewBox="0 0 32 32" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <ellipse cx="16" cy="9" rx="10" ry="4"/>
+          <path d="M6 9v14c0 2.2 4.5 4 10 4s10-1.8 10-4V9"/>
+          <path d="M6 16c0 2.2 4.5 4 10 4s10-1.8 10-4" stroke-opacity="0.5"/>
+          <path d="M13 9l2 2 4-4" stroke-width="2.5"/>
+        </svg>
+      </div>
+      <div class="stage-content">
+        <h3 class="stage-title">
+          Dataset Limpio
+          <span class="tag tag-output">Listo para modelado</span>
+        </h3>
+        <ul class="stage-bullets">
+          <li>DataFrame por padecimiento: <code>Fecha</code>, <code>Entidad</code>, <code>Incrementos_H</code>, <code>Incrementos_M</code>, <code>Región</code></li>
+          <li>Sin valores nulos — series de tiempo coherentes y validadas</li>
+          <li>Versionado con <strong>DVC</strong> y almacenamiento remoto en <strong>S3</strong></li>
+          <li>Listo para alimentar modelos de pronóstico multi-step</li>
+        </ul>
+        <div class="stage-detail">
+          <div class="stage-detail-inner">
+            <strong>Reproducibilidad:</strong> Pipeline completo orquestado con Makefile — desde extracción hasta dataset final ejecutable con un solo comando.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dashed connector to future -->
+    <div class="connector connector--dashed">
+      <div class="connector-line"></div>
+      <div class="connector-arrow"></div>
+    </div>
+
+    <!-- ────── 7. MODELADO (FUTURO) ────── -->
+    <div class="stage stage--future" data-stage="model">
+      <div class="stage-icon">
+        <span class="stage-number">7</span>
+        <svg viewBox="0 0 32 32" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="16" cy="14" r="8"/>
+          <path d="M12 12c0-2.2 1.8-4 4-4"/>
+          <path d="M16 22v5M12 25h8"/>
+          <path d="M10 14a6 6 0 0 0 12 0" stroke-opacity="0.4"/>
+          <circle cx="14" cy="13" r="1" fill="#fff" opacity="0.6"/>
+          <circle cx="18" cy="11" r="1" fill="#fff" opacity="0.6"/>
+          <circle cx="16" cy="15" r="1" fill="#fff" opacity="0.6"/>
+        </svg>
+      </div>
+      <div class="stage-content">
+        <h3 class="stage-title">
+          Modelado
+          <span class="tag tag-future">Próximo paso</span>
+        </h3>
+        <ul class="stage-bullets">
+          <li><strong>Prophet</strong> para pronóstico multi-step con intervalos de predicción</li>
+          <li>Desagregación por sexo y entidad federativa (32 × 2 × 3 modelos)</li>
+          <li>Evaluación con métricas de series de tiempo: MAE, RMSE, MAPE, cobertura</li>
+          <li>Generación de pronósticos para planificación estratégica del IMSS</li>
+        </ul>
+        <div class="stage-detail">
+          <div class="stage-detail-inner">
+            <strong>Decisión de diseño:</strong> Prophet supera a ML tradicional (RF, XGBoost) por acumulación progresiva de error en esquemas recursivos multi-step.
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /pipeline -->
+
+  <!-- ══════════════ STATS BAR ══════════════ -->
+  <div class="stats-bar">
+    <div class="stat-item">
+      <span class="stat-value">60<span class="accent">,</span>288</span>
+      <span class="stat-label">Registros</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-value">32</span>
+      <span class="stat-label">Entidades</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-value">3</span>
+      <span class="stat-label">Padecimientos</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-value">12<span class="accent">+</span></span>
+      <span class="stat-label">Años de datos</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-value"><span class="accent">♀♂</span></span>
+      <span class="stat-label">Desagregado por sexo</span>
+    </div>
+  </div>
+
+</div><!-- /pipeline-wrapper -->
+
+<!-- ══════════════ FOOTER ══════════════ -->
+<footer class="footer">
+  <span>Equipo 01</span>
+  <span class="footer-line"></span>
+  Maestría en Inteligencia Artificial Aplicada
+  <span class="footer-line"></span>
+  <span>2026</span>
+</footer>
+
+</body>
+</html>

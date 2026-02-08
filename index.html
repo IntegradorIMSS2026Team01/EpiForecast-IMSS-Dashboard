@@ -1,0 +1,1516 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EpiForecast-MX — Pronósticos Epidemiológicos Inteligentes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ═══════════════════════════════════════════════════════════════════
+       IMSS INSTITUTIONAL COLOR SYSTEM
+       Guía Cromática Institucional del IMSS — PANTONE to HEX
+       ═══════════════════════════════════════════════════════════════════ */
+    :root {
+      --neutral-black:  #231F20;   /* PANTONE Neutral Black C   */
+      --burgundy:       #9B2242;   /* PANTONE 7420 C            */
+      --dark-burgundy:  #6F1D46;   /* PANTONE 7421 C            */
+      --cool-gray:      #97999B;   /* PANTONE Cool Gray C       */
+      --teal:           #00524E;   /* PANTONE IMSS 561 C        */
+      --dark-teal:      #173F35;   /* PANTONE 627 C             */
+      --cream:          #E8D5B5;   /* PANTONE 7402 C            */
+      --gold:           #B58500;   /* PANTONE 1255 C            */
+
+      /* Derived / utility */
+      --cream-light:    #F5EDE0;
+      --cream-pale:     #FAF6F0;
+      --teal-glow:      rgba(0,82,78,0.08);
+      --burgundy-glow:  rgba(155,34,66,0.06);
+      --gold-glow:      rgba(181,133,0,0.10);
+
+      /* Typography */
+      --font-display:   'DM Serif Display', Georgia, serif;
+      --font-body:      'Source Sans 3', 'Source Sans Pro', sans-serif;
+      --font-mono:      'JetBrains Mono', 'Fira Code', monospace;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       RESET & BASE
+       ═══════════════════════════════════════════════════════════════════ */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      font-family: var(--font-body);
+      color: var(--neutral-black);
+      background: var(--cream-pale);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    img, svg { display: block; max-width: 100%; }
+    a { color: var(--teal); text-decoration: none; transition: color .2s; }
+    a:hover { color: var(--burgundy); }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       NOISE TEXTURE OVERLAY
+       ═══════════════════════════════════════════════════════════════════ */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       NAVIGATION
+       ═══════════════════════════════════════════════════════════════════ */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(23,63,53, 0.96);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(232,213,181,0.1);
+      transition: box-shadow .3s;
+    }
+    .nav.scrolled { box-shadow: 0 4px 30px rgba(0,0,0,0.15); }
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      color: var(--cream);
+      letter-spacing: 0.02em;
+    }
+    .nav-logo span { color: var(--gold); }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      color: rgba(232,213,181,0.7);
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--cream); }
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .nav-hamburger span {
+      width: 24px;
+      height: 2px;
+      background: var(--cream);
+      transition: transform .3s, opacity .3s;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       HERO
+       ═══════════════════════════════════════════════════════════════════ */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      background: linear-gradient(160deg, var(--dark-teal) 0%, var(--teal) 40%, var(--dark-burgundy) 100%);
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 20% 80%, rgba(155,34,66,0.25), transparent),
+        radial-gradient(ellipse 50% 60% at 80% 20%, rgba(181,133,0,0.15), transparent);
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 200px;
+      background: linear-gradient(to top, var(--cream-pale), transparent);
+      z-index: 2;
+    }
+
+    /* Animated grid pattern */
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(232,213,181,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(232,213,181,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      animation: gridDrift 30s linear infinite;
+    }
+    @keyframes gridDrift {
+      to { background-position: 60px 60px; }
+    }
+
+    /* Floating orbs */
+    .hero-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      animation: orbFloat 12s ease-in-out infinite;
+    }
+    .hero-orb--1 {
+      width: 500px; height: 500px;
+      background: rgba(155,34,66,0.2);
+      top: -10%; left: -5%;
+      animation-delay: -2s;
+    }
+    .hero-orb--2 {
+      width: 400px; height: 400px;
+      background: rgba(181,133,0,0.15);
+      bottom: 10%; right: -5%;
+      animation-delay: -6s;
+      animation-duration: 16s;
+    }
+    .hero-orb--3 {
+      width: 300px; height: 300px;
+      background: rgba(0,82,78,0.25);
+      top: 40%; left: 50%;
+      animation-delay: -4s;
+      animation-duration: 14s;
+    }
+    @keyframes orbFloat {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(30px, -20px) scale(1.05); }
+      66% { transform: translate(-20px, 15px) scale(0.95); }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 3;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 8rem 2rem 10rem;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(232,213,181,0.1);
+      border: 1px solid rgba(232,213,181,0.2);
+      border-radius: 100px;
+      padding: 0.4rem 1.2rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--cream);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+      animation: fadeSlideUp 0.8s ease-out both;
+    }
+    .hero-badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--gold);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.4); }
+    }
+
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      line-height: 1.05;
+      color: var(--cream);
+      margin-bottom: 1.5rem;
+      animation: fadeSlideUp 0.8s ease-out 0.15s both;
+    }
+    .hero h1 .accent { color: var(--gold); }
+
+    .hero-sub {
+      font-size: clamp(1.1rem, 2vw, 1.35rem);
+      color: rgba(232,213,181,0.75);
+      max-width: 640px;
+      line-height: 1.8;
+      font-weight: 300;
+      margin-bottom: 3rem;
+      animation: fadeSlideUp 0.8s ease-out 0.3s both;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 3rem;
+      flex-wrap: wrap;
+      animation: fadeSlideUp 0.8s ease-out 0.45s both;
+    }
+    .hero-stat {
+      text-align: left;
+    }
+    .hero-stat-value {
+      font-family: var(--font-display);
+      font-size: 2.6rem;
+      color: var(--cream);
+      line-height: 1.1;
+    }
+    .hero-stat-label {
+      font-size: 0.8rem;
+      color: rgba(232,213,181,0.5);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 600;
+      margin-top: 0.25rem;
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: rgba(232,213,181,0.4);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      animation: fadeSlideUp 0.8s ease-out 0.6s both;
+    }
+    .hero-scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%, 100% { transform: scaleY(1); opacity: 0.6; }
+      50% { transform: scaleY(0.5); opacity: 1; }
+    }
+
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       SECTIONS COMMON
+       ═══════════════════════════════════════════════════════════════════ */
+    .section {
+      padding: 7rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--burgundy);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .section-label::before {
+      content: '';
+      width: 32px;
+      height: 2px;
+      background: var(--burgundy);
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3rem);
+      color: var(--dark-teal);
+      line-height: 1.15;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-desc {
+      font-size: 1.1rem;
+      color: var(--cool-gray);
+      max-width: 680px;
+      line-height: 1.8;
+      font-weight: 300;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       ABOUT / CONTEXT
+       ═══════════════════════════════════════════════════════════════════ */
+    .about {
+      background: white;
+      border-top: 4px solid var(--teal);
+    }
+    .about .section { padding: 5rem 2rem; }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      margin-top: 3rem;
+      align-items: start;
+    }
+    .about-text p {
+      margin-bottom: 1.5rem;
+      font-size: 1.05rem;
+      line-height: 1.85;
+      color: #444;
+    }
+    .about-text strong { color: var(--teal); }
+
+    .about-card {
+      background: var(--cream-pale);
+      border-radius: 16px;
+      padding: 2.5rem;
+      border: 1px solid rgba(232,213,181,0.5);
+      position: relative;
+      overflow: hidden;
+    }
+    .about-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--burgundy), var(--gold));
+    }
+    .about-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      color: var(--dark-teal);
+      margin-bottom: 1.5rem;
+    }
+    .collab-logos {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+    .collab-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      background: white;
+      border-radius: 10px;
+      border: 1px solid rgba(0,82,78,0.08);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .collab-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+    }
+    .collab-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+    .collab-icon--imss { background: linear-gradient(135deg, var(--teal), var(--dark-teal)); color: white; }
+    .collab-icon--tec  { background: linear-gradient(135deg, var(--burgundy), var(--dark-burgundy)); color: white; }
+    .collab-icon--sinave { background: linear-gradient(135deg, var(--gold), #D4A017); color: white; }
+    .collab-name {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--neutral-black);
+    }
+    .collab-role {
+      font-size: 0.8rem;
+      color: var(--cool-gray);
+      margin-top: 0.15rem;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       DISEASES
+       ═══════════════════════════════════════════════════════════════════ */
+    .diseases { padding-top: 2rem; }
+    .disease-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-top: 3.5rem;
+    }
+    .disease-card {
+      position: relative;
+      background: white;
+      border-radius: 20px;
+      padding: 2.5rem 2rem 2rem;
+      border: 1px solid rgba(0,0,0,0.05);
+      overflow: hidden;
+      transition: transform .3s ease, box-shadow .3s ease;
+    }
+    .disease-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+    }
+    .disease-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+    }
+    .disease-card--dep::before { background: var(--burgundy); }
+    .disease-card--par::before { background: var(--teal); }
+    .disease-card--alz::before { background: var(--gold); }
+
+    .disease-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+    .disease-card--dep .disease-icon { background: var(--burgundy-glow); }
+    .disease-card--par .disease-icon { background: var(--teal-glow); }
+    .disease-card--alz .disease-icon { background: var(--gold-glow); }
+
+    .disease-icon svg { width: 28px; height: 28px; }
+    .disease-card--dep .disease-icon svg { color: var(--burgundy); }
+    .disease-card--par .disease-icon svg { color: var(--teal); }
+    .disease-card--alz .disease-icon svg { color: var(--gold); }
+
+    .disease-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      margin-bottom: 0.75rem;
+    }
+    .disease-card--dep h3 { color: var(--burgundy); }
+    .disease-card--par h3 { color: var(--teal); }
+    .disease-card--alz h3 { color: var(--gold); }
+
+    .disease-card p {
+      font-size: 0.95rem;
+      color: #666;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    .disease-tag {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+      font-weight: 500;
+    }
+    .disease-card--dep .disease-tag { background: var(--burgundy-glow); color: var(--burgundy); }
+    .disease-card--par .disease-tag { background: var(--teal-glow); color: var(--teal); }
+    .disease-card--alz .disease-tag { background: var(--gold-glow); color: var(--gold); }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       PIPELINE
+       ═══════════════════════════════════════════════════════════════════ */
+    .pipeline-bg {
+      background: var(--dark-teal);
+      position: relative;
+      overflow: hidden;
+    }
+    .pipeline-bg::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 0% 0%, rgba(155,34,66,0.12), transparent 50%),
+        radial-gradient(ellipse at 100% 100%, rgba(181,133,0,0.1), transparent 50%);
+    }
+    .pipeline-bg .section-label { color: var(--gold); }
+    .pipeline-bg .section-label::before { background: var(--gold); }
+    .pipeline-bg .section-title { color: var(--cream); }
+    .pipeline-bg .section-desc { color: rgba(232,213,181,0.55); }
+
+    .pipeline-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      margin-top: 3.5rem;
+      position: relative;
+    }
+
+    .pipeline-step {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(232,213,181,0.1);
+      border-radius: 16px;
+      padding: 2rem 1.5rem;
+      position: relative;
+      transition: background .3s, border-color .3s;
+    }
+    .pipeline-step:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(232,213,181,0.2);
+    }
+
+    .step-number {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      color: rgba(232,213,181,0.08);
+      position: absolute;
+      top: 1rem;
+      right: 1.5rem;
+      line-height: 1;
+    }
+
+    .step-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(232,213,181,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+    }
+    .step-icon svg { width: 22px; height: 22px; color: var(--gold); }
+
+    .pipeline-step h4 {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      color: var(--cream);
+      margin-bottom: 0.75rem;
+    }
+    .pipeline-step p {
+      font-size: 0.88rem;
+      color: rgba(232,213,181,0.5);
+      line-height: 1.7;
+    }
+
+    .step-tech {
+      margin-top: 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+    .step-tech span {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      background: rgba(181,133,0,0.12);
+      color: var(--gold);
+      padding: 0.25rem 0.6rem;
+      border-radius: 4px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       METHODOLOGY
+       ═══════════════════════════════════════════════════════════════════ */
+    .method-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-top: 3.5rem;
+    }
+    .method-card {
+      background: white;
+      border-radius: 16px;
+      padding: 2.5rem;
+      border: 1px solid rgba(0,0,0,0.05);
+      transition: transform .3s, box-shadow .3s;
+    }
+    .method-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.06);
+    }
+    .method-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      color: var(--dark-teal);
+      margin-bottom: 1rem;
+    }
+    .method-card p {
+      font-size: 0.95rem;
+      color: #666;
+      line-height: 1.75;
+    }
+    .method-card .method-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: var(--teal-glow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+    }
+    .method-card .method-icon svg { width: 24px; height: 24px; color: var(--teal); }
+
+    .method-highlight {
+      background: linear-gradient(135deg, var(--cream-pale), rgba(232,213,181,0.3));
+      border-color: rgba(232,213,181,0.4);
+      grid-column: 1 / -1;
+    }
+    .method-highlight h3 { color: var(--burgundy); }
+    .method-highlight .method-icon {
+      background: var(--burgundy-glow);
+    }
+    .method-highlight .method-icon svg { color: var(--burgundy); }
+
+    .method-features {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1.25rem;
+      margin-top: 1.25rem;
+    }
+    .method-feature {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+    }
+    .method-feature-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--burgundy);
+      margin-top: 0.5rem;
+      flex-shrink: 0;
+    }
+    .method-feature span {
+      font-size: 0.88rem;
+      color: #555;
+      line-height: 1.5;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       TEAM
+       ═══════════════════════════════════════════════════════════════════ */
+    .team-bg {
+      background: white;
+      border-top: 1px solid rgba(0,0,0,0.04);
+      border-bottom: 1px solid rgba(0,0,0,0.04);
+    }
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-top: 3.5rem;
+    }
+    .team-card {
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+      border-radius: 16px;
+      background: var(--cream-pale);
+      border: 1px solid rgba(232,213,181,0.4);
+      transition: transform .3s, box-shadow .3s;
+    }
+    .team-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 36px rgba(0,0,0,0.06);
+    }
+    .team-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      margin: 0 auto 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      color: white;
+    }
+    .team-avatar--1 { background: linear-gradient(135deg, var(--teal), var(--dark-teal)); }
+    .team-avatar--2 { background: linear-gradient(135deg, var(--burgundy), var(--dark-burgundy)); }
+    .team-avatar--3 { background: linear-gradient(135deg, var(--gold), #D4A017); }
+
+    .team-card h4 {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      color: var(--neutral-black);
+      margin-bottom: 0.35rem;
+    }
+    .team-role {
+      font-size: 0.82rem;
+      color: var(--cool-gray);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.6rem;
+    }
+    .team-org {
+      font-size: 0.85rem;
+      color: var(--teal);
+      font-weight: 600;
+    }
+
+    /* Advisors row */
+    .advisors {
+      margin-top: 2rem;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    .advisor-card {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.25rem;
+      border-radius: 12px;
+      background: var(--cream-pale);
+      border: 1px solid rgba(232,213,181,0.3);
+    }
+    .advisor-dot {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .advisor-dot--1 { background: var(--teal); }
+    .advisor-dot--2 { background: var(--burgundy); }
+    .advisor-dot--3 { background: var(--gold); }
+    .advisor-card h5 {
+      font-size: 0.9rem;
+      color: var(--neutral-black);
+      margin-bottom: 0.15rem;
+    }
+    .advisor-card p {
+      font-size: 0.78rem;
+      color: var(--cool-gray);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       TECH STACK
+       ═══════════════════════════════════════════════════════════════════ */
+    .stack-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 3rem;
+      justify-content: center;
+    }
+    .stack-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.65rem 1.2rem;
+      border-radius: 100px;
+      background: white;
+      border: 1px solid rgba(0,0,0,0.06);
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--neutral-black);
+      transition: transform .2s, box-shadow .2s, border-color .2s;
+    }
+    .stack-pill:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+      border-color: var(--teal);
+    }
+    .stack-pill-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+    }
+    .stack-pill-dot--lang   { background: var(--teal); }
+    .stack-pill-dot--ml     { background: var(--burgundy); }
+    .stack-pill-dot--ops    { background: var(--gold); }
+    .stack-pill-dot--viz    { background: var(--dark-teal); }
+    .stack-pill-dot--cloud  { background: var(--dark-burgundy); }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       CTA / DATA SCOPE
+       ═══════════════════════════════════════════════════════════════════ */
+    .scope-bg {
+      background: linear-gradient(135deg, var(--cream), var(--cream-light));
+    }
+    .scope-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+    .scope-stat {
+      text-align: center;
+      padding: 2rem;
+      background: white;
+      border-radius: 16px;
+      border: 1px solid rgba(0,0,0,0.04);
+      transition: transform .3s;
+    }
+    .scope-stat:hover { transform: translateY(-4px); }
+    .scope-stat-value {
+      font-family: var(--font-display);
+      font-size: 2.5rem;
+      line-height: 1.1;
+    }
+    .scope-stat-value--teal { color: var(--teal); }
+    .scope-stat-value--burg { color: var(--burgundy); }
+    .scope-stat-value--gold { color: var(--gold); }
+    .scope-stat-value--dark { color: var(--dark-teal); }
+    .scope-stat-label {
+      font-size: 0.82rem;
+      color: var(--cool-gray);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+      margin-top: 0.5rem;
+    }
+    .scope-stat-sub {
+      font-size: 0.8rem;
+      color: #999;
+      margin-top: 0.25rem;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       FOOTER
+       ═══════════════════════════════════════════════════════════════════ */
+    .footer {
+      background: var(--neutral-black);
+      color: rgba(232,213,181,0.5);
+      text-align: center;
+      padding: 3rem 2rem;
+    }
+    .footer-brand {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      color: var(--cream);
+      margin-bottom: 0.5rem;
+    }
+    .footer-brand span { color: var(--gold); }
+    .footer p {
+      font-size: 0.85rem;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    .footer-divider {
+      width: 60px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--burgundy), var(--gold));
+      margin: 1.5rem auto;
+    }
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 1rem;
+      font-size: 0.8rem;
+    }
+    .footer-links a { color: rgba(232,213,181,0.4); }
+    .footer-links a:hover { color: var(--gold); }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       SCROLL ANIMATIONS
+       ═══════════════════════════════════════════════════════════════════ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       RESPONSIVE
+       ═══════════════════════════════════════════════════════════════════ */
+    @media (max-width: 1024px) {
+      .pipeline-steps { grid-template-columns: repeat(2, 1fr); }
+      .method-features { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-hamburger { display: flex; }
+
+      .hero-stats { gap: 2rem; }
+      .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .disease-grid { grid-template-columns: 1fr; }
+      .pipeline-steps { grid-template-columns: 1fr; }
+      .method-grid { grid-template-columns: 1fr; }
+      .method-features { grid-template-columns: 1fr; }
+      .team-grid { grid-template-columns: 1fr; }
+      .advisors { grid-template-columns: 1fr; }
+      .scope-stats { grid-template-columns: repeat(2, 1fr); }
+      .section { padding: 4rem 1.5rem; }
+    }
+
+    @media (max-width: 480px) {
+      .hero-stats { flex-direction: column; gap: 1.5rem; }
+      .scope-stats { grid-template-columns: 1fr; }
+      .hero-content { padding: 7rem 1.5rem 8rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       NAVIGATION
+       ═══════════════════════════════════════════════════════════════ -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <div class="nav-logo">EpiForecast<span>-MX</span></div>
+      <ul class="nav-links">
+        <li><a href="#about">Contexto</a></li>
+        <li><a href="#diseases">Padecimientos</a></li>
+        <li><a href="#pipeline">Pipeline</a></li>
+        <li><a href="#methodology">Metodología</a></li>
+        <li><a href="#team">Equipo</a></li>
+        <li><a href="#scope">Datos</a></li>
+      </ul>
+      <div class="nav-hamburger" onclick="document.querySelector('.nav-links').classList.toggle('show')" aria-label="Menú">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       HERO
+       ═══════════════════════════════════════════════════════════════ -->
+  <section class="hero" id="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-orb hero-orb--1"></div>
+    <div class="hero-orb hero-orb--2"></div>
+    <div class="hero-orb hero-orb--3"></div>
+
+    <div class="hero-content">
+      <div class="hero-badge">Maestría en Inteligencia Artificial Aplicada · Tec de Monterrey</div>
+
+      <h1>EpiForecast<span class="accent">-MX</span></h1>
+
+      <p class="hero-sub">
+        Pronósticos epidemiológicos inteligentes para padecimientos neurológicos y de salud mental en México.
+        Una colaboración entre el <strong style="color:var(--cream)">Tecnológico de Monterrey</strong>
+        y el <strong style="color:var(--cream)">IMSS</strong>.
+      </p>
+
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-value">3</div>
+          <div class="hero-stat-label">Padecimientos</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value">32</div>
+          <div class="hero-stat-label">Entidades</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value">60K+</div>
+          <div class="hero-stat-label">Registros</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-value">12</div>
+          <div class="hero-stat-label">Años de datos</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-scroll">
+      <div class="hero-scroll-line"></div>
+      Explorar
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       ABOUT
+       ═══════════════════════════════════════════════════════════════ -->
+  <section class="about" id="about">
+    <div class="section">
+      <div class="section-label reveal">Contexto del Proyecto</div>
+      <div class="section-title reveal">Inteligencia artificial al servicio<br>de la salud pública mexicana</div>
+
+      <div class="about-grid">
+        <div class="about-text reveal">
+          <p>
+            <strong>EpiForecast-MX</strong> es un proyecto capstone de la Maestría en Inteligencia Artificial Aplicada del Tecnológico de Monterrey, desarrollado en colaboración directa con el <strong>Instituto Mexicano del Seguro Social (IMSS)</strong>.
+          </p>
+          <p>
+            El proyecto busca generar <strong>pronósticos confiables con intervalos de predicción</strong> para tres padecimientos neurológicos y de salud mental — Depresión, Enfermedad de Parkinson y Enfermedad de Alzheimer — a nivel nacional y subnacional (32 entidades federativas), facilitando la <strong>planificación estratégica de recursos sanitarios</strong> y la toma de decisiones informada.
+          </p>
+          <p>
+            Utilizamos datos semanales de los boletines epidemiológicos del <strong>SINAVE</strong> (Sistema Nacional de Vigilancia Epidemiológica) que abarcan el período 2014–2026, incorporando variables previamente no consideradas como género y entidad geográfica para mejorar la capacidad predictiva.
+          </p>
+        </div>
+
+        <div class="about-card reveal reveal-delay-2">
+          <h3>Colaboración Institucional</h3>
+          <div class="collab-logos">
+            <div class="collab-item">
+              <div class="collab-icon collab-icon--imss">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 21h18M9 8h6M12 8v13M5 21V5a2 2 0 012-2h10a2 2 0 012 2v16"/></svg>
+              </div>
+              <div>
+                <div class="collab-name">IMSS</div>
+                <div class="collab-role">Instituto Mexicano del Seguro Social</div>
+              </div>
+            </div>
+            <div class="collab-item">
+              <div class="collab-icon collab-icon--tec">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+              </div>
+              <div>
+                <div class="collab-name">Tecnológico de Monterrey</div>
+                <div class="collab-role">Maestría en IA Aplicada</div>
+              </div>
+            </div>
+            <div class="collab-item">
+              <div class="collab-icon collab-icon--sinave">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 3v18h18"/><path d="M7 16l4-8 4 4 4-10"/></svg>
+              </div>
+              <div>
+                <div class="collab-name">SINAVE</div>
+                <div class="collab-role">Fuente de datos epidemiológicos</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       DISEASES
+       ═══════════════════════════════════════════════════════════════ -->
+  <section class="section diseases" id="diseases">
+    <div class="section-label reveal">Padecimientos Objetivo</div>
+    <div class="section-title reveal">Tres enfermedades, un pipeline<br>de pronóstico unificado</div>
+    <div class="section-desc reveal">
+      El proyecto se enfoca en condiciones neurológicas y de salud mental con alta carga en el sistema de salud mexicano, generando pronósticos desagregados por entidad y sexo.
+    </div>
+
+    <div class="disease-grid">
+      <!-- Depression -->
+      <div class="disease-card disease-card--dep reveal reveal-delay-1">
+        <div class="disease-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M8 15s1.5-2 4-2 4 2 4 2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+        </div>
+        <h3>Depresión</h3>
+        <p>Padecimiento con el mayor volumen de casos registrados. Presenta marcados patrones estacionales y diferencias significativas por género, con mayor incidencia en mujeres en la mayoría de entidades.</p>
+        <span class="disease-tag">Trastornos del ánimo · CIE-10: F32</span>
+      </div>
+
+      <!-- Parkinson -->
+      <div class="disease-card disease-card--par reveal reveal-delay-2">
+        <div class="disease-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2a10 10 0 100 20 10 10 0 000-20z"/><path d="M12 8v4l3 3"/></svg>
+        </div>
+        <h3>Parkinson</h3>
+        <p>Enfermedad neurodegenerativa con tendencia creciente en los registros epidemiológicos. Su pronóstico a nivel subnacional es crucial para la distribución de medicamentos especializados.</p>
+        <span class="disease-tag">Neurodegenerativo · CIE-10: G20</span>
+      </div>
+
+      <!-- Alzheimer -->
+      <div class="disease-card disease-card--alz reveal reveal-delay-3">
+        <div class="disease-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M8 12h.01M12 12h.01M16 12h.01"/></svg>
+        </div>
+        <h3>Alzheimer</h3>
+        <p>Enfermedad con impacto creciente en el envejecimiento poblacional mexicano. Los pronósticos permiten anticipar necesidades de atención especializada y cuidadores a mediano plazo.</p>
+        <span class="disease-tag">Demencia · CIE-10: G30</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       PIPELINE
+       ═══════════════════════════════════════════════════════════════ -->
+  <section class="pipeline-bg" id="pipeline">
+    <div class="section">
+      <div class="section-label">Pipeline de Datos</div>
+      <div class="section-title">De PDFs crudos a series de tiempo<br>listas para modelado</div>
+      <div class="section-desc">
+        Un flujo reproducible de siete etapas que transforma información no estructurada de boletines epidemiológicos en datasets coherentes para pronóstico multi-step.
+      </div>
+
+      <div class="pipeline-steps">
+        <!-- Step 1 -->
+        <div class="pipeline-step reveal reveal-delay-1">
+          <div class="step-number">01</div>
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+          </div>
+          <h4>Extracción</h4>
+          <p>Procesamiento automatizado de boletines epidemiológicos PDF del SINAVE con extracción de tablas y OCR.</p>
+          <div class="step-tech">
+            <span>camelot-py</span>
+            <span>OpenCV</span>
+            <span>PDF</span>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="pipeline-step reveal reveal-delay-2">
+          <div class="step-number">02</div>
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </div>
+          <h4>EDA</h4>
+          <p>Análisis exploratorio profundo con visualizaciones institucionales, detección de anomalías y validación de la calidad de los datos.</p>
+          <div class="step-tech">
+            <span>Matplotlib</span>
+            <span>Seaborn</span>
+            <span>Jupyter</span>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="pipeline-step reveal reveal-delay-3">
+          <div class="step-number">03</div>
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 22h14a2 2 0 002-2V7l-5-5H6a2 2 0 00-2 2v4"/><polyline points="14,2 14,8 20,8"/><line x1="2" y1="15" x2="10" y2="15"/><line x1="9" y1="18" x2="10" y2="15"/></svg>
+          </div>
+          <h4>Limpieza</h4>
+          <p>Normalización de entidades, corrección de inconsistencias, tratamiento de valores faltantes y estandarización de nomenclaturas.</p>
+          <div class="step-tech">
+            <span>Pandas</span>
+            <span>NumPy</span>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="pipeline-step reveal reveal-delay-4">
+          <div class="step-number">04</div>
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 11h10l-3-3"/><path d="M17 13H7l3 3"/></svg>
+          </div>
+          <h4>Transformación</h4>
+          <p>Corrimiento de semanas epidemiológicas, conversión acumulados→incrementos, tratamiento IQR de outliers y asignación de regiones.</p>
+          <div class="step-tech">
+            <span>Incrementos</span>
+            <span>IQR</span>
+            <span>ISO-8601</span>
+          </div>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="pipeline-step reveal reveal-delay-1">
+          <div class="step-number">05</div>
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+          </div>
+          <h4>Consolidación</h4>
+          <p>Dataset limpio versionado con DVC y almacenado en S3 — series de tiempo coherentes listas para modelado.</p>
+          <div class="step-tech">
+            <span>DVC</span>
+            <span>AWS S3</span>
+            <span>CSV</span>
+          </div>
+        </div>
+
+        <!-- Step 6 -->
+        <div class="pipeline-step reveal reveal-delay-2">
+          <div class="step-number">06</div>
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 3v18h18"/><path d="M7 16l4-8 4 4 4-10"/></svg>
+          </div>
+          <h4>Modelado Prophet</h4>
+          <p>Pronósticos multi-step con intervalos de predicción por padecimiento, entidad y sexo. Superando esquemas recursivos tradicionales.</p>
+          <div class="step-tech">
+            <span>Prophet</span>
+            <span>Forecasting</span>
+          </div>
+        </div>
+
+        <!-- Step 7 -->
+        <div class="pipeline-step reveal reveal-delay-3">
+          <div class="step-number">07</div>
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </div>
+          <h4>Visualización</h4>
+          <p>Dashboards y reportes ejecutivos con identidad visual institucional del IMSS para comunicación con stakeholders.</p>
+          <div class="step-tech">
+            <span>Plotly</span>
+            <span>Makefile</span>
+          </div>
+        </div>
+
+        <!-- Step 8 -->
+        <div class="pipeline-step reveal reveal-delay-4">
+          <div class="step-number">08</div>
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="16,18 22,12 16,6"/><polyline points="8,6 2,12 8,18"/></svg>
+          </div>
+          <h4>MLOps</h4>
+          <p>Infraestructura reproducible con Makefile, Git workflows, versionado de datos y entornos consistentes para todo el equipo.</p>
+          <div class="step-tech">
+            <span>Git</span>
+            <span>Make</span>
+            <span>CI/CD</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       METHODOLOGY
+       ═══════════════════════════════════════════════════════════════ -->
+  <section class="section" id="methodology">
+    <div class="section-label reveal">Metodología</div>
+    <div class="section-title reveal">De silos aislados a un pipeline<br>unificado y escalable</div>
+
+    <div class="method-grid">
+      <div class="method-card reveal reveal-delay-1">
+        <div class="method-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="2" width="8" height="8" rx="1"/><rect x="14" y="2" width="8" height="8" rx="1"/><rect x="8" y="14" width="8" height="8" rx="1"/></svg>
+        </div>
+        <h3>Fase I — Enfoque Monolítico</h3>
+        <p>Modelos aislados por padecimiento con promedios nacionales. Limitado alcance y sin desagregación geográfica ni por sexo. Servió como línea base para identificar oportunidades de mejora.</p>
+      </div>
+
+      <div class="method-card reveal reveal-delay-2">
+        <div class="method-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+        </div>
+        <h3>Fase II — Pipeline Unificado</h3>
+        <p>Arquitectura modular con Prophet para pronósticos multi-step. Matriz de predicciones granulares: 32 entidades × 3 padecimientos × sexo, con intervalos de confianza calibrados.</p>
+      </div>
+
+      <div class="method-card method-highlight reveal reveal-delay-3">
+        <div class="method-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+          </div>
+        <h3>¿Por qué Prophet sobre ML Tradicional?</h3>
+        <p>Los modelos clásicos de machine learning (Random Forest, XGBoost) sufren de acumulación progresiva de errores en esquemas de pronóstico recursivo multi-step. Prophet maneja nativamente horizontes múltiples con incertidumbre calibrada, siendo la herramienta óptima para este caso de uso epidemiológico.</p>
+
+        <div class="method-features">
+          <div class="method-feature">
+            <div class="method-feature-dot"></div>
+            <span>Pronósticos multi-step nativos sin recursión</span>
+          </div>
+          <div class="method-feature">
+            <div class="method-feature-dot"></div>
+            <span>Intervalos de predicción calibrados automáticamente</span>
+          </div>
+          <div class="method-feature">
+            <div class="method-feature-dot"></div>
+            <span>Descomposición interpretable de tendencia y estacionalidad</span>
+          </div>
+          <div class="method-feature">
+            <div class="method-feature-dot"></div>
+            <span>Manejo robusto de valores faltantes y cambios de tendencia</span>
+          </div>
+          <div class="method-feature">
+            <div class="method-feature-dot"></div>
+            <span>Escalabilidad para 192+ combinaciones de pronóstico</span>
+          </div>
+          <div class="method-feature">
+            <div class="method-feature-dot"></div>
+            <span>Reproducibilidad garantizada con MLOps (DVC + Makefile)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       TEAM
+       ═══════════════════════════════════════════════════════════════ -->
+  <section class="team-bg" id="team">
+    <div class="section">
+      <div class="section-label reveal">Equipo</div>
+      <div class="section-title reveal">Un equipo multidisciplinario<br>uniendo tecnología y salud</div>
+
+      <div class="team-grid">
+        <div class="team-card reveal reveal-delay-1">
+          <div class="team-avatar team-avatar--1">SG</div>
+          <h4>Javier Rebull</h4>
+          <div class="team-role">ML Engineer & Lead Developer</div>
+          <div class="team-org">Santander Bank US</div>
+        </div>
+        <div class="team-card reveal reveal-delay-2">
+          <div class="team-avatar team-avatar--2">JC</div>
+          <h4>Juan Carlos Pérez Nava</h4>
+          <div class="team-role">IT Professional & Data Pipeline</div>
+          <div class="team-org">IMSS</div>
+        </div>
+        <div class="team-card reveal reveal-delay-3">
+          <div class="team-avatar team-avatar--3">LG</div>
+          <h4>Luis Gerardo Sánchez</h4>
+          <div class="team-role">Sr. Controls Engineer</div>
+          <div class="team-org">Tesla</div>
+        </div>
+      </div>
+
+      <div class="advisors reveal">
+        <div class="advisor-card">
+          <div class="advisor-dot advisor-dot--1"></div>
+          <div>
+            <h5>Dra. Grettel Barceló Alonso</h5>
+            <p>Asesora Académica — Tec de Monterrey</p>
+          </div>
+        </div>
+        <div class="advisor-card">
+          <div class="advisor-dot advisor-dot--2"></div>
+          <div>
+            <h5>Dra. Ruth Pérez</h5>
+            <p>Stakeholder IMSS — Epidemiología</p>
+          </div>
+        </div>
+        <div class="advisor-card">
+          <div class="advisor-dot advisor-dot--3"></div>
+          <div>
+            <h5>Dra. Lina Díaz Castro</h5>
+            <p>Stakeholder IMSS — Investigación</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       TECH STACK
+       ═══════════════════════════════════════════════════════════════ -->
+  <section class="section" id="stack">
+    <div class="section-label reveal" style="justify-content:center">Stack Tecnológico</div>
+    <div class="section-title reveal" style="text-align:center">Herramientas que potencian<br>el proyecto</div>
+
+    <div class="stack-grid reveal">
+      <div class="stack-pill"><span class="stack-pill-dot stack-pill-dot--lang"></span>Python 3.12</div>
+      <div class="stack-pill"><span class="stack-pill-dot stack-pill-dot--ml"></span>Prophet</div>
+      <div class="stack-pill"><span class="stack-pill-dot stack-pill-dot--ops"></span>DVC</div>
+      <div class="stack-pill"><span class="stack-pill-dot stack-pill-dot--cloud"></span>AWS S3</div>
+      <div class="stack-pill"><span class="stack-pill-dot stack-pill-dot--lang"></span>Pandas</div>
+      <div class="stack-pill"><span class="stack-pill-dot stack-pill-dot--lang"></span>NumPy</div>
+      <div class="stack-pill"><span class="stack-pill-dot stack-pill-dot--viz"></span>Matplotlib</div>
+      <div class="stack-pill"><span class="stack-pill-dot stack-pill-dot--viz"></span>Seaborn</div>
+      <div class="stack-pill"><span class="stack-pill-dot stack-pill-dot--viz"></span>Plotly</div>
+      <div class="stack-pill"><span class="stack-pill-dot stack-pill-dot--ops"></span>Git / GitHub</div>
+      <div class="stack-pill"><span class="stack-pill-dot stack-pill-dot--ops"></span>Makefile</div>
+      <div class="stack-pill"><span class="stack-pill-dot stack-pill-dot--lang"></span>camelot-py</div>
+      <div class="stack-pill"><span class="stack-pill-dot stack-pill-dot--lang"></span>OpenCV</div>
+      <div class="stack-pill"><span class="stack-pill-dot stack-pill-dot--ops"></span>Jupyter</div>
+      <div class="stack-pill"><span class="stack-pill-dot stack-pill-dot--ops"></span>VS Code</div>
+      <div class="stack-pill"><span class="stack-pill-dot stack-pill-dot--ml"></span>Claude Code</div>
+      <div class="stack-pill"><span class="stack-pill-dot stack-pill-dot--ops"></span>LaTeX</div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       DATA SCOPE
+       ═══════════════════════════════════════════════════════════════ -->
+  <section class="scope-bg" id="scope">
+    <div class="section">
+      <div class="section-label reveal">Alcance de Datos</div>
+      <div class="section-title reveal">Un dataset robusto para<br>decisiones informadas</div>
+
+      <div class="scope-stats">
+        <div class="scope-stat reveal reveal-delay-1">
+          <div class="scope-stat-value scope-stat-value--teal">60,288</div>
+          <div class="scope-stat-label">Registros totales</div>
+          <div class="scope-stat-sub">Dataset consolidado</div>
+        </div>
+        <div class="scope-stat reveal reveal-delay-2">
+          <div class="scope-stat-value scope-stat-value--burg">2014–2026</div>
+          <div class="scope-stat-label">Período cubierto</div>
+          <div class="scope-stat-sub">12 años de boletines SINAVE</div>
+        </div>
+        <div class="scope-stat reveal reveal-delay-3">
+          <div class="scope-stat-value scope-stat-value--gold">32</div>
+          <div class="scope-stat-label">Entidades federativas</div>
+          <div class="scope-stat-sub">Cobertura nacional completa</div>
+        </div>
+        <div class="scope-stat reveal reveal-delay-4">
+          <div class="scope-stat-value scope-stat-value--dark">192+</div>
+          <div class="scope-stat-label">Modelos Prophet</div>
+          <div class="scope-stat-sub">3 padecimientos × 32 entidades × sexo</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       FOOTER
+       ═══════════════════════════════════════════════════════════════ -->
+  <footer class="footer">
+    <div class="footer-brand">EpiForecast<span>-MX</span></div>
+    <div class="footer-divider"></div>
+    <p>
+      Proyecto capstone de la Maestría en Inteligencia Artificial Aplicada<br>
+      Tecnológico de Monterrey × Instituto Mexicano del Seguro Social
+    </p>
+    <div class="footer-links">
+      <a href="#hero">Inicio</a>
+      <a href="#pipeline">Pipeline</a>
+      <a href="#team">Equipo</a>
+      <a href="https://github.com" target="_blank" rel="noopener">GitHub</a>
+    </div>
+    <p style="margin-top:1.5rem; font-size:0.75rem; opacity:0.5;">
+      © 2026 EpiForecast-MX. Todos los derechos reservados.<br>
+      Guía Cromática Institucional del IMSS aplicada.
+    </p>
+  </footer>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SCRIPTS
+       ═══════════════════════════════════════════════════════════════ -->
+  <script>
+    // Nav scroll effect
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+
+    reveals.forEach(el => observer.observe(el));
+
+    // Smooth scroll for nav links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          // Close mobile nav if open
+          document.querySelector('.nav-links').classList.remove('show');
+        }
+      });
+    });
+  </script>
+
+  <style>
+    /* Mobile nav toggle */
+    .nav-links.show {
+      display: flex !important;
+      position: absolute;
+      top: 64px;
+      left: 0;
+      right: 0;
+      background: rgba(23,63,53,0.98);
+      flex-direction: column;
+      padding: 1.5rem 2rem;
+      gap: 1.25rem;
+      border-bottom: 1px solid rgba(232,213,181,0.1);
+    }
+  </style>
+</body>
+</html>
