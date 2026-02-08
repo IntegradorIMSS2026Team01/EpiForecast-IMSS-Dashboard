@@ -1,201 +1,739 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — EpiForecast-MX</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-<html>
-	<head>
-		<title>Luis Sánchez - EpiForecast-MX</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="assets/css/main.css" />
-		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+  <meta property="og:title" content="EpiForecast-MX — Dashboard de Visualización">
+  <meta property="og:description" content="Pronósticos epidemiológicos inteligentes para padecimientos neurológicos y de salud mental en México.">
+  <meta property="og:type" content="website">
 
+  <style>
+    /* ═══════════════════════════════════════════════════════════════════
+       IMSS INSTITUTIONAL COLOR SYSTEM
+       Guía Cromática Institucional del IMSS — PANTONE to HEX
+       ═══════════════════════════════════════════════════════════════════ */
+    :root {
+      --neutral-black:  #231F20;
+      --burgundy:       #9B2242;
+      --dark-burgundy:  #6F1D46;
+      --cool-gray:      #97999B;
+      --teal:           #00524E;
+      --dark-teal:      #173F35;
+      --cream:          #E8D5B5;
+      --gold:           #B58500;
 
+      --cream-light:    #F5EDE0;
+      --cream-pale:     #FAF6F0;
+      --teal-glow:      rgba(0,82,78,0.08);
+      --burgundy-glow:  rgba(155,34,66,0.06);
+      --gold-glow:      rgba(181,133,0,0.10);
 
-		<meta property="og:title" content="Luis Sánchez">
-		<link rel="manifest" href="/site.webmanifest">
-		
-		
-		<link rel="icon" href="/favicon.ico">
-		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
-		<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
-		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-		
-		
-		<meta property="og:description" content="Automation, AI, and Digital Transformation. From systems to outcomes.">
-		<meta property="og:image" content="https://luisgss10.com/images/preview.png">
-		<meta property="og:url" content="https://luisgss10.com/">
-		<meta property="og:type" content="website">
+      --font-display:   'DM Serif Display', Georgia, serif;
+      --font-body:      'Source Sans 3', 'Source Sans Pro', sans-serif;
+      --font-mono:      'JetBrains Mono', 'Fira Code', monospace;
+    }
 
-		<meta name="twitter:card" content="summary_large_image">
-		<meta name="twitter:title" content="Luis Sánchez">
-		<meta name="twitter:description" content="Automation, AI, and Digital Transformation. From systems to outcomes.">
-		<meta name="twitter:image" content="https://luisgss10.com/images/preview.png">
+    /* ═══════════════════════════════════════════════════════════════════
+       RESET & BASE
+       ═══════════════════════════════════════════════════════════════════ */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      font-family: var(--font-body);
+      color: var(--neutral-black);
+      background: var(--cream-pale);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    img, svg { display: block; max-width: 100%; }
+    a { color: var(--teal); text-decoration: none; transition: color .2s; }
+    a:hover { color: var(--burgundy); }
 
-		
-		
+    /* Noise texture */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
 
+    /* ═══════════════════════════════════════════════════════════════════
+       NAVIGATION
+       ═══════════════════════════════════════════════════════════════════ */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(23,63,53, 0.96);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(232,213,181,0.1);
+      transition: box-shadow .3s;
+    }
+    .nav.scrolled { box-shadow: 0 4px 30px rgba(0,0,0,0.15); }
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      color: var(--cream);
+      letter-spacing: 0.02em;
+    }
+    .nav-logo span { color: var(--gold); }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      color: rgba(232,213,181,0.7);
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--cream); }
+    .nav-links a.active {
+      color: var(--gold);
+      border-bottom: 2px solid var(--gold);
+      padding-bottom: 2px;
+    }
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .nav-hamburger span {
+      width: 24px;
+      height: 2px;
+      background: var(--cream);
+      transition: transform .3s, opacity .3s;
+    }
 
+    /* ═══════════════════════════════════════════════════════════════════
+       DASHBOARD HERO (compact)
+       ═══════════════════════════════════════════════════════════════════ */
+    .dash-hero {
+      position: relative;
+      padding: 8rem 2rem 4rem;
+      background: linear-gradient(160deg, var(--dark-teal) 0%, var(--teal) 40%, var(--dark-burgundy) 100%);
+      overflow: hidden;
+    }
+    .dash-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 20% 80%, rgba(155,34,66,0.25), transparent),
+        radial-gradient(ellipse 50% 60% at 80% 20%, rgba(181,133,0,0.15), transparent);
+    }
+    .dash-hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 120px;
+      background: linear-gradient(to top, var(--cream-pale), transparent);
+      z-index: 2;
+    }
+    .dash-hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(232,213,181,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(232,213,181,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      animation: gridDrift 30s linear infinite;
+    }
+    @keyframes gridDrift { to { background-position: 60px 60px; } }
 
-	</head>
-	<body class="is-preload">
+    .dash-hero-content {
+      position: relative;
+      z-index: 3;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .dash-hero .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: rgba(232,213,181,0.6);
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      margin-bottom: 1.5rem;
+      transition: color .2s;
+    }
+    .dash-hero .back-link:hover { color: var(--cream); }
+    .dash-hero .back-link svg { width: 18px; height: 18px; }
 
-		
-		<!-- Page Wrapper -->
-			<div id="page-wrapper">
-				<!-- Header -->
-					<header id="header">
-						<h1><a href="index.html">LUISGSS10</a></h1>
-						<nav id="nav">
-							<ul>
-								<li class="special">
-									<a href="#menu" class="menuToggle"><span>Menu</span></a>
-									<div id="menu">
-										<ul>
-											<li><a href="index.html">Home</a></li>
-										</ul>
-									</div>
-								</li>
-							</ul>
-						</nav>
-					</header>
+    .dash-hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
+      color: var(--cream);
+      line-height: 1.1;
+      margin-bottom: 1rem;
+      animation: fadeSlideUp 0.8s ease-out both;
+    }
+    .dash-hero h1 .accent { color: var(--gold); }
+    .dash-hero .dash-sub {
+      font-size: clamp(1rem, 1.8vw, 1.2rem);
+      color: rgba(232,213,181,0.7);
+      max-width: 700px;
+      font-weight: 300;
+      line-height: 1.8;
+      animation: fadeSlideUp 0.8s ease-out 0.15s both;
+    }
+    .dash-hero .dash-update {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1.25rem;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--gold);
+      background: rgba(181,133,0,0.12);
+      padding: 0.4rem 1rem;
+      border-radius: 100px;
+      animation: fadeSlideUp 0.8s ease-out 0.3s both;
+    }
+    .dash-hero .dash-update::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--gold);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.4); }
+    }
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-				<!-- Main -->
-				<article id="main">
-				<header>
-					<h2>EpiForecast-MX</h2>
-					<p>
-					Pronósticos epidemiológicos inteligentes para padecimientos neurológicos y de salud mental en México.
-					Una colaboración entre el Tecnológico de Monterrey y el IMSS.
-					</p>
-					<p><strong>Última actualización:</strong> 5 de febrero de 2026</p>
-				</header>
+    /* ═══════════════════════════════════════════════════════════════════
+       DASHBOARD CONTENT
+       ═══════════════════════════════════════════════════════════════════ */
+    .dash-body {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 2rem 5rem;
+    }
 
-				<section class="wrapper style5">
-					<div class="inner">
+    .dash-intro {
+      margin-bottom: 3rem;
+    }
+    .dash-intro p {
+      font-size: 1.05rem;
+      color: #555;
+      line-height: 1.85;
+      max-width: 800px;
+    }
 
-					<h3>Visualización de los datos</h3>
-					<p>
-						En esta sección se presentan los resultados de manera visual e interactiva. Las visualizaciones
-						permiten explorar los datos por entidad federativa, periodo temporal y padecimiento, así como
-						analizar patrones demográficos y territoriales relevantes.
-					</p>
+    /* Quick nav pills */
+    .dash-nav-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 1.5rem;
+    }
+    .dash-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border-radius: 100px;
+      background: white;
+      border: 1px solid rgba(0,0,0,0.06);
+      color: var(--neutral-black);
+      transition: transform .2s, box-shadow .2s, border-color .2s;
+      cursor: pointer;
+    }
+    .dash-pill:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+      border-color: var(--teal);
+      color: var(--teal);
+    }
+    .dash-pill-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+    }
+    .dash-pill-dot--tabla { background: var(--teal); }
+    .dash-pill-dot--mapa { background: var(--burgundy); }
+    .dash-pill-dot--cat { background: var(--gold); }
+    .dash-pill-dot--anual { background: var(--dark-teal); }
+    .dash-pill-dot--semanal { background: var(--dark-burgundy); }
+    .dash-pill-dot--pred { background: var(--burgundy); }
 
-					<ul>
-						<li>Tabla de datos consolidada</li>
-						<li>Mapa de México con variables demográficas</li>
-						<li>Categorizaciones territoriales</li>
-						<li>Casos por año y por semana</li>
-						<li>Predicciones epidemiológicas</li>
-					</ul>
+    /* Viz section */
+    .viz-section {
+      margin-bottom: 4rem;
+      scroll-margin-top: 80px;
+    }
+    .viz-section-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .viz-number {
+      font-family: var(--font-display);
+      font-size: 2.5rem;
+      color: rgba(0,82,78,0.08);
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    .viz-section h2 {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      color: var(--dark-teal);
+      line-height: 1.2;
+    }
+    .viz-section p {
+      font-size: 0.95rem;
+      color: #666;
+      line-height: 1.75;
+      margin-bottom: 1rem;
+      max-width: 800px;
+    }
+    .viz-section .viz-note {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--burgundy);
+      background: var(--burgundy-glow);
+      display: inline-block;
+      padding: 0.35rem 0.85rem;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+    }
 
-					<h4>Tabla de datos</h4>
-					<p>
-						Esta tabla presenta el conjunto de datos consolidado utilizado en el análisis. La información
-						proviene de los boletines epidemiológicos semanales en formato PDF y corresponde a registros
-						acumulados por entidad federativa, año y semana epidemiológica.
-					</p>
-					<p>
-						Adicionalmente, se incorporó información demográfica obtenida directamente de INEGI para
-						complementar el análisis. La tabla puede filtrarse por año y por condición médica.
-						<strong>Nota:</strong> la información correspondiente a 2026 es simulada y tiene fines
-						exclusivamente informativos por el momento.
-					</p>
-					<div class='tableauPlaceholder' id='viz1770293424381' style='position: relative'><noscript><a href='#'><img alt='EpiForecast-MX: Tabla de datos ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Ep&#47;EpiForecast-MX&#47;Tabladedatos&#47;1_rss.png' style='border: none' /></a></noscript><object class='tableauViz'  style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='' /><param name='name' value='EpiForecast-MX&#47;Tabladedatos' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Ep&#47;EpiForecast-MX&#47;Tabladedatos&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='en-US' /></object></div>                <script type='text/javascript'>                    var divElement = document.getElementById('viz1770293424381');                    var vizElement = divElement.getElementsByTagName('object')[0];                    vizElement.style.width='100%';vizElement.style.height=(divElement.offsetWidth*0.75)+'px';                    var scriptElement = document.createElement('script');                    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    vizElement.parentNode.insertBefore(scriptElement, vizElement);                </script>
+    /* Tableau container */
+    .tableau-wrap {
+      background: white;
+      border-radius: 16px;
+      border: 1px solid rgba(0,0,0,0.05);
+      padding: 1.5rem;
+      margin-top: 1.5rem;
+      transition: box-shadow .3s;
+    }
+    .tableau-wrap:hover {
+      box-shadow: 0 12px 40px rgba(0,0,0,0.06);
+    }
 
-					<hr />
+    /* Divider */
+    .viz-divider {
+      width: 60px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--burgundy), var(--gold));
+      margin: 3rem 0;
+    }
 
-					<h4>Mapa de México</h4>
-					<p>
-						Con base en datos del INEGI, este mapa ofrece una representación gráfica de la densidad poblacional
-						por entidad federativa, así como de la superficie territorial en kilómetros cuadrados mediante
-						variaciones de color.
-					</p>
-					<p>
-						Además, se incluyen los casos desagregados por sexo. Todas las variables visualizadas son
-						seleccionables, lo que permite explorar de manera interactiva la relación entre demografía,
-						territorio e incidencia de los padecimientos.
-					</p>
-					<div class='tableauPlaceholder' id='viz1770299634745' style='position: relative'><noscript><a href='#'><img alt='EpiForecast-MX: Mapa de México ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Ep&#47;EpiForecast-MX&#47;MapadeMxico&#47;1_rss.png' style='border: none' /></a></noscript><object class='tableauViz'  style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='' /><param name='name' value='EpiForecast-MX&#47;MapadeMxico' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Ep&#47;EpiForecast-MX&#47;MapadeMxico&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='en-US' /><param name='filter' value='publish=yes' /></object></div>                <script type='text/javascript'>                    var divElement = document.getElementById('viz1770299634745');                    var vizElement = divElement.getElementsByTagName('object')[0];                    vizElement.style.width='100%';vizElement.style.height=(divElement.offsetWidth*0.75)+'px';                    var scriptElement = document.createElement('script');                    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    vizElement.parentNode.insertBefore(scriptElement, vizElement);                </script>
+    /* ═══════════════════════════════════════════════════════════════════
+       FOOTER
+       ═══════════════════════════════════════════════════════════════════ */
+    .footer {
+      background: var(--neutral-black);
+      color: rgba(232,213,181,0.5);
+      text-align: center;
+      padding: 3rem 2rem;
+    }
+    .footer-brand {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      color: var(--cream);
+      margin-bottom: 0.5rem;
+    }
+    .footer-brand span { color: var(--gold); }
+    .footer p {
+      font-size: 0.85rem;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    .footer-divider {
+      width: 60px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--burgundy), var(--gold));
+      margin: 1.5rem auto;
+    }
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 1rem;
+      font-size: 0.8rem;
+    }
+    .footer-links a { color: rgba(232,213,181,0.4); }
+    .footer-links a:hover { color: var(--gold); }
 
-					<hr />
+    /* ═══════════════════════════════════════════════════════════════════
+       SCROLL ANIMATIONS
+       ═══════════════════════════════════════════════════════════════════ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
 
-					<h4>México en categorías</h4>
-					<p>
-						Este mapa permite visualizar distintas categorizaciones sugeridas del país, considerando múltiples
-						criterios analíticos. Entre ellos se incluyen la región geográfica, la región socio-urbana, el
-						ratio entre hombres y mujeres, la extensión territorial y la densidad poblacional.
-					</p>
-					<p>
-						Asimismo, se presentan dos enfoques de tamaño poblacional: uno basado en rangos fijos (bins
-						definidos) y otro construido mediante percentiles. Estas categorizaciones facilitan comparaciones
-						estructurales entre entidades.
-					</p>
-					<div class='tableauPlaceholder' id='viz1770299606081' style='position: relative'><noscript><a href='#'><img alt='EpiForecast-MX: Mapa: Categorías ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Ep&#47;EpiForecast-MX&#47;MapaCategoras&#47;1_rss.png' style='border: none' /></a></noscript><object class='tableauViz'  style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='' /><param name='name' value='EpiForecast-MX&#47;MapaCategoras' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Ep&#47;EpiForecast-MX&#47;MapaCategoras&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='en-US' /><param name='filter' value='publish=yes' /></object></div>                <script type='text/javascript'>                    var divElement = document.getElementById('viz1770299606081');                    var vizElement = divElement.getElementsByTagName('object')[0];                    vizElement.style.width='100%';vizElement.style.height=(divElement.offsetWidth*0.75)+'px';                    var scriptElement = document.createElement('script');                    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    vizElement.parentNode.insertBefore(scriptElement, vizElement);                </script>
+    /* ═══════════════════════════════════════════════════════════════════
+       RESPONSIVE
+       ═══════════════════════════════════════════════════════════════════ */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-hamburger { display: flex; }
+      .dash-hero { padding: 7rem 1.5rem 3rem; }
+      .dash-body { padding: 2rem 1.5rem 4rem; }
+      .tableau-wrap { padding: 0.75rem; border-radius: 10px; }
+      .dash-nav-pills { gap: 0.5rem; }
+    }
 
-					<hr />
+    /* Mobile nav toggle */
+    .nav-links.show {
+      display: flex !important;
+      position: absolute;
+      top: 64px;
+      left: 0;
+      right: 0;
+      background: rgba(23,63,53,0.98);
+      flex-direction: column;
+      padding: 1.5rem 2rem;
+      gap: 1.25rem;
+      border-bottom: 1px solid rgba(232,213,181,0.1);
+    }
+  </style>
+</head>
+<body>
 
-					<h4>Casos por año</h4>
-					<p>
-						Esta visualización muestra el incremento de casos anuales desagregado por sexo. El gráfico permite
-						filtrar por año y por padecimiento, facilitando el análisis comparativo de tendencias entre
-						periodos y condiciones médicas.
-					</p>
-					<div class='tableauPlaceholder' id='viz1770293499912' style='position: relative'><noscript><a href='#'><img alt='EpiForecast-MX: Casos por año ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Ep&#47;EpiForecast-MX&#47;Casosporao&#47;1_rss.png' style='border: none' /></a></noscript><object class='tableauViz'  style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='' /><param name='name' value='EpiForecast-MX&#47;Casosporao' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Ep&#47;EpiForecast-MX&#47;Casosporao&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='en-US' /></object></div>                <script type='text/javascript'>                    var divElement = document.getElementById('viz1770293499912');                    var vizElement = divElement.getElementsByTagName('object')[0];                    vizElement.style.width='100%';vizElement.style.height=(divElement.offsetWidth*0.75)+'px';                    var scriptElement = document.createElement('script');                    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    vizElement.parentNode.insertBefore(scriptElement, vizElement);                </script>
+  <!-- ═══════════════════════════════════════════════════════════════
+       NAVIGATION
+       ═══════════════════════════════════════════════════════════════ -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo" style="text-decoration:none;">EpiForecast<span>-MX</span></a>
+      <ul class="nav-links">
+        <li><a href="index.html">Inicio</a></li>
+        <li><a href="index.html#about">Contexto</a></li>
+        <li><a href="index.html#pipeline">Pipeline</a></li>
+        <li><a href="index.html#team">Equipo</a></li>
+        <li><a href="EpiDashboard.html" class="active">Dashboard</a></li>
+      </ul>
+      <div class="nav-hamburger" onclick="document.querySelector('.nav-links').classList.toggle('show')" aria-label="Menú">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </nav>
 
-					<hr />
+  <!-- ═══════════════════════════════════════════════════════════════
+       HERO
+       ═══════════════════════════════════════════════════════════════ -->
+  <section class="dash-hero">
+    <div class="dash-hero-grid"></div>
+    <div class="dash-hero-content">
+      <a href="index.html" class="back-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 12H5"/><polyline points="12 19 5 12 12 5"/></svg>
+        Regresar a la página principal
+      </a>
+      <h1>Dashboard de <span class="accent">Visualización</span></h1>
+      <p class="dash-sub">
+        Explora los datos epidemiológicos de forma interactiva. Visualizaciones construidas con
+        Tableau Public a partir de los boletines del SINAVE y datos demográficos del INEGI.
+      </p>
+      <div class="dash-update">Última actualización: 5 de febrero de 2026</div>
+    </div>
+  </section>
 
-					<h4>Casos semanales</h4>
-					<p>
-						En esta sección se presenta el incremento de casos semanales por sexo. La visualización incluye
-						filtros por año y padecimiento, lo que permite analizar la dinámica temporal de corto plazo y
-						detectar variaciones relevantes dentro de cada año epidemiológico.
-					</p>
-					<div class='tableauPlaceholder' id='viz1770293458080' style='position: relative'><noscript><a href='#'><img alt='EpiForecast-MX: Casos por semana ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Ep&#47;EpiForecast-MX&#47;Casosporsemana&#47;1_rss.png' style='border: none' /></a></noscript><object class='tableauViz'  style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='' /><param name='name' value='EpiForecast-MX&#47;Casosporsemana' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Ep&#47;EpiForecast-MX&#47;Casosporsemana&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='en-US' /></object></div>                <script type='text/javascript'>                    var divElement = document.getElementById('viz1770293458080');                    var vizElement = divElement.getElementsByTagName('object')[0];                    vizElement.style.width='100%';vizElement.style.height=(divElement.offsetWidth*0.75)+'px';                    var scriptElement = document.createElement('script');                    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    vizElement.parentNode.insertBefore(scriptElement, vizElement);                </script>
+  <!-- ═══════════════════════════════════════════════════════════════
+       DASHBOARD BODY
+       ═══════════════════════════════════════════════════════════════ -->
+  <main class="dash-body">
 
-					<hr />
+    <!-- Intro + quick nav -->
+    <div class="dash-intro reveal">
+      <p>
+        En esta sección se presentan los resultados de manera visual e interactiva. Las visualizaciones
+        permiten explorar los datos por entidad federativa, periodo temporal y padecimiento, así como
+        analizar patrones demográficos y territoriales relevantes.
+      </p>
+      <div class="dash-nav-pills">
+        <a href="#tabla" class="dash-pill"><span class="dash-pill-dot dash-pill-dot--tabla"></span> Tabla de datos</a>
+        <a href="#mapa" class="dash-pill"><span class="dash-pill-dot dash-pill-dot--mapa"></span> Mapa de México</a>
+        <a href="#categorias" class="dash-pill"><span class="dash-pill-dot dash-pill-dot--cat"></span> Categorías</a>
+        <a href="#anual" class="dash-pill"><span class="dash-pill-dot dash-pill-dot--anual"></span> Casos por año</a>
+        <a href="#semanal" class="dash-pill"><span class="dash-pill-dot dash-pill-dot--semanal"></span> Casos semanales</a>
+        <a href="#predicciones" class="dash-pill"><span class="dash-pill-dot dash-pill-dot--pred"></span> Predicciones</a>
+      </div>
+    </div>
 
-					<h4>Predicciones</h4>
-					<p>
-						<strong>Nota:</strong> las predicciones presentadas son simuladas por el momento.
-					</p>
-					<p>
-						Esta visualización muestra el incremento de casos anuales por sexo, así como la predicción
-						resultante del modelo seleccionado como el más apropiado para cada padecimiento. Estas
-						proyecciones tienen un carácter exploratorio y se irán refinando conforme se integren nuevos
-						datos y validaciones.
-					</p>
-					<div class='tableauPlaceholder' id='viz1770305288248' style='position: relative'><noscript><a href='#'><img alt='EpiForecast-MX: Predicciones ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Ep&#47;EpiForecast-MX&#47;Predicciones&#47;1_rss.png' style='border: none' /></a></noscript><object class='tableauViz'  style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='' /><param name='name' value='EpiForecast-MX&#47;Predicciones' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Ep&#47;EpiForecast-MX&#47;Predicciones&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='en-US' /><param name='filter' value='publish=yes' /></object></div>                <script type='text/javascript'>                    var divElement = document.getElementById('viz1770305288248');                    var vizElement = divElement.getElementsByTagName('object')[0];                    vizElement.style.width='100%';vizElement.style.height=(divElement.offsetWidth*0.75)+'px';                    var scriptElement = document.createElement('script');                    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    vizElement.parentNode.insertBefore(scriptElement, vizElement);                </script><hr />
+    <!-- ─── 1. Tabla de datos ─── -->
+    <section class="viz-section reveal" id="tabla">
+      <div class="viz-section-header">
+        <div class="viz-number">01</div>
+        <h2>Tabla de datos</h2>
+      </div>
+      <p>
+        Esta tabla presenta el conjunto de datos consolidado utilizado en el análisis. La información
+        proviene de los boletines epidemiológicos semanales en formato PDF y corresponde a registros
+        acumulados por entidad federativa, año y semana epidemiológica.
+      </p>
+      <p>
+        Adicionalmente, se incorporó información demográfica obtenida directamente de INEGI para
+        complementar el análisis. La tabla puede filtrarse por año y por condición médica.
+      </p>
+      <span class="viz-note">⚠ La información de 2026 es simulada y tiene fines informativos</span>
 
-					</div>
-				</section>
-				</article>
+      <div class="tableau-wrap">
+        <div class='tableauPlaceholder' id='viz1770293424381' style='position: relative'><noscript><a href='#'><img alt='EpiForecast-MX: Tabla de datos' src='https://public.tableau.com/static/images/Ep/EpiForecast-MX/Tabladedatos/1_rss.png' style='border: none' /></a></noscript><object class='tableauViz' style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /><param name='embed_code_version' value='3' /><param name='site_root' value='' /><param name='name' value='EpiForecast-MX/Tabladedatos' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='static_image' value='https://public.tableau.com/static/images/Ep/EpiForecast-MX/Tabladedatos/1.png' /><param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='es-ES' /></object></div>
+        <script type='text/javascript'>
+          var divElement = document.getElementById('viz1770293424381');
+          var vizElement = divElement.getElementsByTagName('object')[0];
+          vizElement.style.width='100%';
+          vizElement.style.height=(divElement.offsetWidth*0.75)+'px';
+          var scriptElement = document.createElement('script');
+          scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
+          vizElement.parentNode.insertBefore(scriptElement, vizElement);
+        </script>
+      </div>
+    </section>
 
+    <div class="viz-divider"></div>
 
+    <!-- ─── 2. Mapa de México ─── -->
+    <section class="viz-section reveal" id="mapa">
+      <div class="viz-section-header">
+        <div class="viz-number">02</div>
+        <h2>Mapa de México</h2>
+      </div>
+      <p>
+        Con base en datos del INEGI, este mapa ofrece una representación gráfica de la densidad poblacional
+        por entidad federativa, así como de la superficie territorial en kilómetros cuadrados mediante
+        variaciones de color.
+      </p>
+      <p>
+        Además, se incluyen los casos desagregados por sexo. Todas las variables visualizadas son
+        seleccionables, lo que permite explorar de manera interactiva la relación entre demografía,
+        territorio e incidencia de los padecimientos.
+      </p>
 
-				<!-- Footer -->
-					<footer id="footer">
-						<ul class="icons">
-							<li><a href="https://www.linkedin.com/in/luisgss10/" class="icon brands fa-linkedin" target="_blank" rel="noopener noreferrer"><span class="label">LinkedIn</span></a></li>
-							<li><a href="https://github.com/luisgss10" class="icon brands fa-github" target="_blank" rel="noopener noreferrer"><span class="label">GitHub</span></a></li>
-							<li><a href="mailto:luisgss10@hotmail.com" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
-							
-						</ul>
-						<ul class="copyright">
-							<li>&copy; 2026 LUIS SANCHEZ. All rights reserved.</li><li><a href="http://luisgss10.com">LUISGSS10.COM</a></li>
-						</ul>
-					</footer>
+      <div class="tableau-wrap">
+        <div class='tableauPlaceholder' id='viz1770299634745' style='position: relative'><noscript><a href='#'><img alt='EpiForecast-MX: Mapa de México' src='https://public.tableau.com/static/images/Ep/EpiForecast-MX/MapadeMxico/1_rss.png' style='border: none' /></a></noscript><object class='tableauViz' style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /><param name='embed_code_version' value='3' /><param name='site_root' value='' /><param name='name' value='EpiForecast-MX/MapadeMxico' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='static_image' value='https://public.tableau.com/static/images/Ep/EpiForecast-MX/MapadeMxico/1.png' /><param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='es-ES' /><param name='filter' value='publish=yes' /></object></div>
+        <script type='text/javascript'>
+          var divElement = document.getElementById('viz1770299634745');
+          var vizElement = divElement.getElementsByTagName('object')[0];
+          vizElement.style.width='100%';
+          vizElement.style.height=(divElement.offsetWidth*0.75)+'px';
+          var scriptElement = document.createElement('script');
+          scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
+          vizElement.parentNode.insertBefore(scriptElement, vizElement);
+        </script>
+      </div>
+    </section>
 
-			</div>
+    <div class="viz-divider"></div>
 
-		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/jquery.scrollex.min.js"></script>
-			<script src="assets/js/jquery.scrolly.min.js"></script>
-			<script src="assets/js/browser.min.js"></script>
-			<script src="assets/js/breakpoints.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<script src="assets/js/main.js"></script>
+    <!-- ─── 3. Categorías ─── -->
+    <section class="viz-section reveal" id="categorias">
+      <div class="viz-section-header">
+        <div class="viz-number">03</div>
+        <h2>México en categorías</h2>
+      </div>
+      <p>
+        Este mapa permite visualizar distintas categorizaciones sugeridas del país, considerando múltiples
+        criterios analíticos. Entre ellos se incluyen la región geográfica, la región socio-urbana, el
+        ratio entre hombres y mujeres, la extensión territorial y la densidad poblacional.
+      </p>
+      <p>
+        Asimismo, se presentan dos enfoques de tamaño poblacional: uno basado en rangos fijos (bins
+        definidos) y otro construido mediante percentiles. Estas categorizaciones facilitan comparaciones
+        estructurales entre entidades.
+      </p>
 
+      <div class="tableau-wrap">
+        <div class='tableauPlaceholder' id='viz1770299606081' style='position: relative'><noscript><a href='#'><img alt='EpiForecast-MX: Mapa: Categorías' src='https://public.tableau.com/static/images/Ep/EpiForecast-MX/MapaCategoras/1_rss.png' style='border: none' /></a></noscript><object class='tableauViz' style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /><param name='embed_code_version' value='3' /><param name='site_root' value='' /><param name='name' value='EpiForecast-MX/MapaCategoras' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='static_image' value='https://public.tableau.com/static/images/Ep/EpiForecast-MX/MapaCategoras/1.png' /><param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='es-ES' /><param name='filter' value='publish=yes' /></object></div>
+        <script type='text/javascript'>
+          var divElement = document.getElementById('viz1770299606081');
+          var vizElement = divElement.getElementsByTagName('object')[0];
+          vizElement.style.width='100%';
+          vizElement.style.height=(divElement.offsetWidth*0.75)+'px';
+          var scriptElement = document.createElement('script');
+          scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
+          vizElement.parentNode.insertBefore(scriptElement, vizElement);
+        </script>
+      </div>
+    </section>
 
+    <div class="viz-divider"></div>
 
-	</body>
+    <!-- ─── 4. Casos por año ─── -->
+    <section class="viz-section reveal" id="anual">
+      <div class="viz-section-header">
+        <div class="viz-number">04</div>
+        <h2>Casos por año</h2>
+      </div>
+      <p>
+        Esta visualización muestra el incremento de casos anuales desagregado por sexo. El gráfico permite
+        filtrar por año y por padecimiento, facilitando el análisis comparativo de tendencias entre
+        periodos y condiciones médicas.
+      </p>
+
+      <div class="tableau-wrap">
+        <div class='tableauPlaceholder' id='viz1770293499912' style='position: relative'><noscript><a href='#'><img alt='EpiForecast-MX: Casos por año' src='https://public.tableau.com/static/images/Ep/EpiForecast-MX/Casosporao/1_rss.png' style='border: none' /></a></noscript><object class='tableauViz' style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /><param name='embed_code_version' value='3' /><param name='site_root' value='' /><param name='name' value='EpiForecast-MX/Casosporao' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='static_image' value='https://public.tableau.com/static/images/Ep/EpiForecast-MX/Casosporao/1.png' /><param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='es-ES' /></object></div>
+        <script type='text/javascript'>
+          var divElement = document.getElementById('viz1770293499912');
+          var vizElement = divElement.getElementsByTagName('object')[0];
+          vizElement.style.width='100%';
+          vizElement.style.height=(divElement.offsetWidth*0.75)+'px';
+          var scriptElement = document.createElement('script');
+          scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
+          vizElement.parentNode.insertBefore(scriptElement, vizElement);
+        </script>
+      </div>
+    </section>
+
+    <div class="viz-divider"></div>
+
+    <!-- ─── 5. Casos semanales ─── -->
+    <section class="viz-section reveal" id="semanal">
+      <div class="viz-section-header">
+        <div class="viz-number">05</div>
+        <h2>Casos semanales</h2>
+      </div>
+      <p>
+        En esta sección se presenta el incremento de casos semanales por sexo. La visualización incluye
+        filtros por año y padecimiento, lo que permite analizar la dinámica temporal de corto plazo y
+        detectar variaciones relevantes dentro de cada año epidemiológico.
+      </p>
+
+      <div class="tableau-wrap">
+        <div class='tableauPlaceholder' id='viz1770293458080' style='position: relative'><noscript><a href='#'><img alt='EpiForecast-MX: Casos por semana' src='https://public.tableau.com/static/images/Ep/EpiForecast-MX/Casosporsemana/1_rss.png' style='border: none' /></a></noscript><object class='tableauViz' style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /><param name='embed_code_version' value='3' /><param name='site_root' value='' /><param name='name' value='EpiForecast-MX/Casosporsemana' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='static_image' value='https://public.tableau.com/static/images/Ep/EpiForecast-MX/Casosporsemana/1.png' /><param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='es-ES' /></object></div>
+        <script type='text/javascript'>
+          var divElement = document.getElementById('viz1770293458080');
+          var vizElement = divElement.getElementsByTagName('object')[0];
+          vizElement.style.width='100%';
+          vizElement.style.height=(divElement.offsetWidth*0.75)+'px';
+          var scriptElement = document.createElement('script');
+          scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
+          vizElement.parentNode.insertBefore(scriptElement, vizElement);
+        </script>
+      </div>
+    </section>
+
+    <div class="viz-divider"></div>
+
+    <!-- ─── 6. Predicciones ─── -->
+    <section class="viz-section reveal" id="predicciones">
+      <div class="viz-section-header">
+        <div class="viz-number">06</div>
+        <h2>Predicciones</h2>
+      </div>
+      <span class="viz-note">⚠ Las predicciones presentadas son simuladas por el momento</span>
+      <p>
+        Esta visualización muestra el incremento de casos anuales por sexo, así como la predicción
+        resultante del modelo seleccionado como el más apropiado para cada padecimiento. Estas
+        proyecciones tienen un carácter exploratorio y se irán refinando conforme se integren nuevos
+        datos y validaciones.
+      </p>
+
+      <div class="tableau-wrap">
+        <div class='tableauPlaceholder' id='viz1770305288248' style='position: relative'><noscript><a href='#'><img alt='EpiForecast-MX: Predicciones' src='https://public.tableau.com/static/images/Ep/EpiForecast-MX/Predicciones/1_rss.png' style='border: none' /></a></noscript><object class='tableauViz' style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /><param name='embed_code_version' value='3' /><param name='site_root' value='' /><param name='name' value='EpiForecast-MX/Predicciones' /><param name='tabs' value='no' /><param name='toolbar' value='yes' /><param name='static_image' value='https://public.tableau.com/static/images/Ep/EpiForecast-MX/Predicciones/1.png' /><param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='es-ES' /><param name='filter' value='publish=yes' /></object></div>
+        <script type='text/javascript'>
+          var divElement = document.getElementById('viz1770305288248');
+          var vizElement = divElement.getElementsByTagName('object')[0];
+          vizElement.style.width='100%';
+          vizElement.style.height=(divElement.offsetWidth*0.75)+'px';
+          var scriptElement = document.createElement('script');
+          scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
+          vizElement.parentNode.insertBefore(scriptElement, vizElement);
+        </script>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       FOOTER
+       ═══════════════════════════════════════════════════════════════ -->
+  <footer class="footer">
+    <div class="footer-brand">EpiForecast<span>-MX</span></div>
+    <div class="footer-divider"></div>
+    <p>
+      Proyecto capstone de la Maestría en Inteligencia Artificial Aplicada<br>
+      Tecnológico de Monterrey × Instituto Mexicano del Seguro Social
+    </p>
+    <div class="footer-links">
+      <a href="index.html">Inicio</a>
+      <a href="index.html#pipeline">Pipeline</a>
+      <a href="index.html#team">Equipo</a>
+      <a href="https://github.com/IntegradorIMSS2026Team01" target="_blank" rel="noopener">GitHub</a>
+    </div>
+    <p style="margin-top:1.5rem; font-size:0.75rem; opacity:0.5;">
+      © 2026 EpiForecast-MX · Equipo 01. Todos los derechos reservados.<br>
+      Guía Cromática Institucional del IMSS aplicada.
+    </p>
+  </footer>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SCRIPTS
+       ═══════════════════════════════════════════════════════════════ -->
+  <script>
+    // Nav scroll effect
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+    reveals.forEach(el => observer.observe(el));
+
+    // Smooth scroll for nav pills
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          document.querySelector('.nav-links').classList.remove('show');
+        }
+      });
+    });
+  </script>
+</body>
 </html>
