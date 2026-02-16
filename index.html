@@ -876,6 +876,232 @@
     }
 
     /* ═══════════════════════════════════════════════════════════════════
+       RESULTS BASELINE
+       ═══════════════════════════════════════════════════════════════════ */
+    .results-bg {
+      background: linear-gradient(160deg, #0a0a0a 0%, var(--neutral-black) 50%, #1a1520 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .results-bg::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 40% 40% at 15% 30%, rgba(155,34,66,0.15), transparent),
+        radial-gradient(ellipse 35% 35% at 85% 70%, rgba(0,82,78,0.12), transparent),
+        radial-gradient(ellipse 30% 30% at 50% 50%, rgba(181,133,0,0.08), transparent);
+    }
+    .results-bg .section-label { color: var(--gold); }
+    .results-bg .section-label::before { background: var(--gold); }
+    .results-bg .section-title { color: var(--cream); }
+    .results-bg .section-desc { color: rgba(232,213,181,0.55); }
+
+    .results-summary {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin: 2rem 0 3rem;
+      flex-wrap: wrap;
+    }
+    .results-summary-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1.1rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(232,213,181,0.12);
+      border-radius: 100px;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: rgba(232,213,181,0.7);
+    }
+    .results-summary-pill strong {
+      color: var(--cream);
+      font-size: 0.88rem;
+    }
+
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+    .result-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(232,213,181,0.08);
+      border-radius: 20px;
+      padding: 2rem 1.8rem;
+      position: relative;
+      overflow: hidden;
+      transition: background .3s, border-color .3s, transform .3s;
+    }
+    .result-card:hover {
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(232,213,181,0.18);
+      transform: translateY(-4px);
+    }
+    .result-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+    }
+    .result-card--dep::before { background: linear-gradient(90deg, var(--burgundy), #C0384F); }
+    .result-card--par::before { background: linear-gradient(90deg, var(--teal), #1A7A74); }
+    .result-card--alz::before { background: linear-gradient(90deg, var(--gold), #D4A017); }
+
+    .result-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+    .result-card-tag {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      padding: 0.3rem 0.7rem;
+      border-radius: 6px;
+      font-weight: 500;
+    }
+    .result-card--dep .result-card-tag { background: rgba(155,34,66,0.15); color: #E8899C; }
+    .result-card--par .result-card-tag { background: rgba(0,82,78,0.15); color: #5DB8B2; }
+    .result-card--alz .result-card-tag { background: rgba(181,133,0,0.15); color: #DABB54; }
+
+    .result-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      color: var(--cream);
+    }
+
+    .result-kpis {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .result-kpi {
+      background: rgba(0,0,0,0.2);
+      border-radius: 12px;
+      padding: 1rem;
+      text-align: center;
+    }
+    .result-kpi-value {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      line-height: 1.1;
+    }
+    .result-card--dep .result-kpi-value { color: #E8899C; }
+    .result-card--par .result-kpi-value { color: #5DB8B2; }
+    .result-card--alz .result-kpi-value { color: #DABB54; }
+    .result-kpi-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: rgba(232,213,181,0.45);
+      margin-top: 0.3rem;
+      font-weight: 600;
+    }
+
+    .result-semaphore {
+      display: flex;
+      gap: 0.4rem;
+      margin-bottom: 1.2rem;
+    }
+    .result-semaphore-seg {
+      flex: 1;
+      height: 6px;
+      border-radius: 3px;
+      position: relative;
+    }
+    .result-semaphore-seg::after {
+      content: attr(data-label);
+      position: absolute;
+      bottom: -18px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.62rem;
+      color: rgba(232,213,181,0.35);
+      white-space: nowrap;
+      font-family: var(--font-mono);
+    }
+    .seg-exc   { background: var(--teal); }
+    .seg-acep  { background: var(--gold); }
+    .seg-mej   { background: #E65100; }
+    .seg-ins   { background: #B71C1C; }
+
+    .result-states {
+      margin-top: 2rem;
+      display: flex;
+      gap: 0.75rem;
+    }
+    .result-state {
+      flex: 1;
+      padding: 0.8rem;
+      border-radius: 10px;
+      font-size: 0.78rem;
+      line-height: 1.4;
+    }
+    .result-state--best {
+      background: rgba(0,82,78,0.1);
+      border: 1px solid rgba(0,82,78,0.2);
+    }
+    .result-state--worst {
+      background: rgba(183,28,28,0.08);
+      border: 1px solid rgba(183,28,28,0.15);
+    }
+    .result-state-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.3rem;
+      display: block;
+    }
+    .result-state--best .result-state-label { color: #5DB8B2; }
+    .result-state--worst .result-state-label { color: #E8899C; }
+    .result-state-name {
+      color: rgba(232,213,181,0.8);
+      font-weight: 600;
+    }
+    .result-state-val {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      color: var(--cream);
+    }
+
+    .results-cv-bar {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+    .cv-detail {
+      text-align: center;
+      padding: 1.5rem;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(232,213,181,0.08);
+      border-radius: 14px;
+    }
+    .cv-detail-value {
+      font-family: var(--font-mono);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--gold);
+    }
+    .cv-detail-label {
+      font-size: 0.75rem;
+      color: rgba(232,213,181,0.4);
+      margin-top: 0.25rem;
+    }
+
+    @media (max-width: 768px) {
+      .results-grid { grid-template-columns: 1fr; }
+      .results-cv-bar { grid-template-columns: 1fr; }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════
        FOOTER
        ═══════════════════════════════════════════════════════════════════ */
     .footer {
@@ -974,6 +1200,7 @@
         <li><a href="#diseases">Padecimientos</a></li>
         <li><a href="#pipeline">Pipeline</a></li>
         <li><a href="#methodology">Metodología</a></li>
+        <li><a href="#results">Resultados</a></li>
         <li><a href="#team">Equipo</a></li>
         <li><a href="#scope">Datos</a></li>
         <li><a href="EpiDashboard.html" style="color:var(--gold);">Dashboard</a></li>
@@ -994,28 +1221,28 @@
     <div class="hero-orb hero-orb--3"></div>
 
     <div class="hero-content">
-      <div class="hero-badge">Maestría en Inteligencia Artificial Aplicada · Tec de Monterrey</div>
+      <div class="hero-badge">Avance 3 · Modelo Baseline Validado · 297 Modelos Prophet</div>
 
       <h1>EpiForecast<span class="accent">-MX</span></h1>
 
       <p class="hero-sub">
-        Pronósticos epidemiológicos inteligentes para padecimientos neurológicos y de salud mental en México.
+        297 modelos Prophet validados con cross-validation temporal para pronósticos epidemiológicos de padecimientos neurológicos y de salud mental en México.
         Una colaboración entre el <strong style="color:var(--cream)">Tecnológico de Monterrey</strong>
         y el <strong style="color:var(--cream)">IMSS</strong>.
       </p>
 
       <div class="hero-stats">
         <div class="hero-stat">
-          <div class="hero-stat-value">3</div>
-          <div class="hero-stat-label">Padecimientos</div>
+          <div class="hero-stat-value">297</div>
+          <div class="hero-stat-label">Modelos Prophet</div>
         </div>
         <div class="hero-stat">
           <div class="hero-stat-value">32</div>
           <div class="hero-stat-label">Entidades</div>
         </div>
         <div class="hero-stat">
-          <div class="hero-stat-value">60K+</div>
-          <div class="hero-stat-label">Registros</div>
+          <div class="hero-stat-value">14.6%</div>
+          <div class="hero-stat-label">Mejor MAPE Nac.</div>
         </div>
         <div class="hero-stat">
           <div class="hero-stat-value">12</div>
@@ -1109,8 +1336,8 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M8 15s1.5-2 4-2 4 2 4 2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
         </div>
         <h3>Depresión</h3>
-        <p>Padecimiento con el mayor volumen de casos registrados. Presenta marcados patrones estacionales y diferencias significativas por género, con mayor incidencia en mujeres en la mayoría de entidades.</p>
-        <span class="disease-tag">Trastornos del ánimo · CIE-10: F32</span>
+        <p>Mayor volumen de casos y mejor predecibilidad. MAPE nacional de 14.6% con patrones estacionales marcados. Ciudad de México alcanza un MAPE estatal de apenas 4.8% — el mejor del portafolio completo.</p>
+        <span class="disease-tag">CIE-10: F32 · MAPE 14.6% · 99 modelos</span>
       </div>
 
       <!-- Parkinson -->
@@ -1119,8 +1346,8 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2a10 10 0 100 20 10 10 0 000-20z"/><path d="M12 8v4l3 3"/></svg>
         </div>
         <h3>Parkinson</h3>
-        <p>Enfermedad neurodegenerativa con tendencia creciente en los registros epidemiológicos. Su pronóstico a nivel subnacional es crucial para la distribución de medicamentos especializados.</p>
-        <span class="disease-tag">Neurodegenerativo · CIE-10: G20</span>
+        <p>Escenario más desafiante con MAPE nacional de 27.8% y alta volatilidad estatal. Solo 5 de 32 estados superan el umbral aceptable — la baja incidencia genera una relación señal-ruido desfavorable.</p>
+        <span class="disease-tag">CIE-10: G20 · MAPE 27.8% · 99 modelos</span>
       </div>
 
       <!-- Alzheimer -->
@@ -1129,8 +1356,8 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M8 12h.01M12 12h.01M16 12h.01"/></svg>
         </div>
         <h3>Alzheimer</h3>
-        <p>Enfermedad con impacto creciente en el envejecimiento poblacional mexicano. Los pronósticos permiten anticipar necesidades de atención especializada y cuidadores a mediano plazo.</p>
-        <span class="disease-tag">Demencia · CIE-10: G30</span>
+        <p>Posición intermedia con MAPE nacional de 28.3% y la menor dispersión inter-estatal (σ = 8.6%). Es el único padecimiento donde las mujeres presentan mejor predecibilidad que los hombres.</p>
+        <span class="disease-tag">CIE-10: G30 · MAPE 28.3% · 99 modelos</span>
       </div>
     </div>
   </section>
@@ -1288,7 +1515,7 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
         </div>
         <h3>Fase II — Pipeline Unificado</h3>
-        <p>Arquitectura modular con Prophet para pronósticos multi-step. Matriz de predicciones granulares: 32 entidades × 3 padecimientos × sexo, con intervalos de confianza calibrados.</p>
+        <p>Arquitectura modular con Prophet para pronósticos multi-step. 297 modelos baseline validados con cross-validation temporal (initial=730d, period=56d, horizon=168d). Matriz completa: 3 padecimientos × (1 nacional + 2 sexo + 32 estados + 64 estado×sexo).</p>
       </div>
 
       <div class="method-card method-highlight reveal reveal-delay-3">
@@ -1317,12 +1544,178 @@
           </div>
           <div class="method-feature">
             <div class="method-feature-dot"></div>
-            <span>Escalabilidad para 192+ combinaciones de pronóstico</span>
+            <span>Escalabilidad demostrada: 297 modelos validados en producción</span>
           </div>
           <div class="method-feature">
             <div class="method-feature-dot"></div>
             <span>Reproducibilidad garantizada con MLOps (DVC + Makefile)</span>
           </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       RESULTS — BASELINE MODEL
+       ═══════════════════════════════════════════════════════════════ -->
+  <section class="results-bg" id="results">
+    <div class="section">
+      <div class="section-label reveal">Avance 3 — Resultados</div>
+      <div class="section-title reveal">297 modelos baseline<br>validados con datos reales</div>
+      <div class="section-desc reveal">
+        Cross-validation temporal con 4 niveles de granularidad: Nacional, Nacional×Sexo, Estatal y Estatal×Sexo. Métricas evaluadas con MAPE, RMSE, MAE y MDAPE sobre horizonte de 168 días.
+      </div>
+
+      <div class="results-summary reveal">
+        <div class="results-summary-pill">Modelos totales <strong>297</strong></div>
+        <div class="results-summary-pill">Horizonte <strong>168 días</strong></div>
+        <div class="results-summary-pill">Changepoints COVID <strong>5 detectados</strong></div>
+        <div class="results-summary-pill">Outliers IQR <strong>179 identificados</strong></div>
+      </div>
+
+      <div class="results-grid">
+        <!-- DEPRESIÓN -->
+        <div class="result-card result-card--dep reveal reveal-delay-1">
+          <div class="result-card-header">
+            <h3>Depresión</h3>
+            <span class="result-card-tag">F32 · 99 modelos</span>
+          </div>
+          <div class="result-kpis">
+            <div class="result-kpi">
+              <div class="result-kpi-value">14.6%</div>
+              <div class="result-kpi-label">MAPE Nacional</div>
+            </div>
+            <div class="result-kpi">
+              <div class="result-kpi-value">397</div>
+              <div class="result-kpi-label">RMSE Nacional</div>
+            </div>
+            <div class="result-kpi">
+              <div class="result-kpi-value">37.8%</div>
+              <div class="result-kpi-label">Mediana Estatal</div>
+            </div>
+            <div class="result-kpi">
+              <div class="result-kpi-value">5.2 pp</div>
+              <div class="result-kpi-label">Brecha Train-CV</div>
+            </div>
+          </div>
+
+          <div class="result-semaphore">
+            <div class="result-semaphore-seg seg-exc" style="flex:2" data-label="2 Exc"></div>
+            <div class="result-semaphore-seg seg-acep" style="flex:8" data-label="8 Acep"></div>
+            <div class="result-semaphore-seg seg-mej" style="flex:15" data-label="15 Mejora"></div>
+            <div class="result-semaphore-seg seg-ins" style="flex:7" data-label="7 Insuf"></div>
+          </div>
+
+          <div class="result-states">
+            <div class="result-state result-state--best">
+              <span class="result-state-label">Mejor estado</span>
+              <span class="result-state-name">Cd. de México</span> · <span class="result-state-val">4.8%</span>
+            </div>
+            <div class="result-state result-state--worst">
+              <span class="result-state-label">Mayor reto</span>
+              <span class="result-state-name">Guerrero</span> · <span class="result-state-val">77.4%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- PARKINSON -->
+        <div class="result-card result-card--par reveal reveal-delay-2">
+          <div class="result-card-header">
+            <h3>Parkinson</h3>
+            <span class="result-card-tag">G20 · 99 modelos</span>
+          </div>
+          <div class="result-kpis">
+            <div class="result-kpi">
+              <div class="result-kpi-value">27.8%</div>
+              <div class="result-kpi-label">MAPE Nacional</div>
+            </div>
+            <div class="result-kpi">
+              <div class="result-kpi-value">39</div>
+              <div class="result-kpi-label">RMSE Nacional</div>
+            </div>
+            <div class="result-kpi">
+              <div class="result-kpi-value">65.6%</div>
+              <div class="result-kpi-label">Mediana Estatal</div>
+            </div>
+            <div class="result-kpi">
+              <div class="result-kpi-value">7.4 pp</div>
+              <div class="result-kpi-label">Brecha Train-CV</div>
+            </div>
+          </div>
+
+          <div class="result-semaphore">
+            <div class="result-semaphore-seg seg-mej" style="flex:5" data-label="5 Mejora"></div>
+            <div class="result-semaphore-seg seg-ins" style="flex:27" data-label="27 Insuf"></div>
+          </div>
+
+          <div class="result-states">
+            <div class="result-state result-state--best">
+              <span class="result-state-label">Mejor estado</span>
+              <span class="result-state-name">Jalisco</span> · <span class="result-state-val">36.0%</span>
+            </div>
+            <div class="result-state result-state--worst">
+              <span class="result-state-label">Mayor reto</span>
+              <span class="result-state-name">Puebla</span> · <span class="result-state-val">102.3%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ALZHEIMER -->
+        <div class="result-card result-card--alz reveal reveal-delay-3">
+          <div class="result-card-header">
+            <h3>Alzheimer</h3>
+            <span class="result-card-tag">G30 · 99 modelos</span>
+          </div>
+          <div class="result-kpis">
+            <div class="result-kpi">
+              <div class="result-kpi-value">28.3%</div>
+              <div class="result-kpi-label">MAPE Nacional</div>
+            </div>
+            <div class="result-kpi">
+              <div class="result-kpi-value">12</div>
+              <div class="result-kpi-label">RMSE Nacional</div>
+            </div>
+            <div class="result-kpi">
+              <div class="result-kpi-value">47.5%</div>
+              <div class="result-kpi-label">Mediana Estatal</div>
+            </div>
+            <div class="result-kpi">
+              <div class="result-kpi-value">4.9 pp</div>
+              <div class="result-kpi-label">Brecha Train-CV</div>
+            </div>
+          </div>
+
+          <div class="result-semaphore">
+            <div class="result-semaphore-seg seg-mej" style="flex:21" data-label="21 Mejora"></div>
+            <div class="result-semaphore-seg seg-ins" style="flex:11" data-label="11 Insuf"></div>
+          </div>
+
+          <div class="result-states">
+            <div class="result-state result-state--best">
+              <span class="result-state-label">Mejor estado</span>
+              <span class="result-state-name">San Luis Potosí</span> · <span class="result-state-val">38.7%</span>
+            </div>
+            <div class="result-state result-state--worst">
+              <span class="result-state-label">Mayor reto</span>
+              <span class="result-state-name">Baja Calif. Sur</span> · <span class="result-state-val">74.7%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cross-validation details -->
+      <div class="results-cv-bar reveal">
+        <div class="cv-detail">
+          <div class="cv-detail-value">730 días</div>
+          <div class="cv-detail-label">Ventana de entrenamiento inicial</div>
+        </div>
+        <div class="cv-detail">
+          <div class="cv-detail-value">56 días</div>
+          <div class="cv-detail-label">Período entre cortes</div>
+        </div>
+        <div class="cv-detail">
+          <div class="cv-detail-value">168 días</div>
+          <div class="cv-detail-label">Horizonte de pronóstico</div>
         </div>
       </div>
     </div>
@@ -1338,7 +1731,7 @@
 
       <div class="team-grid">
         <div class="team-card reveal reveal-delay-1">
-          <div class="team-avatar team-avatar--1">SG</div>
+          <div class="team-avatar team-avatar--1">JR</div>
           <h4>Javier Rebull</h4>
           <div class="team-role">ML Engineer & Lead Developer</div>
           <div class="team-org">Santander Bank US</div>
@@ -1408,6 +1801,9 @@
       <div class="stack-pill"><span class="stack-pill-dot stack-pill-dot--ops"></span>VS Code</div>
       <div class="stack-pill"><span class="stack-pill-dot stack-pill-dot--ml"></span>Claude Code</div>
       <div class="stack-pill"><span class="stack-pill-dot stack-pill-dot--ops"></span>LaTeX</div>
+      <div class="stack-pill"><span class="stack-pill-dot stack-pill-dot--viz"></span>Tableau Public</div>
+      <div class="stack-pill"><span class="stack-pill-dot stack-pill-dot--ops"></span>GitHub Actions</div>
+      <div class="stack-pill"><span class="stack-pill-dot stack-pill-dot--cloud"></span>Netlify</div>
     </div>
   </section>
 
@@ -1423,12 +1819,12 @@
         <div class="scope-stat reveal reveal-delay-1">
           <div class="scope-stat-value scope-stat-value--teal">60,288</div>
           <div class="scope-stat-label">Registros totales</div>
-          <div class="scope-stat-sub">Dataset consolidado</div>
+          <div class="scope-stat-sub">Dataset consolidado SINAVE + INEGI</div>
         </div>
         <div class="scope-stat reveal reveal-delay-2">
-          <div class="scope-stat-value scope-stat-value--burg">2014–2026</div>
+          <div class="scope-stat-value scope-stat-value--burg">2012–2026</div>
           <div class="scope-stat-label">Período cubierto</div>
-          <div class="scope-stat-sub">12 años de boletines SINAVE</div>
+          <div class="scope-stat-sub">13+ años de boletines SINAVE</div>
         </div>
         <div class="scope-stat reveal reveal-delay-3">
           <div class="scope-stat-value scope-stat-value--gold">32</div>
@@ -1436,9 +1832,9 @@
           <div class="scope-stat-sub">Cobertura nacional completa</div>
         </div>
         <div class="scope-stat reveal reveal-delay-4">
-          <div class="scope-stat-value scope-stat-value--dark">192+</div>
+          <div class="scope-stat-value scope-stat-value--dark">297</div>
           <div class="scope-stat-label">Modelos Prophet</div>
-          <div class="scope-stat-sub">3 padecimientos × 32 entidades × sexo</div>
+          <div class="scope-stat-sub">99 por padecimiento · Validados con CV temporal</div>
         </div>
       </div>
     </div>
@@ -1457,6 +1853,7 @@
     <div class="footer-links">
       <a href="#hero">Inicio</a>
       <a href="#pipeline">Pipeline</a>
+      <a href="#results">Resultados</a>
       <a href="#team">Equipo</a>
       <a href="EpiDashboard.html">Dashboard</a>
       <a href="https://github.com/IntegradorIMSS2026Team01" target="_blank" rel="noopener">GitHub</a>
