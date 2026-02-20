@@ -477,6 +477,27 @@
        ═══════════════════════════════════════════════════════════════ -->
   <main class="dash-body">
 
+    <section class="dash-intro reveal">
+      <h1>Atajos</h1>
+      <p>
+        Accesos directos a las visualizaciones interactivas del análisis exploratorio y de predicción
+        epidemiológica.
+      </p>
+
+      <div class="dash-nav-pills">
+        <a href="#tabla" class="dash-pill">Tabla de datos</a>
+        <a href="#mapa" class="dash-pill">Mapa de México</a>
+        <a href="#categorias" class="dash-pill">México en Categorías</a>
+        <a href="#anual" class="dash-pill">Casos por año</a>
+        <a href="#semanal" class="dash-pill">Casos semanales</a>
+      </div>
+      <div class="dash-nav-pills">
+        <a href="#pred-intervalo" class="dash-pill">Predicciones</a>
+        <a href="#pred-desempeno" class="dash-pill">Desempeño del Modelo</a>
+        <a href="#pred-52semanas" class="dash-pill">Últimas 52 semanas</a>
+      </div>
+    </section>
+
     <!-- =========================
         EXPLORACIÓN DE LOS DATOS
     ========================== -->
@@ -489,13 +510,6 @@
         federativa, periodo temporal, género y padecimiento, así como analizar patrones demográficos y
         territoriales relevantes.
       </p>
-      <div class="dash-nav-pills">
-        <a href="#tabla" class="dash-pill">Tabla de datos</a>
-        <a href="#mapa" class="dash-pill">Mapa de México</a>
-        <a href="#categorias" class="dash-pill">Categorías</a>
-        <a href="#anual" class="dash-pill">Casos por año</a>
-        <a href="#semanal" class="dash-pill">Casos semanales</a>
-      </div>
     </section>
 
     <!-- 01. Tabla -->
@@ -626,7 +640,7 @@
     </section>
 
     <!-- 01 -->
-    <section class="viz-section reveal">
+    <section class="viz-section reveal" id="pred-intervalo">
       <div class="viz-section-header">
         <div class="viz-number">01</div>
         <h2>Predicción e incertidumbre</h2>
@@ -648,7 +662,7 @@
     <div class="viz-divider"></div>
 
     <!-- 02 -->
-    <section class="viz-section reveal">
+    <section class="viz-section reveal" id="pred-desempeno">
       <div class="viz-section-header">
         <div class="viz-number">02</div>
         <h2>Desempeño del modelo</h2>
@@ -670,7 +684,7 @@
     <div class="viz-divider"></div>
 
     <!-- 03 -->
-    <section class="viz-section reveal">
+    <section class="viz-section reveal" id="pred-52semanas">
       <div class="viz-section-header">
         <div class="viz-number">03</div>
         <h2>Últimas 52 semanas y proyección</h2>
