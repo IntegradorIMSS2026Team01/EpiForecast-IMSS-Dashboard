@@ -1273,6 +1273,65 @@
   </section>
 
   <!-- ═══════════════════════════════════════════════════════════════
+       REPORTES Y HERRAMIENTAS
+       ═══════════════════════════════════════════════════════════════ -->
+  <section id="reportes" style="padding:4rem 2rem 3rem;background:linear-gradient(180deg,var(--cream-pale) 0%,#fff 100%)">
+    <div style="max-width:1100px;margin:0 auto;text-align:center">
+      <div class="section-label reveal" style="margin-bottom:.5rem">Acceso Directo</div>
+      <div class="section-title reveal" style="margin-bottom:2.5rem">Reportes y Herramientas</div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem;text-align:left" class="reveal">
+
+        <!-- Dashboard Tableau -->
+        <a href="EpiDashboard.html" style="text-decoration:none;display:block;background:#fff;border:2px solid var(--cream);border-radius:16px;padding:1.8rem 1.5rem;transition:transform .2s,box-shadow .2s,border-color .2s" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 32px rgba(23,63,53,.12)';this.style.borderColor='var(--gold)'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='var(--cream)'">
+          <div style="font-size:2rem;margin-bottom:.75rem">📊</div>
+          <div style="font-weight:700;color:var(--dark-teal);font-size:1.05rem;margin-bottom:.4rem">Dashboard Interactivo</div>
+          <div style="font-size:.82rem;color:var(--cool-gray);line-height:1.5">Visualización Tableau con filtros por padecimiento, estado y sexo. Tooltips con métricas MASE.</div>
+        </a>
+
+        <!-- Reporte de Resultados -->
+        <a href="reporte_resultados.html" style="text-decoration:none;display:block;background:#fff;border:2px solid var(--cream);border-radius:16px;padding:1.8rem 1.5rem;transition:transform .2s,box-shadow .2s,border-color .2s" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 32px rgba(23,63,53,.12)';this.style.borderColor='var(--gold)'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='var(--cream)'">
+          <div style="font-size:2rem;margin-bottom:.75rem">📈</div>
+          <div style="font-weight:700;color:var(--dark-teal);font-size:1.05rem;margin-bottom:.4rem">Reporte de Resultados</div>
+          <div style="font-size:.82rem;color:var(--cool-gray);line-height:1.5">312 modelos Prophet con métricas MASE, RMSE, MAE. Ranking interactivo, cobertura geográfica y top/bottom 10.</div>
+        </a>
+
+        <!-- Galería de Pronósticos -->
+        <a href="Reports/index.html" style="text-decoration:none;display:block;background:#fff;border:2px solid var(--cream);border-radius:16px;padding:1.8rem 1.5rem;transition:transform .2s,box-shadow .2s,border-color .2s" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 32px rgba(23,63,53,.12)';this.style.borderColor='var(--gold)'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='var(--cream)'">
+          <div style="font-size:2rem;margin-bottom:.75rem">🔮</div>
+          <div style="font-weight:700;color:var(--dark-teal);font-size:1.05rem;margin-bottom:.4rem">Galería de Pronósticos</div>
+          <div style="font-size:.82rem;color:var(--cool-gray);line-height:1.5">312 gráficos PNG interactivos con filtros por padecimiento, nivel geográfico y sexo. Lightbox y búsqueda.</div>
+        </a>
+
+        <!-- Bitácora del Modelado -->
+        <a href="bitacora_modelado.html" style="text-decoration:none;display:block;background:#fff;border:2px solid var(--cream);border-radius:16px;padding:1.8rem 1.5rem;transition:transform .2s,box-shadow .2s,border-color .2s" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 32px rgba(23,63,53,.12)';this.style.borderColor='var(--gold)'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='var(--cream)'">
+          <div style="font-size:2rem;margin-bottom:.75rem">📓</div>
+          <div style="font-weight:700;color:var(--dark-teal);font-size:1.05rem;margin-bottom:.4rem">Bitácora del Modelado</div>
+          <div style="font-size:.82rem;color:var(--cool-gray);line-height:1.5">Recorrido completo Prophet v1→v6: feature engineering, normalización, grids, anti-Newton, modo híbrido.</div>
+        </a>
+
+        <!-- Comparación de Modelos — DESTACADO -->
+        <a href="comparacion_modelos.html" style="text-decoration:none;display:block;background:linear-gradient(135deg,var(--dark-teal),#1a5c4f);border:2px solid var(--gold);border-radius:16px;padding:1.8rem 1.5rem;transition:transform .2s,box-shadow .2s;grid-column:1 / -1" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 32px rgba(181,133,0,.25)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+          <div style="display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap">
+            <div style="font-size:2.5rem">⚔️</div>
+            <div style="flex:1;min-width:200px">
+              <div style="font-weight:700;color:var(--gold);font-size:1.15rem;margin-bottom:.4rem">Comparación de Modelos — Benchmark SageMaker</div>
+              <div style="font-size:.85rem;color:var(--cream);line-height:1.5">6 algoritmos (Prophet, DeepAR, TFT, LightGBM+LSTM, XGBoost, Ridge) × 258 series = 1,548 trials en AWS SageMaker. 19 gráficos interactivos, tablas con filtros y análisis por padecimiento.</div>
+            </div>
+            <div style="display:flex;gap:1.5rem;flex-wrap:wrap">
+              <div style="text-align:center"><div style="font-size:1.6rem;font-weight:800;color:var(--gold)">1,548</div><div style="font-size:.7rem;color:var(--cream);opacity:.8">trials</div></div>
+              <div style="text-align:center"><div style="font-size:1.6rem;font-weight:800;color:var(--gold)">6</div><div style="font-size:.7rem;color:var(--cream);opacity:.8">modelos</div></div>
+              <div style="text-align:center"><div style="font-size:1.6rem;font-weight:800;color:var(--gold)">9.8h</div><div style="font-size:.7rem;color:var(--cream);opacity:.8">cómputo</div></div>
+              <div style="text-align:center"><div style="font-size:1.6rem;font-weight:800;color:var(--gold)">~$10</div><div style="font-size:.7rem;color:var(--cream);opacity:.8">USD</div></div>
+            </div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
        ABOUT
        ═══════════════════════════════════════════════════════════════ -->
   <section class="about" id="about">
