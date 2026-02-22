@@ -25,7 +25,7 @@ El dashboard incluye las siguientes secciones interactivas construidas con **Tab
 - **Categorías territoriales** — Categorizaciones por región geográfica, región socio-urbana, ratio de género, extensión territorial y densidad poblacional.
 - **Casos por año** — Incremento anual de casos desagregado por sexo, con filtros por año y padecimiento.
 - **Casos por semana** — Dinámica temporal de corto plazo dentro de cada año epidemiológico.
-- **Predicciones** — Proyecciones del modelo Prophet para cada padecimiento *(en desarrollo)*.
+- **Predicciones** — Proyecciones del modelo Prophet para cada padecimiento.
 
 ## Fuentes de datos
 
@@ -41,16 +41,47 @@ El dashboard incluye las siguientes secciones interactivas construidas con **Tab
 | Hosting | Netlify |
 | Repositorio | GitHub (IntegradorIMSS2026Team01) |
 
+## Galeria de Pronosticos
+
+La seccion **Reports/** contiene una galeria HTML interactiva con **312 graficos** de pronostico generados por Prophet, organizados por padecimiento, entidad y sexo.
+
+- **Filtros** por padecimiento (Alzheimer, Depresion, Parkinson), nivel (estatal, nacional, regional) y sexo
+- **Busqueda** por nombre de estado o region
+- **Vista grid / lista** con lightbox para ver cada grafico en detalle
+- **Ficha tecnica** en cada grafico: modelo, MASE, RMSE, tipo (estatal propio / regional fallback)
+
+Accesible desde:
+- Boton "Explorar Pronosticos" en la pagina principal (`index.html`)
+- Link "Pronosticos" en el navbar del dashboard (`EpiDashboard.html`)
+- Boton "Volver al inicio" en la galeria para regresar a `proyectointegrador.org`
+
 ## Estructura del sitio
 
 ```
 EpiForecast-IMSS-Dashboard/
-├── index.html                  # Página principal del proyecto
+├── index.html                  # Pagina principal del proyecto
 ├── EpiDashboard.html           # Dashboard con visualizaciones Tableau
+├── Reports/
+│   ├── index.html              # Galeria interactiva de 312 pronosticos
+│   ├── Alzheimer/              # PNGs por entidad (ej. Aguascalientes/)
+│   ├── Depresion/              #   cada carpeta tiene general/hombres/mujeres
+│   └── Parkinson/
 ├── Avance1.Equipo01.html       # Reporte de avance (HTML)
 ├── Avance1.Equipo01.pdf        # Reporte de avance (PDF)
 ├── pipeline_diagramEDA.html    # Diagrama del pipeline EDA
 └── README.md
+```
+
+## Navegacion
+
+El sitio tiene tres paginas principales conectadas entre si:
+
+```
+index.html  ──▶  EpiDashboard.html  (Dashboard Tableau)
+    │
+    └──────▶  Reports/index.html   (Galeria de Pronosticos)
+                  │
+                  └──▶  proyectointegrador.org  (Volver al inicio)
 ```
 
 ## Desarrollo local
