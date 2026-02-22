@@ -69,7 +69,7 @@
     }
 
     /* ═══════════════════════════════════════════════════════════════════
-       NAVIGATION
+       NAVIGATION — Grouped dropdowns
        ═══════════════════════════════════════════════════════════════════ */
     .nav {
       position: fixed;
@@ -77,39 +77,177 @@
       left: 0;
       right: 0;
       z-index: 1000;
-      background: rgba(23,63,53, 0.96);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(232,213,181,0.1);
-      transition: box-shadow .3s;
+      background: rgba(23,63,53, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(232,213,181,0.08);
+      transition: box-shadow .3s, padding .3s;
     }
-    .nav.scrolled { box-shadow: 0 4px 30px rgba(0,0,0,0.15); }
+    .nav.scrolled {
+      box-shadow: 0 4px 30px rgba(0,0,0,0.18);
+      background: rgba(23,63,53, 0.97);
+    }
     .nav-inner {
       max-width: 1200px;
       margin: 0 auto;
       padding: 0 2rem;
       display: flex;
       align-items: center;
-      justify-content: space-between;
       height: 64px;
+      gap: 1rem;
     }
+    .nav.scrolled .nav-inner { height: 52px; }
     .nav-logo {
       font-family: var(--font-display);
       font-size: 1.3rem;
       color: var(--cream);
       letter-spacing: 0.02em;
+      flex-shrink: 0;
     }
     .nav-logo span { color: var(--gold); }
-    .nav-links { display: flex; gap: 2rem; list-style: none; }
-    .nav-links a {
-      color: rgba(232,213,181,0.7);
-      font-size: 0.85rem;
+
+    /* Dropdown menu system */
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      list-style: none;
+      flex: 1;
+      justify-content: center;
+    }
+    .nav-group {
+      position: relative;
+    }
+    .nav-group-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      color: rgba(232,213,181,0.65);
+      font-size: 0.78rem;
       font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.1em;
-      transition: color .2s;
+      letter-spacing: 0.08em;
+      padding: 0.5rem 0.85rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: color .2s, background .2s;
+      white-space: nowrap;
+      border: none;
+      background: none;
+      font-family: inherit;
     }
-    .nav-links a:hover { color: var(--cream); }
+    .nav-group-toggle:hover,
+    .nav-group:hover .nav-group-toggle {
+      color: var(--cream);
+      background: rgba(232,213,181,0.06);
+    }
+    .nav-group-toggle svg {
+      width: 10px;
+      height: 10px;
+      opacity: 0.5;
+      transition: transform .2s;
+    }
+    .nav-group:hover .nav-group-toggle svg {
+      transform: rotate(180deg);
+      opacity: 0.8;
+    }
+
+    /* Dropdown panel */
+    .nav-dropdown {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%) translateY(-4px);
+      background: rgba(23,63,53,0.98);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(232,213,181,0.1);
+      border-radius: 12px;
+      padding: 0.5rem;
+      min-width: 200px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .15s, transform .15s, visibility .15s;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+    }
+    .nav-group:hover .nav-dropdown {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+    .nav-dropdown::before {
+      content: '';
+      position: absolute;
+      top: -8px;
+      left: 0;
+      right: 0;
+      height: 8px;
+    }
+    .nav-dropdown a {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.6rem 1rem;
+      color: rgba(232,213,181,0.7);
+      font-size: 0.82rem;
+      font-weight: 500;
+      border-radius: 8px;
+      transition: background .15s, color .15s;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .nav-dropdown a:hover {
+      background: rgba(232,213,181,0.08);
+      color: var(--cream);
+    }
+    .nav-dropdown a svg {
+      width: 16px;
+      height: 16px;
+      opacity: 0.5;
+      flex-shrink: 0;
+    }
+    .nav-dropdown a:hover svg { opacity: 0.8; }
+
+    /* CTA buttons (right side) */
+    .nav-ctas {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      border-radius: 100px;
+      text-decoration: none;
+      transition: transform .2s, box-shadow .2s, background .2s;
+      white-space: nowrap;
+    }
+    .nav-cta:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(181,133,0,0.3);
+    }
+    .nav-cta--primary {
+      background: var(--gold);
+      color: var(--dark-teal);
+    }
+    .nav-cta--secondary {
+      background: rgba(232,213,181,0.1);
+      color: var(--gold);
+      border: 1px solid rgba(181,133,0,0.3);
+    }
+    .nav-cta--secondary:hover {
+      background: rgba(181,133,0,0.15);
+      color: var(--gold);
+    }
+    .nav-cta svg { width: 14px; height: 14px; }
+
+    /* Hamburger */
     .nav-hamburger {
       display: none;
       flex-direction: column;
@@ -1157,15 +1295,251 @@
     .reveal-delay-4 { transition-delay: 0.4s; }
 
     /* ═══════════════════════════════════════════════════════════════════
+       REPORTES SECTION — Premium editorial layout
+       ═══════════════════════════════════════════════════════════════════ */
+    .reportes-section {
+      position: relative;
+      padding: 6rem 2rem 5rem;
+      background: linear-gradient(180deg, var(--cream-pale) 0%, #f8f5ef 40%, #fff 100%);
+      overflow: hidden;
+    }
+    .reportes-pattern {
+      position: absolute;
+      inset: 0;
+      opacity: 0.03;
+      background-image: radial-gradient(circle, var(--dark-teal) 1px, transparent 1px);
+      background-size: 24px 24px;
+      pointer-events: none;
+    }
+    .reportes-inner {
+      position: relative;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .reportes-section .section-label::before { display: none; }
+    .reportes-section .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      color: var(--dark-teal);
+    }
+
+    /* Feature blocks — editorial grid */
+    .reportes-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+      margin-bottom: 3rem;
+    }
+    .rpt-block {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      padding: 2.2rem 2rem;
+      text-decoration: none;
+      transition: background .25s;
+      border-right: 1px solid rgba(0,0,0,0.06);
+    }
+    .rpt-block:last-child { border-right: none; }
+    .rpt-block:hover {
+      background: rgba(0,82,78,0.03);
+    }
+    .rpt-icon {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 1.2rem;
+      color: var(--gold);
+      transition: transform .25s;
+    }
+    .rpt-block:hover .rpt-icon { transform: scale(1.08); }
+    .rpt-icon svg { width: 100%; height: 100%; }
+    .rpt-title {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      color: var(--dark-teal);
+      margin-bottom: 0.6rem;
+      transition: color .25s;
+    }
+    .rpt-block:hover .rpt-title { color: var(--gold); }
+    .rpt-desc {
+      font-size: 0.85rem;
+      color: var(--cool-gray);
+      line-height: 1.6;
+      flex: 1;
+    }
+    .rpt-arrow {
+      display: flex;
+      align-items: center;
+      margin-top: 1.2rem;
+      color: var(--gold);
+      opacity: 0;
+      transform: translateX(-8px);
+      transition: opacity .25s, transform .25s;
+    }
+    .rpt-arrow svg { width: 18px; height: 18px; }
+    .rpt-block:hover .rpt-arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* Benchmark banner — mini-hero */
+    .benchmark-banner {
+      display: block;
+      position: relative;
+      text-decoration: none;
+      border-radius: 16px;
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--dark-teal) 0%, var(--teal) 50%, var(--dark-burgundy) 100%);
+      padding: 2.5rem 3rem;
+      transition: transform .3s, box-shadow .3s;
+    }
+    .benchmark-banner:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+      color: var(--cream);
+    }
+    .benchmark-pattern {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(232,213,181,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(232,213,181,0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+    }
+    .benchmark-content {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 3rem;
+      flex-wrap: wrap;
+    }
+    .benchmark-text { flex: 1; min-width: 280px; }
+    .benchmark-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+    .benchmark-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.4rem, 3vw, 1.9rem);
+      color: var(--cream);
+      margin-bottom: 0.6rem;
+    }
+    .benchmark-desc {
+      font-size: 0.88rem;
+      color: rgba(232,213,181,0.6);
+      line-height: 1.6;
+      max-width: 480px;
+    }
+    .benchmark-kpis {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .benchmark-kpi { text-align: center; }
+    .benchmark-kpi-value {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      color: var(--cream);
+      line-height: 1.1;
+    }
+    .benchmark-kpi-label {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(232,213,181,0.45);
+      font-weight: 600;
+      margin-top: 0.2rem;
+    }
+    .benchmark-cta {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1.5rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════════
+       MOBILE NAV
+       ═══════════════════════════════════════════════════════════════════ */
+    .nav-mobile {
+      display: none;
+      flex-direction: column;
+      background: rgba(23,63,53,0.98);
+      backdrop-filter: blur(16px);
+      padding: 1rem 2rem 1.5rem;
+      border-bottom: 1px solid rgba(232,213,181,0.1);
+    }
+    .nav-mobile.show { display: flex; }
+    .nav-mobile-group { border-bottom: 1px solid rgba(232,213,181,0.06); }
+    .nav-mobile-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.85rem 0;
+      color: rgba(232,213,181,0.7);
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+    }
+    .nav-mobile-heading svg {
+      width: 10px;
+      height: 10px;
+      transition: transform .2s;
+    }
+    .nav-mobile-group.open .nav-mobile-heading svg { transform: rotate(180deg); }
+    .nav-mobile-items {
+      display: none;
+      flex-direction: column;
+      padding-bottom: 0.5rem;
+    }
+    .nav-mobile-group.open .nav-mobile-items { display: flex; }
+    .nav-mobile-items a {
+      padding: 0.5rem 1rem;
+      color: rgba(232,213,181,0.55);
+      font-size: 0.82rem;
+      text-decoration: none;
+      border-radius: 6px;
+      transition: background .15s, color .15s;
+    }
+    .nav-mobile-items a:hover {
+      background: rgba(232,213,181,0.06);
+      color: var(--cream);
+    }
+    .nav-mobile-ctas {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+    .nav-mobile-ctas .nav-cta { flex: 1; font-size: 0.78rem; }
+
+    /* ═══════════════════════════════════════════════════════════════════
        RESPONSIVE
        ═══════════════════════════════════════════════════════════════════ */
     @media (max-width: 1024px) {
       .pipeline-steps { grid-template-columns: repeat(2, 1fr); }
       .method-features { grid-template-columns: 1fr 1fr; }
+      .reportes-grid { grid-template-columns: repeat(2, 1fr); }
+      .rpt-block:nth-child(2) { border-right: none; }
+      .rpt-block:nth-child(1), .rpt-block:nth-child(2) {
+        border-bottom: 1px solid rgba(0,0,0,0.06);
+      }
+      .benchmark-content { gap: 2rem; }
     }
 
     @media (max-width: 768px) {
-      .nav-links { display: none; }
+      .nav-menu, .nav-ctas { display: none; }
       .nav-hamburger { display: flex; }
 
       .hero-stats { gap: 2rem; }
@@ -1178,6 +1552,13 @@
       .advisors { grid-template-columns: 1fr; }
       .scope-stats { grid-template-columns: repeat(2, 1fr); }
       .section { padding: 4rem 1.5rem; }
+      .reportes-grid { grid-template-columns: 1fr; }
+      .rpt-block { border-right: none !important; border-bottom: 1px solid rgba(0,0,0,0.06); }
+      .rpt-block:last-child { border-bottom: none; }
+      .rpt-arrow { opacity: 1; transform: none; }
+      .benchmark-banner { padding: 2rem 1.5rem; }
+      .benchmark-kpis { gap: 1.2rem; }
+      .benchmark-kpi-value { font-size: 1.6rem; }
     }
 
     @media (max-width: 480px) {
@@ -1195,22 +1576,87 @@
   <nav class="nav" id="nav">
     <div class="nav-inner">
       <div class="nav-logo">EpiForecast<span>-MX</span></div>
-      <ul class="nav-links">
-        <li><a href="#about">Contexto</a></li>
-        <li><a href="#diseases">Padecimientos</a></li>
-        <li><a href="#pipeline">Pipeline</a></li>
-        <li><a href="#methodology">Metodología</a></li>
-        <li><a href="#results">Resultados</a></li>
-        <li><a href="#team">Equipo</a></li>
-        <li><a href="#scope">Datos</a></li>
-        <li><a href="EpiDashboard.html" style="color:var(--gold);">Dashboard</a></li>
-        <li><a href="reporte_resultados.html" style="color:var(--gold);">Reporte</a></li>
-        <li><a href="Reports/index.html" style="color:var(--gold);">Pronósticos</a></li>
-        <li><a href="bitacora_modelado.html" style="color:var(--gold);">Bitácora</a></li>
-        <li><a href="comparacion_modelos.html" style="color:var(--gold);">Comparación</a></li>
+
+      <ul class="nav-menu">
+        <!-- Proyecto -->
+        <li class="nav-group">
+          <button class="nav-group-toggle">Proyecto <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg></button>
+          <div class="nav-dropdown">
+            <a href="#about"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>Contexto</a>
+            <a href="#diseases"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg>Padecimientos</a>
+            <a href="#team"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Equipo</a>
+            <a href="#scope"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>Datos</a>
+          </div>
+        </li>
+
+        <!-- Metodología -->
+        <li class="nav-group">
+          <button class="nav-group-toggle">Metodología <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg></button>
+          <div class="nav-dropdown">
+            <a href="#pipeline"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>Pipeline</a>
+            <a href="#methodology"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>Metodología</a>
+            <a href="bitacora_modelado.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Bitácora v1-v6</a>
+          </div>
+        </li>
+
+        <!-- Resultados -->
+        <li class="nav-group">
+          <button class="nav-group-toggle">Resultados <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg></button>
+          <div class="nav-dropdown">
+            <a href="#results"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Resumen</a>
+            <a href="reporte_resultados.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Reporte Completo</a>
+            <a href="comparacion_modelos.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>Benchmark SageMaker</a>
+          </div>
+        </li>
       </ul>
-      <div class="nav-hamburger" onclick="document.querySelector('.nav-links').classList.toggle('show')" aria-label="Menú">
+
+      <!-- CTA buttons -->
+      <div class="nav-ctas">
+        <a href="EpiDashboard.html" class="nav-cta nav-cta--primary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          Dashboard
+        </a>
+        <a href="Reports/index.html" class="nav-cta nav-cta--secondary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          Pronósticos
+        </a>
+      </div>
+
+      <div class="nav-hamburger" onclick="toggleMobileNav()" aria-label="Menú">
         <span></span><span></span><span></span>
+      </div>
+    </div>
+
+    <!-- Mobile menu -->
+    <div class="nav-mobile" id="navMobile">
+      <div class="nav-mobile-group">
+        <div class="nav-mobile-heading" onclick="this.parentElement.classList.toggle('open')">Proyecto <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg></div>
+        <div class="nav-mobile-items">
+          <a href="#about">Contexto</a>
+          <a href="#diseases">Padecimientos</a>
+          <a href="#team">Equipo</a>
+          <a href="#scope">Datos</a>
+        </div>
+      </div>
+      <div class="nav-mobile-group">
+        <div class="nav-mobile-heading" onclick="this.parentElement.classList.toggle('open')">Metodología <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg></div>
+        <div class="nav-mobile-items">
+          <a href="#pipeline">Pipeline</a>
+          <a href="#methodology">Metodología</a>
+          <a href="bitacora_modelado.html">Bitácora v1-v6</a>
+        </div>
+      </div>
+      <div class="nav-mobile-group">
+        <div class="nav-mobile-heading" onclick="this.parentElement.classList.toggle('open')">Resultados <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg></div>
+        <div class="nav-mobile-items">
+          <a href="#results">Resumen</a>
+          <a href="reporte_resultados.html">Reporte Completo</a>
+          <a href="comparacion_modelos.html">Benchmark SageMaker</a>
+        </div>
+      </div>
+      <div class="nav-mobile-ctas">
+        <a href="EpiDashboard.html" class="nav-cta nav-cta--primary" style="justify-content:center;padding:.6rem 1.5rem">Dashboard</a>
+        <a href="Reports/index.html" class="nav-cta nav-cta--secondary" style="justify-content:center;padding:.6rem 1.5rem">Pronósticos</a>
       </div>
     </div>
   </nav>
@@ -1273,61 +1719,76 @@
   </section>
 
   <!-- ═══════════════════════════════════════════════════════════════
-       REPORTES Y HERRAMIENTAS
+       REPORTES Y HERRAMIENTAS — Premium redesign
        ═══════════════════════════════════════════════════════════════ -->
-  <section id="reportes" style="padding:4rem 2rem 3rem;background:linear-gradient(180deg,var(--cream-pale) 0%,#fff 100%)">
-    <div style="max-width:1100px;margin:0 auto;text-align:center">
-      <div class="section-label reveal" style="margin-bottom:.5rem">Acceso Directo</div>
-      <div class="section-title reveal" style="margin-bottom:2.5rem">Reportes y Herramientas</div>
+  <section id="reportes" class="reportes-section">
+    <!-- Subtle dot-grid pattern overlay -->
+    <div class="reportes-pattern"></div>
 
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem;text-align:left" class="reveal">
-
-        <!-- Dashboard Tableau -->
-        <a href="EpiDashboard.html" style="text-decoration:none;display:block;background:#fff;border:2px solid var(--cream);border-radius:16px;padding:1.8rem 1.5rem;transition:transform .2s,box-shadow .2s,border-color .2s" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 32px rgba(23,63,53,.12)';this.style.borderColor='var(--gold)'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='var(--cream)'">
-          <div style="margin-bottom:.75rem"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--dark-teal)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
-          <div style="font-weight:700;color:var(--dark-teal);font-size:1.05rem;margin-bottom:.4rem">Dashboard Interactivo</div>
-          <div style="font-size:.82rem;color:var(--cool-gray);line-height:1.5">Visualización Tableau con filtros por padecimiento, estado y sexo. Tooltips con métricas MASE.</div>
-        </a>
-
-        <!-- Reporte de Resultados -->
-        <a href="reporte_resultados.html" style="text-decoration:none;display:block;background:#fff;border:2px solid var(--cream);border-radius:16px;padding:1.8rem 1.5rem;transition:transform .2s,box-shadow .2s,border-color .2s" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 32px rgba(23,63,53,.12)';this.style.borderColor='var(--gold)'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='var(--cream)'">
-          <div style="margin-bottom:.75rem"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--dark-teal)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="3" y1="20" x2="21" y2="20"/></svg></div>
-          <div style="font-weight:700;color:var(--dark-teal);font-size:1.05rem;margin-bottom:.4rem">Reporte de Resultados</div>
-          <div style="font-size:.82rem;color:var(--cool-gray);line-height:1.5">312 modelos Prophet con métricas MASE, RMSE, MAE. Ranking interactivo, cobertura geográfica y top/bottom 10.</div>
-        </a>
-
-        <!-- Galería de Pronósticos -->
-        <a href="Reports/index.html" style="text-decoration:none;display:block;background:#fff;border:2px solid var(--cream);border-radius:16px;padding:1.8rem 1.5rem;transition:transform .2s,box-shadow .2s,border-color .2s" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 32px rgba(23,63,53,.12)';this.style.borderColor='var(--gold)'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='var(--cream)'">
-          <div style="margin-bottom:.75rem"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--dark-teal)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
-          <div style="font-weight:700;color:var(--dark-teal);font-size:1.05rem;margin-bottom:.4rem">Galería de Pronósticos</div>
-          <div style="font-size:.82rem;color:var(--cool-gray);line-height:1.5">312 gráficos PNG interactivos con filtros por padecimiento, nivel geográfico y sexo. Lightbox y búsqueda.</div>
-        </a>
-
-        <!-- Bitácora del Modelado -->
-        <a href="bitacora_modelado.html" style="text-decoration:none;display:block;background:#fff;border:2px solid var(--cream);border-radius:16px;padding:1.8rem 1.5rem;transition:transform .2s,box-shadow .2s,border-color .2s" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 32px rgba(23,63,53,.12)';this.style.borderColor='var(--gold)'" onmouseout="this.style.transform='';this.style.boxShadow='';this.style.borderColor='var(--cream)'">
-          <div style="margin-bottom:.75rem"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--dark-teal)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="8" y1="7" x2="16" y2="7"/><line x1="8" y1="11" x2="13" y2="11"/></svg></div>
-          <div style="font-weight:700;color:var(--dark-teal);font-size:1.05rem;margin-bottom:.4rem">Bitácora del Modelado</div>
-          <div style="font-size:.82rem;color:var(--cool-gray);line-height:1.5">Recorrido completo Prophet v1→v6: feature engineering, normalización, grids, anti-Newton, modo híbrido.</div>
-        </a>
-
-        <!-- Comparación de Modelos — DESTACADO -->
-        <a href="comparacion_modelos.html" style="text-decoration:none;display:block;background:linear-gradient(135deg,var(--dark-teal),#1a5c4f);border:2px solid var(--gold);border-radius:16px;padding:1.8rem 1.5rem;transition:transform .2s,box-shadow .2s;grid-column:1 / -1" onmouseover="this.style.transform='translateY(-4px)';this.style.boxShadow='0 12px 32px rgba(181,133,0,.25)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
-          <div style="display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap">
-            <div><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 17.5L3 6V3h3l11.5 11.5"/><path d="M13 19l6-6"/><path d="M16 16l4 4"/><path d="M19 21l2-2"/><path d="M9.5 6.5L21 18v3h-3L6.5 9.5"/><path d="M11 5l-6 6"/><path d="M8 8L4 4"/><path d="M5 3L3 5"/></svg></div>
-            <div style="flex:1;min-width:200px">
-              <div style="font-weight:700;color:var(--gold);font-size:1.15rem;margin-bottom:.4rem">Comparación de Modelos — Benchmark SageMaker</div>
-              <div style="font-size:.85rem;color:var(--cream);line-height:1.5">6 algoritmos (Prophet, DeepAR, TFT, LightGBM+LSTM, XGBoost, Ridge) × 258 series = 1,548 trials en AWS SageMaker. 19 gráficos interactivos, tablas con filtros y análisis por padecimiento.</div>
-            </div>
-            <div style="display:flex;gap:1.5rem;flex-wrap:wrap">
-              <div style="text-align:center"><div style="font-size:1.6rem;font-weight:800;color:var(--gold)">1,548</div><div style="font-size:.7rem;color:var(--cream);opacity:.8">trials</div></div>
-              <div style="text-align:center"><div style="font-size:1.6rem;font-weight:800;color:var(--gold)">6</div><div style="font-size:.7rem;color:var(--cream);opacity:.8">modelos</div></div>
-              <div style="text-align:center"><div style="font-size:1.6rem;font-weight:800;color:var(--gold)">9.8h</div><div style="font-size:.7rem;color:var(--cream);opacity:.8">cómputo</div></div>
-              <div style="text-align:center"><div style="font-size:1.6rem;font-weight:800;color:var(--gold)">~$10</div><div style="font-size:.7rem;color:var(--cream);opacity:.8">USD</div></div>
-            </div>
-          </div>
-        </a>
-
+    <div class="reportes-inner">
+      <div class="section-label reveal" style="color:var(--gold)">
+        <span style="display:inline-block;width:32px;height:2px;background:var(--gold);margin-right:.75rem"></span>Acceso Directo
       </div>
+      <div class="section-title reveal" style="margin-bottom:1rem">Reportes y Herramientas</div>
+      <p class="section-desc reveal" style="margin-bottom:3.5rem">Todo el análisis, la evidencia y las herramientas interactivas del proyecto, en un solo lugar.</p>
+
+      <!-- 4 Feature blocks -->
+      <div class="reportes-grid reveal">
+        <a href="EpiDashboard.html" class="rpt-block">
+          <div class="rpt-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+          </div>
+          <div class="rpt-title">Dashboard Interactivo</div>
+          <div class="rpt-desc">Tableau con filtros por padecimiento, estado y sexo. Tooltips con métricas MASE por modelo.</div>
+          <span class="rpt-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
+        </a>
+
+        <a href="reporte_resultados.html" class="rpt-block">
+          <div class="rpt-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M9 15l2 2 4-4"/></svg>
+          </div>
+          <div class="rpt-title">Reporte de Resultados</div>
+          <div class="rpt-desc">312 modelos con MASE, RMSE, MAE. Ranking interactivo, cobertura geográfica y top/bottom 10.</div>
+          <span class="rpt-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
+        </a>
+
+        <a href="Reports/index.html" class="rpt-block">
+          <div class="rpt-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/><circle cx="22" cy="6" r="2" fill="currentColor" stroke="none" opacity=".4"/></svg>
+          </div>
+          <div class="rpt-title">Galería de Pronósticos</div>
+          <div class="rpt-desc">312 gráficos con filtros por padecimiento, nivel geográfico y sexo. Lightbox y búsqueda.</div>
+          <span class="rpt-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
+        </a>
+
+        <a href="bitacora_modelado.html" class="rpt-block">
+          <div class="rpt-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="8" y1="7" x2="16" y2="7"/><line x1="8" y1="11" x2="13" y2="11"/></svg>
+          </div>
+          <div class="rpt-title">Bitácora del Modelado</div>
+          <div class="rpt-desc">Prophet v1 a v6: feature engineering, normalización, grids, anti-Newton, modo híbrido.</div>
+          <span class="rpt-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
+        </a>
+      </div>
+
+      <!-- Benchmark SageMaker — mini-hero banner -->
+      <a href="comparacion_modelos.html" class="benchmark-banner reveal">
+        <div class="benchmark-pattern"></div>
+        <div class="benchmark-content">
+          <div class="benchmark-text">
+            <div class="benchmark-label">Benchmark AWS SageMaker</div>
+            <div class="benchmark-title">La Batalla de los Modelos</div>
+            <div class="benchmark-desc">6 algoritmos compiten sobre 258 series temporales. Prophet, DeepAR, TFT, LightGBM+LSTM, XGBoost y Ridge — 19 gráficos interactivos con análisis por padecimiento.</div>
+          </div>
+          <div class="benchmark-kpis">
+            <div class="benchmark-kpi"><div class="benchmark-kpi-value">1,548</div><div class="benchmark-kpi-label">Trials</div></div>
+            <div class="benchmark-kpi"><div class="benchmark-kpi-value">6</div><div class="benchmark-kpi-label">Modelos</div></div>
+            <div class="benchmark-kpi"><div class="benchmark-kpi-value">9.8h</div><div class="benchmark-kpi-label">Cómputo</div></div>
+            <div class="benchmark-kpi"><div class="benchmark-kpi-value">~$10</div><div class="benchmark-kpi-label">USD</div></div>
+          </div>
+        </div>
+        <span class="benchmark-cta">Ver Reporte Completo <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
+      </a>
     </div>
   </section>
 
@@ -1981,26 +2442,24 @@
         if (target) {
           target.scrollIntoView({ behavior: 'smooth', block: 'start' });
           // Close mobile nav if open
-          document.querySelector('.nav-links').classList.remove('show');
+          const mob = document.getElementById('navMobile');
+          if (mob) mob.classList.remove('show');
         }
       });
     });
   </script>
 
-  <style>
-    /* Mobile nav toggle */
-    .nav-links.show {
-      display: flex !important;
-      position: absolute;
-      top: 64px;
-      left: 0;
-      right: 0;
-      background: rgba(23,63,53,0.98);
-      flex-direction: column;
-      padding: 1.5rem 2rem;
-      gap: 1.25rem;
-      border-bottom: 1px solid rgba(232,213,181,0.1);
+  <script>
+    function toggleMobileNav() {
+      const mob = document.getElementById('navMobile');
+      mob.classList.toggle('show');
     }
-  </style>
+    // Close mobile nav on link click
+    document.querySelectorAll('.nav-mobile-items a').forEach(a => {
+      a.addEventListener('click', () => {
+        document.getElementById('navMobile').classList.remove('show');
+      });
+    });
+  </script>
 </body>
 </html>
