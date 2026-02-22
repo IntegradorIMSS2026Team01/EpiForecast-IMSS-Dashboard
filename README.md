@@ -53,7 +53,8 @@ La seccion **Reports/** contiene una galeria HTML interactiva con **312 graficos
 Accesible desde:
 - Boton "Explorar Pronosticos" en la pagina principal (`index.html`)
 - Link "Pronosticos" en el navbar del dashboard (`EpiDashboard.html`)
-- Boton "Volver al inicio" en la galeria para regresar a `proyectointegrador.org`
+- Link "Pronosticos" en el navbar del reporte de modelos (`reporte_resultados.html`)
+- Botones de navegacion en la propia galeria (Inicio, Dashboard, Reporte de Modelos)
 
 ## Estructura del sitio
 
@@ -61,6 +62,7 @@ Accesible desde:
 EpiForecast-IMSS-Dashboard/
 ├── index.html                  # Pagina principal del proyecto
 ├── EpiDashboard.html           # Dashboard con visualizaciones Tableau
+├── reporte_resultados.html     # Reporte HTML interactivo de resultados del modelado
 ├── Reports/
 │   ├── index.html              # Galeria interactiva de 312 pronosticos
 │   ├── Alzheimer/              # PNGs por entidad (ej. Aguascalientes/)
@@ -72,17 +74,35 @@ EpiForecast-IMSS-Dashboard/
 └── README.md
 ```
 
+## Reporte de Resultados del Modelado
+
+El archivo `reporte_resultados.html` es un reporte HTML interactivo self-contained que presenta los resultados generales del modelado Prophet (312 modelos). Incluye:
+
+- **Guia rapida**: Explicacion accesible de MASE, regiones INEGI, fallback regional y confianza
+- **Resumen por padecimiento**: KPIs, graficos comparativos (barras, doughnut, histograma)
+- **Desglose por sexo**: MASE por sexo y padecimiento
+- **Ranking interactivo**: Tabla sorteable/filtrable de 312 modelos, agrupados Nacional/Regional/Estatal
+- **Cobertura geografica**: Grid de 32 estados con tipo de modelo (propio vs fallback)
+- **Top/Bottom 10**: Mejores y peores modelos por MASE
+- **Metricas**: Formulas e interpretacion de MASE, RMSE, MAE, MAPE
+
+Tecnologias: Chart.js 4.x (CDN), Google Fonts, CSS animations, branding IMSS.
+
+Se genera desde el repo principal con `make report` (`scripts/genera_reporte.py`).
+
 ## Navegacion
 
-El sitio tiene tres paginas principales conectadas entre si:
+El sitio tiene cuatro paginas principales conectadas entre si:
 
 ```
-index.html  ──▶  EpiDashboard.html  (Dashboard Tableau)
+index.html  ──▶  EpiDashboard.html      (Dashboard Tableau)
     │
-    └──────▶  Reports/index.html   (Galeria de Pronosticos)
-                  │
-                  └──▶  proyectointegrador.org  (Volver al inicio)
+    ├──────▶  reporte_resultados.html  (Reporte de Modelos)
+    │
+    └──────▶  Reports/index.html       (Galeria de Pronosticos)
 ```
+
+Todas las paginas incluyen enlaces de navegacion cruzada entre si.
 
 ## Desarrollo local
 
