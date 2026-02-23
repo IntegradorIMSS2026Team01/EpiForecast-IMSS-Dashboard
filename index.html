@@ -306,37 +306,40 @@
       to { background-position: 60px 60px; }
     }
 
-    /* Floating orbs */
-    .hero-orb {
+    /* Animated SVG mesh grid */
+    .hero-mesh {
       position: absolute;
-      border-radius: 50%;
-      filter: blur(80px);
-      animation: orbFloat 12s ease-in-out infinite;
+      inset: 0;
+      overflow: hidden;
     }
-    .hero-orb--1 {
-      width: 500px; height: 500px;
-      background: rgba(155,34,66,0.2);
-      top: -10%; left: -5%;
-      animation-delay: -2s;
+    .hero-mesh svg {
+      width: 100%;
+      height: 100%;
+      opacity: 0.12;
     }
-    .hero-orb--2 {
-      width: 400px; height: 400px;
-      background: rgba(181,133,0,0.15);
-      bottom: 10%; right: -5%;
-      animation-delay: -6s;
-      animation-duration: 16s;
+    .hero-mesh line {
+      stroke: var(--cream);
+      stroke-width: 0.5;
     }
-    .hero-orb--3 {
-      width: 300px; height: 300px;
-      background: rgba(0,82,78,0.25);
-      top: 40%; left: 50%;
-      animation-delay: -4s;
-      animation-duration: 14s;
+    .hero-mesh .pulse-h { animation: meshPulseH 8s ease-in-out infinite; }
+    .hero-mesh .pulse-v { animation: meshPulseV 10s ease-in-out infinite; }
+    @keyframes meshPulseH {
+      0%, 100% { opacity: 0.08; stroke-width: 0.3; }
+      50% { opacity: 0.25; stroke-width: 0.8; }
     }
-    @keyframes orbFloat {
-      0%, 100% { transform: translate(0, 0) scale(1); }
-      33% { transform: translate(30px, -20px) scale(1.05); }
-      66% { transform: translate(-20px, 15px) scale(0.95); }
+    @keyframes meshPulseV {
+      0%, 100% { opacity: 0.12; stroke-width: 0.4; }
+      50% { opacity: 0.2; stroke-width: 0.7; }
+    }
+    .hero-mesh .node {
+      fill: var(--gold);
+      opacity: 0;
+      animation: nodeGlow 6s ease-in-out infinite;
+    }
+    .hero-mesh .node:nth-child(odd) { animation-delay: -3s; }
+    @keyframes nodeGlow {
+      0%, 100% { opacity: 0; r: 1; }
+      50% { opacity: 0.4; r: 2.5; }
     }
 
     .hero-content {
@@ -771,6 +774,19 @@
       padding: 2.5rem;
       border: 1px solid rgba(0,0,0,0.05);
       transition: transform .3s, box-shadow .3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .method-card::before {
+      content: attr(data-phase);
+      font-family: var(--font-display);
+      font-size: 6rem;
+      color: rgba(0,82,78,0.04);
+      position: absolute;
+      top: 0.5rem;
+      right: 1rem;
+      line-height: 1;
+      pointer-events: none;
     }
     .method-card:hover {
       transform: translateY(-4px);
@@ -1164,10 +1180,14 @@
       white-space: nowrap;
       font-family: var(--font-mono);
     }
-    .seg-exc   { background: var(--teal); }
-    .seg-acep  { background: var(--gold); }
-    .seg-mej   { background: #E65100; }
-    .seg-ins   { background: #B71C1C; }
+    .seg-exc   { background: var(--teal); animation: semaphorePulse 3s ease-in-out infinite; }
+    .seg-acep  { background: var(--gold); animation: semaphorePulse 3s ease-in-out infinite 0.5s; }
+    .seg-mej   { background: #E65100; animation: semaphorePulse 3s ease-in-out infinite 1s; }
+    .seg-ins   { background: #B71C1C; animation: semaphorePulse 3s ease-in-out infinite 1.5s; }
+    @keyframes semaphorePulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
 
     .result-states {
       margin-top: 2rem;
@@ -1295,15 +1315,15 @@
     .reveal-delay-4 { transition-delay: 0.4s; }
 
     /* ═══════════════════════════════════════════════════════════════════
-       REPORTES SECTION — Premium editorial layout
+       CTA HUB — Centro de Reportes
        ═══════════════════════════════════════════════════════════════════ */
-    .reportes-section {
+    .cta-hub {
       position: relative;
       padding: 6rem 2rem 5rem;
       background: linear-gradient(180deg, var(--cream-pale) 0%, #f8f5ef 40%, #fff 100%);
       overflow: hidden;
     }
-    .reportes-pattern {
+    .cta-hub-pattern {
       position: absolute;
       inset: 0;
       opacity: 0.03;
@@ -1311,161 +1331,110 @@
       background-size: 24px 24px;
       pointer-events: none;
     }
-    .reportes-inner {
+    .cta-hub-inner {
       position: relative;
-      max-width: 1100px;
+      max-width: 1200px;
       margin: 0 auto;
     }
-    .reportes-section .section-label::before { display: none; }
-    .reportes-section .section-title {
-      font-family: var(--font-display);
-      font-size: clamp(2rem, 4vw, 2.8rem);
-      color: var(--dark-teal);
+    .cta-hub .section-label::before { display: none; }
+
+    /* Card grid */
+    .cta-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 3rem;
     }
 
-    /* Feature blocks — editorial grid */
-    .reportes-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 0;
-      border-bottom: 1px solid rgba(0,0,0,0.06);
-      margin-bottom: 3rem;
-    }
-    .rpt-block {
+    .cta-card {
       position: relative;
+      background: rgba(255,255,255,0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(0,0,0,0.06);
+      border-radius: 16px;
+      padding: 2rem 1.75rem 1.75rem;
       display: flex;
       flex-direction: column;
-      padding: 2.2rem 2rem;
-      text-decoration: none;
-      transition: background .25s;
-      border-right: 1px solid rgba(0,0,0,0.06);
+      transition: transform .3s cubic-bezier(.4,0,.2,1), box-shadow .3s cubic-bezier(.4,0,.2,1), border-color .3s;
     }
-    .rpt-block:last-child { border-right: none; }
-    .rpt-block:hover {
-      background: rgba(0,82,78,0.03);
+    .cta-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 50px rgba(0,82,78,0.1);
+      border-color: rgba(0,82,78,0.15);
     }
-    .rpt-icon {
-      width: 40px;
-      height: 40px;
-      margin-bottom: 1.2rem;
-      color: var(--gold);
+
+    /* Featured card — double width */
+    .cta-card--featured {
+      grid-column: span 2;
+      background: linear-gradient(135deg, var(--dark-teal) 0%, var(--teal) 60%, var(--dark-burgundy) 100%);
+      border: 1px solid rgba(232,213,181,0.15);
+      color: var(--cream);
+    }
+    .cta-card--featured:hover {
+      box-shadow: 0 20px 60px rgba(0,82,78,0.25);
+      border-color: rgba(232,213,181,0.3);
+    }
+    .cta-card--featured .cta-card-title { color: var(--cream); }
+    .cta-card--featured .cta-card-desc { color: rgba(232,213,181,0.7); }
+
+    .cta-card-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+      background: var(--teal-glow);
       transition: transform .25s;
     }
-    .rpt-block:hover .rpt-icon { transform: scale(1.08); }
-    .rpt-icon svg { width: 100%; height: 100%; }
-    .rpt-title {
-      font-family: var(--font-display);
-      font-size: 1.15rem;
-      color: var(--dark-teal);
-      margin-bottom: 0.6rem;
-      transition: color .25s;
+    .cta-card:hover .cta-card-icon { transform: scale(1.08); }
+    .cta-card-icon svg { width: 24px; height: 24px; color: var(--teal); }
+    .cta-card--featured .cta-card-icon {
+      background: rgba(232,213,181,0.1);
     }
-    .rpt-block:hover .rpt-title { color: var(--gold); }
-    .rpt-desc {
-      font-size: 0.85rem;
+    .cta-card--featured .cta-card-icon svg { color: var(--gold); }
+
+    .cta-card-title {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      color: var(--dark-teal);
+      margin-bottom: 0.5rem;
+    }
+    .cta-card-desc {
+      font-size: 0.88rem;
       color: var(--cool-gray);
       line-height: 1.6;
       flex: 1;
-    }
-    .rpt-arrow {
-      display: flex;
-      align-items: center;
-      margin-top: 1.2rem;
-      color: var(--gold);
-      opacity: 0;
-      transform: translateX(-8px);
-      transition: opacity .25s, transform .25s;
-    }
-    .rpt-arrow svg { width: 18px; height: 18px; }
-    .rpt-block:hover .rpt-arrow {
-      opacity: 1;
-      transform: translateX(0);
+      margin-bottom: 1.25rem;
     }
 
-    /* Benchmark banner — mini-hero */
-    .benchmark-banner {
-      display: block;
-      position: relative;
-      text-decoration: none;
-      border-radius: 16px;
-      overflow: hidden;
-      background: linear-gradient(135deg, var(--dark-teal) 0%, var(--teal) 50%, var(--dark-burgundy) 100%);
-      padding: 2.5rem 3rem;
-      transition: transform .3s, box-shadow .3s;
-    }
-    .benchmark-banner:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-      color: var(--cream);
-    }
-    .benchmark-pattern {
-      position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(232,213,181,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(232,213,181,0.04) 1px, transparent 1px);
-      background-size: 40px 40px;
-      pointer-events: none;
-    }
-    .benchmark-content {
-      position: relative;
-      display: flex;
-      align-items: center;
-      gap: 3rem;
-      flex-wrap: wrap;
-    }
-    .benchmark-text { flex: 1; min-width: 280px; }
-    .benchmark-label {
-      font-size: 0.7rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--gold);
-      margin-bottom: 0.5rem;
-    }
-    .benchmark-title {
-      font-family: var(--font-display);
-      font-size: clamp(1.4rem, 3vw, 1.9rem);
-      color: var(--cream);
-      margin-bottom: 0.6rem;
-    }
-    .benchmark-desc {
-      font-size: 0.88rem;
-      color: rgba(232,213,181,0.6);
-      line-height: 1.6;
-      max-width: 480px;
-    }
-    .benchmark-kpis {
-      display: flex;
-      gap: 2rem;
-      flex-wrap: wrap;
-    }
-    .benchmark-kpi { text-align: center; }
-    .benchmark-kpi-value {
-      font-family: var(--font-display);
-      font-size: 2.2rem;
-      color: var(--cream);
-      line-height: 1.1;
-    }
-    .benchmark-kpi-label {
-      font-size: 0.68rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: rgba(232,213,181,0.45);
-      font-weight: 600;
-      margin-top: 0.2rem;
-    }
-    .benchmark-cta {
-      position: relative;
+    .cta-card-btn {
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
-      margin-top: 1.5rem;
-      font-size: 0.8rem;
+      gap: 0.4rem;
+      padding: 0.55rem 1.2rem;
+      background: var(--gold);
+      color: var(--dark-teal);
+      font-size: 0.78rem;
       font-weight: 700;
-      color: var(--gold);
       text-transform: uppercase;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.04em;
+      border-radius: 100px;
+      text-decoration: none;
+      transition: transform .2s, box-shadow .2s;
+      align-self: flex-start;
+    }
+    .cta-card-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(181,133,0,0.3);
+      color: var(--dark-teal);
+    }
+    .cta-card-btn svg { width: 14px; height: 14px; }
+    .cta-card--featured .cta-card-btn {
+      background: var(--gold);
+      color: var(--dark-teal);
     }
 
     /* ═══════════════════════════════════════════════════════════════════
@@ -1530,12 +1499,8 @@
     @media (max-width: 1024px) {
       .pipeline-steps { grid-template-columns: repeat(2, 1fr); }
       .method-features { grid-template-columns: 1fr 1fr; }
-      .reportes-grid { grid-template-columns: repeat(2, 1fr); }
-      .rpt-block:nth-child(2) { border-right: none; }
-      .rpt-block:nth-child(1), .rpt-block:nth-child(2) {
-        border-bottom: 1px solid rgba(0,0,0,0.06);
-      }
-      .benchmark-content { gap: 2rem; }
+      .cta-grid { grid-template-columns: repeat(2, 1fr); }
+      .cta-card--featured { grid-column: span 2; }
     }
 
     @media (max-width: 768px) {
@@ -1552,13 +1517,8 @@
       .advisors { grid-template-columns: 1fr; }
       .scope-stats { grid-template-columns: repeat(2, 1fr); }
       .section { padding: 4rem 1.5rem; }
-      .reportes-grid { grid-template-columns: 1fr; }
-      .rpt-block { border-right: none !important; border-bottom: 1px solid rgba(0,0,0,0.06); }
-      .rpt-block:last-child { border-bottom: none; }
-      .rpt-arrow { opacity: 1; transform: none; }
-      .benchmark-banner { padding: 2rem 1.5rem; }
-      .benchmark-kpis { gap: 1.2rem; }
-      .benchmark-kpi-value { font-size: 1.6rem; }
+      .cta-grid { grid-template-columns: 1fr; }
+      .cta-card--featured { grid-column: span 1; }
     }
 
     @media (max-width: 480px) {
@@ -1582,10 +1542,9 @@
         <li class="nav-group">
           <button class="nav-group-toggle">Proyecto <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg></button>
           <div class="nav-dropdown">
-            <a href="#about"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>Contexto</a>
-            <a href="#diseases"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg>Padecimientos</a>
-            <a href="#team"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Equipo</a>
-            <a href="#scope"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>Datos</a>
+            <a href="#hero"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>Inicio</a>
+            <a href="EpiDashboard.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</a>
+            <a href="Reports/index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Pronósticos</a>
           </div>
         </li>
 
@@ -1593,9 +1552,10 @@
         <li class="nav-group">
           <button class="nav-group-toggle">Metodología <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg></button>
           <div class="nav-dropdown">
-            <a href="#pipeline"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>Pipeline</a>
-            <a href="#methodology"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>Metodología</a>
             <a href="bitacora_modelado.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Bitácora v1-v6</a>
+            <a href="ficha_tecnica_prophet.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Ficha Prophet</a>
+            <a href="hiperparametros_modelos.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>HPs SageMaker</a>
+            <a href="construccion_dashboard.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>Arquitectura Dashboard</a>
           </div>
         </li>
 
@@ -1603,13 +1563,10 @@
         <li class="nav-group">
           <button class="nav-group-toggle">Resultados <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg></button>
           <div class="nav-dropdown">
-            <a href="#results"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Resumen</a>
-            <a href="reporte_resultados.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Reporte Completo</a>
-            <a href="comparacion_modelos.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>Benchmark SageMaker</a>
-            <a href="ficha_tecnica_prophet.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>Ficha Prophet</a>
-            <a href="hiperparametros_modelos.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>HPs SageMaker</a>
-            <a href="construccion_dashboard.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 20h20"/><path d="M5 20V8l7-5 7 5v12"/><rect x="9" y="12" width="6" height="8"/></svg>Construcción</a>
+            <a href="reporte_resultados.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M9 15l2 2 4-4"/></svg>Resultados</a>
+            <a href="comparacion_modelos.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Comparación SageMaker</a>
             <a href="conclusiones.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Conclusiones</a>
+            <a href="referencias.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>Referencias</a>
           </div>
         </li>
       </ul>
@@ -1624,6 +1581,9 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
           Pronósticos
         </a>
+        <a href="https://github.com/IntegradorIMSS2026Team01" target="_blank" rel="noopener" class="nav-cta nav-cta--secondary" style="padding:0.4rem 0.6rem" title="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        </a>
       </div>
 
       <div class="nav-hamburger" onclick="toggleMobileNav()" aria-label="Menú">
@@ -1636,30 +1596,27 @@
       <div class="nav-mobile-group">
         <div class="nav-mobile-heading" onclick="this.parentElement.classList.toggle('open')">Proyecto <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg></div>
         <div class="nav-mobile-items">
-          <a href="#about">Contexto</a>
-          <a href="#diseases">Padecimientos</a>
-          <a href="#team">Equipo</a>
-          <a href="#scope">Datos</a>
+          <a href="#hero">Inicio</a>
+          <a href="EpiDashboard.html">Dashboard</a>
+          <a href="Reports/index.html">Pronósticos</a>
         </div>
       </div>
       <div class="nav-mobile-group">
         <div class="nav-mobile-heading" onclick="this.parentElement.classList.toggle('open')">Metodología <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg></div>
         <div class="nav-mobile-items">
-          <a href="#pipeline">Pipeline</a>
-          <a href="#methodology">Metodología</a>
           <a href="bitacora_modelado.html">Bitácora v1-v6</a>
+          <a href="ficha_tecnica_prophet.html">Ficha Prophet</a>
+          <a href="hiperparametros_modelos.html">HPs SageMaker</a>
+          <a href="construccion_dashboard.html">Arquitectura Dashboard</a>
         </div>
       </div>
       <div class="nav-mobile-group">
         <div class="nav-mobile-heading" onclick="this.parentElement.classList.toggle('open')">Resultados <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg></div>
         <div class="nav-mobile-items">
-          <a href="#results">Resumen</a>
-          <a href="reporte_resultados.html">Reporte Completo</a>
-          <a href="comparacion_modelos.html">Benchmark SageMaker</a>
-          <a href="ficha_tecnica_prophet.html">Ficha Prophet</a>
-          <a href="hiperparametros_modelos.html">HPs SageMaker</a>
-          <a href="construccion_dashboard.html">Construcción</a>
+          <a href="reporte_resultados.html">Resultados</a>
+          <a href="comparacion_modelos.html">Comparación SageMaker</a>
           <a href="conclusiones.html">Conclusiones</a>
+          <a href="referencias.html">Referencias</a>
         </div>
       </div>
       <div class="nav-mobile-ctas">
@@ -1674,37 +1631,62 @@
        ═══════════════════════════════════════════════════════════════ -->
   <section class="hero" id="hero">
     <div class="hero-grid"></div>
-    <div class="hero-orb hero-orb--1"></div>
-    <div class="hero-orb hero-orb--2"></div>
-    <div class="hero-orb hero-orb--3"></div>
+    <div class="hero-mesh">
+      <svg viewBox="0 0 1200 800" preserveAspectRatio="none">
+        <line class="pulse-h" x1="0" y1="100" x2="1200" y2="100" style="animation-delay:-1s"/>
+        <line class="pulse-h" x1="0" y1="200" x2="1200" y2="200" style="animation-delay:-3s"/>
+        <line class="pulse-h" x1="0" y1="300" x2="1200" y2="300" style="animation-delay:-5s"/>
+        <line class="pulse-h" x1="0" y1="400" x2="1200" y2="400" style="animation-delay:-2s"/>
+        <line class="pulse-h" x1="0" y1="500" x2="1200" y2="500" style="animation-delay:-7s"/>
+        <line class="pulse-h" x1="0" y1="600" x2="1200" y2="600" style="animation-delay:-4s"/>
+        <line class="pulse-h" x1="0" y1="700" x2="1200" y2="700" style="animation-delay:-6s"/>
+        <line class="pulse-v" x1="150" y1="0" x2="150" y2="800" style="animation-delay:-2s"/>
+        <line class="pulse-v" x1="300" y1="0" x2="300" y2="800" style="animation-delay:-4s"/>
+        <line class="pulse-v" x1="450" y1="0" x2="450" y2="800" style="animation-delay:-1s"/>
+        <line class="pulse-v" x1="600" y1="0" x2="600" y2="800" style="animation-delay:-6s"/>
+        <line class="pulse-v" x1="750" y1="0" x2="750" y2="800" style="animation-delay:-3s"/>
+        <line class="pulse-v" x1="900" y1="0" x2="900" y2="800" style="animation-delay:-5s"/>
+        <line class="pulse-v" x1="1050" y1="0" x2="1050" y2="800" style="animation-delay:-7s"/>
+        <circle class="node" cx="300" cy="200" r="2"/>
+        <circle class="node" cx="600" cy="300" r="2"/>
+        <circle class="node" cx="900" cy="100" r="2"/>
+        <circle class="node" cx="450" cy="500" r="2"/>
+        <circle class="node" cx="750" cy="400" r="2"/>
+        <circle class="node" cx="150" cy="600" r="2"/>
+        <circle class="node" cx="1050" cy="500" r="2"/>
+        <circle class="node" cx="300" cy="700" r="2"/>
+        <circle class="node" cx="600" cy="600" r="2"/>
+        <circle class="node" cx="900" cy="700" r="2"/>
+      </svg>
+    </div>
 
     <div class="hero-content">
-      <div class="hero-badge">Entrega Final · Modelo v6 Optimizado · 312 Modelos Prophet</div>
+      <div class="hero-badge">Maestría en IA Aplicada — Proyecto Integrador 2026</div>
 
-      <h1>EpiForecast<span class="accent">-MX</span></h1>
+      <h1>Inteligencia Epidemiológica<br>para <span class="accent">México</span></h1>
 
       <p class="hero-sub">
-        312 modelos Prophet (297 estatales + 15 regionales) con cross-validation temporal, modo híbrido de fallback regional y métrica MASE.
+        312 modelos Prophet con cross-validation temporal, modo híbrido de fallback regional y métrica MASE.
         Pronósticos a 52 semanas con <strong style="color:var(--cream)">100% cobertura estatal</strong>.
         Una colaboración entre el <strong style="color:var(--cream)">Tecnológico de Monterrey</strong>
         y el <strong style="color:var(--cream)">IMSS</strong>.
       </p>
 
-      <div class="hero-stats">
+      <div class="hero-stats" id="heroStats">
         <div class="hero-stat">
-          <div class="hero-stat-value">312</div>
+          <div class="hero-stat-value" data-target="312" data-suffix="">0</div>
           <div class="hero-stat-label">Modelos Prophet</div>
         </div>
         <div class="hero-stat">
-          <div class="hero-stat-value">100%</div>
+          <div class="hero-stat-value" data-target="100" data-suffix="%">0%</div>
           <div class="hero-stat-label">Cobertura Estatal</div>
         </div>
         <div class="hero-stat">
-          <div class="hero-stat-value">&lt; 1.0</div>
-          <div class="hero-stat-label">MASE (supera naive)</div>
+          <div class="hero-stat-value" data-target="3" data-suffix="">0</div>
+          <div class="hero-stat-label">Padecimientos</div>
         </div>
         <div class="hero-stat">
-          <div class="hero-stat-value">52</div>
+          <div class="hero-stat-value" data-target="52" data-suffix="">0</div>
           <div class="hero-stat-label">Semanas Pronóstico</div>
         </div>
       </div>
@@ -1727,76 +1709,149 @@
   </section>
 
   <!-- ═══════════════════════════════════════════════════════════════
-       REPORTES Y HERRAMIENTAS — Premium redesign
+       CENTRO DE REPORTES — CTA Hub
        ═══════════════════════════════════════════════════════════════ -->
-  <section id="reportes" class="reportes-section">
-    <!-- Subtle dot-grid pattern overlay -->
-    <div class="reportes-pattern"></div>
+  <section id="reportes" class="cta-hub">
+    <div class="cta-hub-pattern"></div>
 
-    <div class="reportes-inner">
+    <div class="cta-hub-inner">
       <div class="section-label reveal" style="color:var(--gold)">
         <span style="display:inline-block;width:32px;height:2px;background:var(--gold);margin-right:.75rem"></span>Acceso Directo
       </div>
-      <div class="section-title reveal" style="margin-bottom:1rem">Reportes y Herramientas</div>
-      <p class="section-desc reveal" style="margin-bottom:3.5rem">Todo el análisis, la evidencia y las herramientas interactivas del proyecto, en un solo lugar.</p>
+      <div class="section-title reveal" style="margin-bottom:1rem">Centro de Reportes</div>
+      <p class="section-desc reveal" style="margin-bottom:1rem">Toda la evidencia, el análisis y las herramientas interactivas del proyecto, en un solo lugar.</p>
 
-      <!-- 4 Feature blocks -->
-      <div class="reportes-grid reveal">
-        <a href="EpiDashboard.html" class="rpt-block">
-          <div class="rpt-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+      <div class="cta-grid">
+        <!-- 1. Dashboard — FEATURED -->
+        <div class="cta-card cta-card--featured reveal reveal-delay-1">
+          <div class="cta-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
           </div>
-          <div class="rpt-title">Dashboard Interactivo</div>
-          <div class="rpt-desc">Tableau con filtros por padecimiento, estado y sexo. Tooltips con métricas MASE por modelo.</div>
-          <span class="rpt-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
-        </a>
-
-        <a href="reporte_resultados.html" class="rpt-block">
-          <div class="rpt-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M9 15l2 2 4-4"/></svg>
-          </div>
-          <div class="rpt-title">Reporte de Resultados</div>
-          <div class="rpt-desc">312 modelos con MASE, RMSE, MAE. Ranking interactivo, cobertura geográfica y top/bottom 10.</div>
-          <span class="rpt-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
-        </a>
-
-        <a href="Reports/index.html" class="rpt-block">
-          <div class="rpt-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/><circle cx="22" cy="6" r="2" fill="currentColor" stroke="none" opacity=".4"/></svg>
-          </div>
-          <div class="rpt-title">Galería de Pronósticos</div>
-          <div class="rpt-desc">312 gráficos con filtros por padecimiento, nivel geográfico y sexo. Lightbox y búsqueda.</div>
-          <span class="rpt-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
-        </a>
-
-        <a href="bitacora_modelado.html" class="rpt-block">
-          <div class="rpt-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="8" y1="7" x2="16" y2="7"/><line x1="8" y1="11" x2="13" y2="11"/></svg>
-          </div>
-          <div class="rpt-title">Bitácora del Modelado</div>
-          <div class="rpt-desc">Prophet v1 a v6: feature engineering, normalización, grids, anti-Newton, modo híbrido.</div>
-          <span class="rpt-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
-        </a>
-      </div>
-
-      <!-- Benchmark SageMaker — mini-hero banner -->
-      <a href="comparacion_modelos.html" class="benchmark-banner reveal">
-        <div class="benchmark-pattern"></div>
-        <div class="benchmark-content">
-          <div class="benchmark-text">
-            <div class="benchmark-label">Benchmark AWS SageMaker</div>
-            <div class="benchmark-title">La Batalla de los Modelos</div>
-            <div class="benchmark-desc">6 algoritmos compiten sobre 258 series temporales. Prophet, DeepAR, TFT, LightGBM+LSTM, XGBoost y Ridge — 19 gráficos interactivos con análisis por padecimiento.</div>
-          </div>
-          <div class="benchmark-kpis">
-            <div class="benchmark-kpi"><div class="benchmark-kpi-value">1,548</div><div class="benchmark-kpi-label">Trials</div></div>
-            <div class="benchmark-kpi"><div class="benchmark-kpi-value">6</div><div class="benchmark-kpi-label">Modelos</div></div>
-            <div class="benchmark-kpi"><div class="benchmark-kpi-value">9.8h</div><div class="benchmark-kpi-label">Cómputo</div></div>
-            <div class="benchmark-kpi"><div class="benchmark-kpi-value">~$10</div><div class="benchmark-kpi-label">USD</div></div>
-          </div>
+          <div class="cta-card-title">Dashboard Interactivo</div>
+          <div class="cta-card-desc">Tableau interactivo con filtros por padecimiento, estado y sexo. Tooltips con métricas MASE por modelo.</div>
+          <a href="EpiDashboard.html" class="cta-card-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+            Explorar Dashboard
+          </a>
         </div>
-        <span class="benchmark-cta">Ver Reporte Completo <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
-      </a>
+
+        <!-- 2. Galería de Pronósticos -->
+        <div class="cta-card reveal reveal-delay-2">
+          <div class="cta-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <div class="cta-card-title">Galería de Pronósticos</div>
+          <div class="cta-card-desc">312 gráficos con filtros, lightbox y búsqueda.</div>
+          <a href="Reports/index.html" class="cta-card-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+            Ver Pronósticos
+          </a>
+        </div>
+
+        <!-- 3. Resultados del Modelado -->
+        <div class="cta-card reveal reveal-delay-1">
+          <div class="cta-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M9 15l2 2 4-4"/></svg>
+          </div>
+          <div class="cta-card-title">Resultados del Modelado</div>
+          <div class="cta-card-desc">MASE, RMSE, ranking interactivo y cobertura.</div>
+          <a href="reporte_resultados.html" class="cta-card-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+            Ver Resultados
+          </a>
+        </div>
+
+        <!-- 4. Bitácora del Modelado -->
+        <div class="cta-card reveal reveal-delay-2">
+          <div class="cta-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          </div>
+          <div class="cta-card-title">Bitácora del Modelado</div>
+          <div class="cta-card-desc">Prophet v1 a v6: evolución completa.</div>
+          <a href="bitacora_modelado.html" class="cta-card-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+            Ver Bitácora
+          </a>
+        </div>
+
+        <!-- 5. Comparación de Modelos -->
+        <div class="cta-card reveal reveal-delay-3">
+          <div class="cta-card-icon" style="background:var(--burgundy-glow)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" style="color:var(--burgundy)"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          </div>
+          <div class="cta-card-title">Comparación de Modelos</div>
+          <div class="cta-card-desc">6 algoritmos, 1,548 trials en SageMaker.</div>
+          <a href="comparacion_modelos.html" class="cta-card-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+            Ver Comparación
+          </a>
+        </div>
+
+        <!-- 6. Ficha Técnica Prophet -->
+        <div class="cta-card reveal reveal-delay-4">
+          <div class="cta-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          </div>
+          <div class="cta-card-title">Ficha Técnica Prophet</div>
+          <div class="cta-card-desc">Hiperparámetros y arquitectura del modelo.</div>
+          <a href="ficha_tecnica_prophet.html" class="cta-card-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+            Ver Ficha
+          </a>
+        </div>
+
+        <!-- 7. HPs SageMaker -->
+        <div class="cta-card reveal reveal-delay-1">
+          <div class="cta-card-icon" style="background:var(--gold-glow)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" style="color:var(--gold)"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          </div>
+          <div class="cta-card-title">HPs SageMaker</div>
+          <div class="cta-card-desc">Configuración de los 6 modelos comparados.</div>
+          <a href="hiperparametros_modelos.html" class="cta-card-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+            Ver HPs
+          </a>
+        </div>
+
+        <!-- 8. Arquitectura Dashboard -->
+        <div class="cta-card reveal reveal-delay-2">
+          <div class="cta-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+          </div>
+          <div class="cta-card-title">Arquitectura Dashboard</div>
+          <div class="cta-card-desc">Pipeline de datos para Tableau y visualización.</div>
+          <a href="construccion_dashboard.html" class="cta-card-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+            Ver Arquitectura
+          </a>
+        </div>
+
+        <!-- 9. Conclusiones -->
+        <div class="cta-card reveal reveal-delay-3">
+          <div class="cta-card-icon" style="background:rgba(46,125,50,0.08)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" style="color:#2E7D32"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          </div>
+          <div class="cta-card-title">Conclusiones</div>
+          <div class="cta-card-desc">Hallazgos clave y reflexiones del proyecto.</div>
+          <a href="conclusiones.html" class="cta-card-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+            Ver Conclusiones
+          </a>
+        </div>
+
+        <!-- 10. Referencias -->
+        <div class="cta-card reveal reveal-delay-4">
+          <div class="cta-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <div class="cta-card-title">Referencias</div>
+          <div class="cta-card-desc">43 fuentes bibliográficas organizadas por tema.</div>
+          <a href="referencias.html" class="cta-card-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+            Ver Referencias
+          </a>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -2042,7 +2097,7 @@
     <div class="section-title reveal">De silos aislados a un pipeline<br>optimizado y escalable</div>
 
     <div class="method-grid">
-      <div class="method-card reveal reveal-delay-1">
+      <div class="method-card reveal reveal-delay-1" data-phase="I">
         <div class="method-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="2" width="8" height="8" rx="1"/><rect x="14" y="2" width="8" height="8" rx="1"/><rect x="8" y="14" width="8" height="8" rx="1"/></svg>
         </div>
@@ -2050,7 +2105,7 @@
         <p>Modelos aislados por padecimiento con promedios nacionales. Limitado alcance y sin desagregación geográfica ni por sexo. Sirvió como línea base para identificar oportunidades de mejora.</p>
       </div>
 
-      <div class="method-card reveal reveal-delay-2">
+      <div class="method-card reveal reveal-delay-2" data-phase="II">
         <div class="method-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
         </div>
@@ -2058,7 +2113,7 @@
         <p>Arquitectura modular con Prophet para pronósticos multi-step. 297 modelos baseline validados con cross-validation temporal. Matriz: 3 padecimientos x 33 entidades x 3 sexos.</p>
       </div>
 
-      <div class="method-card reveal reveal-delay-1">
+      <div class="method-card reveal reveal-delay-1" data-phase="III">
         <div class="method-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
         </div>
@@ -2066,7 +2121,7 @@
         <p>Grids diferenciados por padecimiento, normalización a tasa por 100K + log-transform, protección anti-Newton (3 capas), modo híbrido con fallback regional, MASE como métrica. De 87% a 100% cobertura estatal.</p>
       </div>
 
-      <div class="method-card method-highlight reveal reveal-delay-3">
+      <div class="method-card method-highlight reveal reveal-delay-3" data-phase="v6">
         <div class="method-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
           </div>
@@ -2369,7 +2424,7 @@
 
       <div class="scope-stats">
         <div class="scope-stat reveal reveal-delay-1">
-          <div class="scope-stat-value scope-stat-value--teal">60,288</div>
+          <div class="scope-stat-value scope-stat-value--teal" data-target="60288" data-suffix="">0</div>
           <div class="scope-stat-label">Registros totales</div>
           <div class="scope-stat-sub">Dataset consolidado SINAVE + INEGI</div>
         </div>
@@ -2379,12 +2434,12 @@
           <div class="scope-stat-sub">13+ años de boletines SINAVE</div>
         </div>
         <div class="scope-stat reveal reveal-delay-3">
-          <div class="scope-stat-value scope-stat-value--gold">32</div>
+          <div class="scope-stat-value scope-stat-value--gold" data-target="32" data-suffix="">0</div>
           <div class="scope-stat-label">Entidades federativas</div>
           <div class="scope-stat-sub">Cobertura nacional completa</div>
         </div>
         <div class="scope-stat reveal reveal-delay-4">
-          <div class="scope-stat-value scope-stat-value--dark">312</div>
+          <div class="scope-stat-value scope-stat-value--dark" data-target="312" data-suffix="">0</div>
           <div class="scope-stat-label">Modelos Prophet</div>
           <div class="scope-stat-sub">297 estatales + 15 regionales · CV temporal</div>
         </div>
@@ -2404,17 +2459,16 @@
     </p>
     <div class="footer-links">
       <a href="#hero">Inicio</a>
-      <a href="#pipeline">Pipeline</a>
-      <a href="#results">Resultados</a>
-      <a href="#team">Equipo</a>
       <a href="EpiDashboard.html">Dashboard</a>
       <a href="Reports/index.html">Pronósticos</a>
+      <a href="reporte_resultados.html">Resultados</a>
       <a href="bitacora_modelado.html">Bitácora</a>
       <a href="comparacion_modelos.html">Comparación</a>
       <a href="ficha_tecnica_prophet.html">Ficha Prophet</a>
       <a href="hiperparametros_modelos.html">HPs SageMaker</a>
-      <a href="construccion_dashboard.html">Construcción Dashboard</a>
+      <a href="construccion_dashboard.html">Arquitectura Dashboard</a>
       <a href="conclusiones.html">Conclusiones</a>
+      <a href="referencias.html">Referencias</a>
       <a href="https://github.com/IntegradorIMSS2026Team01" target="_blank" rel="noopener">GitHub</a>
     </div>
     <p style="margin-top:1.5rem; font-size:0.75rem; opacity:0.5;">
@@ -2471,6 +2525,57 @@
       a.addEventListener('click', () => {
         document.getElementById('navMobile').classList.remove('show');
       });
+    });
+
+    // Counter animation
+    function animateCounter(el) {
+      const target = parseFloat(el.getAttribute('data-target'));
+      const suffix = el.getAttribute('data-suffix') || '';
+      const duration = 2000;
+      const start = performance.now();
+
+      function update(now) {
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        let current;
+        if (Number.isInteger(target)) {
+          current = Math.round(target * eased);
+        } else {
+          current = (target * eased).toFixed(1);
+        }
+        el.textContent = current.toLocaleString() + suffix;
+        if (progress < 1) requestAnimationFrame(update);
+        else el.textContent = target.toLocaleString() + suffix;
+      }
+      requestAnimationFrame(update);
+    }
+
+    // Observe hero stats for counter trigger
+    const heroStats = document.getElementById('heroStats');
+    if (heroStats) {
+      const counterObs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            heroStats.querySelectorAll('[data-target]').forEach(animateCounter);
+            counterObs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.3 });
+      counterObs.observe(heroStats);
+    }
+
+    // Also animate scope stats
+    document.querySelectorAll('.scope-stat-value[data-target]').forEach(el => {
+      const scopeObs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            animateCounter(entry.target);
+            scopeObs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.3 });
+      scopeObs.observe(el);
     });
   </script>
 </body>
