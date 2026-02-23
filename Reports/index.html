@@ -32,10 +32,11 @@
   }
   /* Nav */
   .nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(23,63,53,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(232,213,181,.08);transition:box-shadow .3s,background .3s}.nav.scrolled{box-shadow:0 4px 30px rgba(0,0,0,.18);background:rgba(23,63,53,.97)}.nav-inner{max-width:1200px;margin:0 auto;padding:0 2rem;display:flex;align-items:center;height:64px;gap:1rem}.nav-logo{font-family:var(--font-display);font-size:1.3rem;color:var(--cream);letter-spacing:.02em;flex-shrink:0;text-decoration:none}.nav-logo span{color:var(--gold)}.nav-menu{display:flex;align-items:center;gap:.25rem;list-style:none;flex:1;justify-content:center}.nav-group{position:relative}.nav-group-toggle{display:flex;align-items:center;gap:.3rem;color:rgba(232,213,181,.65);font-size:.78rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;padding:.5rem .85rem;border-radius:6px;cursor:pointer;transition:color .2s,background .2s;white-space:nowrap;border:none;background:none;font-family:inherit}.nav-group-toggle:hover,.nav-group:hover .nav-group-toggle{color:var(--cream);background:rgba(232,213,181,.06)}.nav-group-toggle svg{width:10px;height:10px;opacity:.5;transition:transform .2s}.nav-group:hover .nav-group-toggle svg{transform:rotate(180deg);opacity:.8}.nav-dropdown{position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%) translateY(-4px);background:rgba(23,63,53,.98);backdrop-filter:blur(16px);border:1px solid rgba(232,213,181,.1);border-radius:12px;padding:.5rem;min-width:200px;opacity:0;visibility:hidden;transition:opacity .15s,transform .15s,visibility .15s;box-shadow:0 12px 40px rgba(0,0,0,.25)}.nav-group:hover .nav-dropdown{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}.nav-dropdown::before{content:'';position:absolute;top:-8px;left:0;right:0;height:8px}.nav-dropdown a{display:flex;align-items:center;gap:.75rem;padding:.6rem 1rem;color:rgba(232,213,181,.7);font-size:.82rem;font-weight:500;border-radius:8px;transition:background .15s,color .15s;text-decoration:none;white-space:nowrap}.nav-dropdown a:hover{background:rgba(232,213,181,.08);color:var(--cream)}.nav-dropdown a svg{width:16px;height:16px;opacity:.5;flex-shrink:0}.nav-dropdown a:hover svg{opacity:.8}.nav-ctas{display:flex;gap:.5rem;align-items:center;flex-shrink:0}.nav-cta{display:inline-flex;align-items:center;gap:.4rem;padding:.4rem 1rem;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;border-radius:100px;text-decoration:none;transition:transform .2s,box-shadow .2s,background .2s;white-space:nowrap}.nav-cta:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(181,133,0,.3)}.nav-cta--primary{background:var(--gold);color:var(--dark-teal)}.nav-cta--secondary{background:rgba(232,213,181,.1);color:var(--gold);border:1px solid rgba(181,133,0,.3)}.nav-cta--secondary:hover{background:rgba(181,133,0,.15);color:var(--gold)}.nav-cta svg{width:14px;height:14px}.nav-hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}.nav-hamburger span{width:24px;height:2px;background:var(--cream);transition:transform .3s,opacity .3s}.nav-mobile{display:none;flex-direction:column;background:rgba(23,63,53,.98);backdrop-filter:blur(16px);padding:1rem 2rem 1.5rem;border-bottom:1px solid rgba(232,213,181,.1)}.nav-mobile.show{display:flex}.nav-mobile-group{border-bottom:1px solid rgba(232,213,181,.06)}.nav-mobile-heading{display:flex;align-items:center;justify-content:space-between;padding:.85rem 0;color:rgba(232,213,181,.7);font-size:.82rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;cursor:pointer}.nav-mobile-heading svg{width:10px;height:10px;transition:transform .2s}.nav-mobile-group.open .nav-mobile-heading svg{transform:rotate(180deg)}.nav-mobile-items{display:none;flex-direction:column;padding-bottom:.5rem}.nav-mobile-group.open .nav-mobile-items{display:flex}.nav-mobile-items a{padding:.5rem 1rem;color:rgba(232,213,181,.55);font-size:.82rem;text-decoration:none;border-radius:6px;transition:background .15s,color .15s}.nav-mobile-items a:hover{background:rgba(232,213,181,.06);color:var(--cream)}.nav-mobile-ctas{display:flex;gap:.5rem;margin-top:1rem}@media(max-width:768px){.nav-menu,.nav-ctas{display:none}.nav-hamburger{display:flex}}
+  /* ── Controls ─────────────────────────────── */
   .controls {
     background: var(--imss-card);
     border-bottom: 1px solid var(--imss-border);
-    padding: 16px 32px;
+    padding: 0 32px;
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
@@ -44,196 +45,148 @@
     top: 64px;
     z-index: 99;
     box-shadow: var(--shadow);
+    min-height: 52px;
   }
-  .filter-group {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .filter-group label {
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    color: var(--imss-muted);
-    letter-spacing: 0.5px;
-  }
+  .filter-group { display: flex; align-items: center; gap: 6px; }
+  .filter-group label { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; color: var(--imss-muted); letter-spacing: 0.5px; }
   .filter-group select, .filter-group input {
-    padding: 6px 12px;
-    border: 1px solid var(--imss-border);
-    border-radius: 6px;
-    font-size: 0.85rem;
-    background: white;
-    color: var(--imss-text);
-    outline: none;
-    transition: border-color 0.2s;
+    padding: 5px 10px; border: 1px solid var(--imss-border); border-radius: 6px;
+    font-size: 0.85rem; background: white; color: var(--imss-text); outline: none; transition: border-color 0.2s;
   }
-  .filter-group select:focus, .filter-group input:focus {
-    border-color: var(--imss-green);
-  }
-  .filter-group input[type="search"] { width: 200px; }
-  .badge {
-    display: inline-block;
-    padding: 4px 10px;
-    border-radius: 12px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: white;
-    margin-left: auto;
-  }
+  .filter-group select:focus, .filter-group input:focus { border-color: var(--imss-green); }
+  .filter-group input[type="search"] { width: 180px; }
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; color: white; margin-left: auto; }
   .badge-count { background: var(--imss-green); }
-  .view-toggle {
-    display: flex;
-    gap: 4px;
-    margin-left: 8px;
+
+  /* ── Tier nav pills ───────────────────────── */
+  .tier-nav {
+    display: flex; gap: 8px; align-items: center;
+    padding: 8px 32px; background: rgba(23,63,53,0.025);
+    border-bottom: 1px solid var(--imss-border);
+    position: sticky; top: 116px; z-index: 98;
   }
-  .view-toggle button {
-    padding: 6px 12px;
-    border: 1px solid var(--imss-border);
-    background: white;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 0.8rem;
-    transition: all 0.2s;
+  .tier-nav a {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 14px; border-radius: 100px; font-size: 0.74rem; font-weight: 600;
+    text-decoration: none; border: 1px solid var(--imss-border); color: var(--imss-muted);
+    background: white; transition: all 0.2s;
   }
-  .view-toggle button.active {
-    background: var(--imss-green);
-    color: white;
-    border-color: var(--imss-green);
+  .tier-nav a:hover { border-color: var(--dark-teal); color: var(--dark-teal); background: rgba(23,63,53,0.04); }
+  .tier-nav .pill-count { background: var(--imss-bg); border-radius: 10px; padding: 1px 7px; font-size: 0.68rem; }
+
+  /* ── Tier common ──────────────────────────── */
+  .tier { position: relative; }
+  .tier-inner { max-width: 1280px; margin: 0 auto; padding: 56px 40px; }
+  .tier-header { margin-bottom: 40px; display: flex; flex-direction: column; gap: 8px; }
+  .tier-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; padding: 4px 12px; border-radius: 100px; width: fit-content; }
+  .tier-title { font-family: var(--font-display); font-size: 2.2rem; line-height: 1.1; }
+  .tier-sub { font-size: 0.9rem; max-width: 500px; }
+
+  /* ── NACIONAL ─────────────────────────────── */
+  .tier-nacional {
+    background: linear-gradient(160deg, #0d2b22 0%, #173F35 55%, #1b4a3b 100%);
+    position: relative; overflow: hidden;
   }
-  main { padding: 24px 32px; }
-  .gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-    gap: 20px;
+  .tier-nacional::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 70% 90% at 95% 40%, rgba(181,133,0,0.07) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 70% at 5% 60%, rgba(0,136,74,0.09) 0%, transparent 60%);
   }
-  .gallery.compact {
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 12px;
+  .tier-nacional::after {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background-image: linear-gradient(rgba(232,213,181,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(232,213,181,0.025) 1px, transparent 1px);
+    background-size: 48px 48px;
   }
-  .card {
-    background: var(--imss-card);
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: var(--shadow);
-    transition: transform 0.2s, box-shadow 0.2s;
-    cursor: pointer;
-    border: 2px solid transparent;
+  .tier-nacional .tier-inner { position: relative; z-index: 1; }
+  .tier-nacional .tier-badge { background: rgba(181,133,0,0.15); color: var(--gold); border: 1px solid rgba(181,133,0,0.3); }
+  .tier-nacional .tier-title { color: var(--cream); }
+  .tier-nacional .tier-sub { color: rgba(232,213,181,0.5); }
+  .nac-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+  .nac-pad-group { display: flex; flex-direction: column; gap: 10px; }
+  .nac-pad-divider { display: flex; align-items: center; gap: 10px; padding-bottom: 14px; margin-bottom: 4px; border-bottom: 1px solid rgba(232,213,181,0.1); }
+  .nac-pad-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .nac-pad-dot.alzheimer { background: #4caf7d; }
+  .nac-pad-dot.depresion { background: #6b9de8; }
+  .nac-pad-dot.parkinson { background: #e07575; }
+  .nac-pad-name { font-family: var(--font-display); font-size: 1.2rem; color: var(--cream); }
+  .nac-card {
+    border-radius: 10px; overflow: hidden; cursor: pointer;
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(232,213,181,0.08);
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
   }
-  .card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.12);
-  }
+  .nac-card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,0,0,0.45), 0 0 0 1px rgba(181,133,0,0.35); border-color: rgba(181,133,0,0.25); }
+  .nac-card img { width: 100%; height: auto; display: block; }
+  .nac-card-label { padding: 8px 12px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(232,213,181,0.45); }
+
+  /* ── REGIONAL ─────────────────────────────── */
+  .tier-regional { background: #f3f6f4; }
+  .tier-regional .tier-badge { background: rgba(23,63,53,0.07); color: var(--dark-teal); border: 1px solid rgba(23,63,53,0.13); }
+  .tier-regional .tier-title { color: var(--dark-teal); }
+  .tier-regional .tier-sub { color: var(--imss-muted); }
+  .regional-groups { display: flex; flex-direction: column; gap: 40px; }
+  .region-label { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid var(--imss-border); }
+  .region-accent { width: 4px; height: 22px; border-radius: 2px; background: var(--gold); flex-shrink: 0; }
+  .region-name { font-size: 1rem; font-weight: 700; color: var(--imss-text); flex: 1; }
+  .region-count { font-size: 0.72rem; color: var(--imss-muted); background: white; border: 1px solid var(--imss-border); border-radius: 20px; padding: 2px 10px; }
+  .region-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 14px; }
+
+  /* ── ESTATAL ──────────────────────────────── */
+  .tier-estatal { background: white; }
+  .tier-estatal .tier-badge { background: rgba(0,104,71,0.07); color: var(--imss-green); border: 1px solid rgba(0,104,71,0.15); }
+  .tier-estatal .tier-title { color: var(--imss-text); }
+  .tier-estatal .tier-sub { color: var(--imss-muted); }
+  .estatal-toolbar { display: flex; gap: 8px; margin-bottom: 18px; }
+  .btn-sm { padding: 5px 14px; border: 1px solid var(--imss-border); background: white; border-radius: 6px; font-size: 0.78rem; font-weight: 600; color: var(--imss-muted); cursor: pointer; transition: all 0.15s; }
+  .btn-sm:hover { border-color: var(--dark-teal); color: var(--dark-teal); }
+  .accordion { border: 1px solid var(--imss-border); border-radius: 12px; overflow: hidden; }
+  .state-item { border-bottom: 1px solid var(--imss-border); }
+  .state-item:last-child { border-bottom: none; }
+  .state-header { display: flex; align-items: center; gap: 12px; padding: 14px 24px; cursor: pointer; user-select: none; transition: background 0.15s; }
+  .state-header:hover { background: rgba(23,63,53,0.03); }
+  .state-item.open > .state-header { background: rgba(23,63,53,0.04); border-bottom: 1px solid var(--imss-border); }
+  .state-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--imss-green); flex-shrink: 0; opacity: 0.3; transition: opacity 0.2s; }
+  .state-item.open > .state-header .state-dot { opacity: 1; }
+  .state-name { font-weight: 600; font-size: 0.92rem; color: var(--imss-text); flex: 1; }
+  .state-count { font-size: 0.7rem; color: var(--imss-muted); background: var(--imss-bg); padding: 2px 9px; border-radius: 20px; }
+  .chevron { width: 12px; height: 12px; color: var(--imss-muted); transition: transform 0.25s; flex-shrink: 0; }
+  .state-item.open .chevron { transform: rotate(180deg); }
+  .state-body { display: none; padding: 20px 24px 24px; background: #fafbfc; }
+  .state-item.open .state-body { display: block; }
+  .state-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 12px; }
+
+  /* ── Cards ────────────────────────────────── */
+  .card { background: var(--imss-card); border-radius: 10px; overflow: hidden; box-shadow: var(--shadow); transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; border: 2px solid transparent; }
+  .card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.12); }
   .card.pad-Alzheimer { border-left: 4px solid var(--alzheimer); }
-  .card.pad-Depresion { border-left: 4px solid var(--depresion); }
-  .card.pad-Parkinson { border-left: 4px solid var(--parkinson); }
-  .card img {
-    width: 100%;
-    height: auto;
-    display: block;
-    background: #fafafa;
-  }
-  .card .info {
-    padding: 10px 14px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .card .info .title {
-    font-size: 0.82rem;
-    font-weight: 600;
-  }
-  .card .info .tags {
-    display: flex;
-    gap: 4px;
-  }
-  .tag {
-    font-size: 0.65rem;
-    padding: 2px 7px;
-    border-radius: 8px;
-    font-weight: 600;
-    text-transform: uppercase;
-  }
+  .card.pad-Depresion  { border-left: 4px solid var(--depresion); }
+  .card.pad-Parkinson  { border-left: 4px solid var(--parkinson); }
+  .card img { width: 100%; height: auto; display: block; background: #fafafa; }
+  .card .info { padding: 8px 12px; display: flex; justify-content: space-between; align-items: center; }
+  .card .info .title { font-size: 0.8rem; font-weight: 600; }
+  .card .info .tags { display: flex; gap: 4px; }
+  .tag { font-size: 0.62rem; padding: 2px 6px; border-radius: 8px; font-weight: 600; text-transform: uppercase; }
   .tag-nacional { background: #e8f5e9; color: #2e7d32; }
   .tag-regional { background: #e3f2fd; color: #1565c0; }
   .tag-estatal  { background: #fce4ec; color: #c62828; }
   .tag-general  { background: #f3e5f5; color: #7b1fa2; }
   .tag-hombres  { background: #e3f2fd; color: #0d47a1; }
   .tag-mujeres  { background: #fce4ec; color: #ad1457; }
-  .empty {
-    text-align: center;
-    padding: 60px 20px;
-    color: var(--imss-muted);
-    font-size: 1.1rem;
-  }
-  /* Lightbox */
-  .lightbox {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.85);
-    z-index: 1000;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-  }
+
+  /* ── Lightbox ─────────────────────────────── */
+  .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88); z-index: 2000; justify-content: center; align-items: center; padding: 20px; }
   .lightbox.open { display: flex; }
-  .lightbox img {
-    max-width: 95%;
-    max-height: 90vh;
-    border-radius: 8px;
-    box-shadow: 0 8px 40px rgba(0,0,0,0.5);
-  }
-  .lightbox .close {
-    position: absolute;
-    top: 16px;
-    right: 24px;
-    font-size: 2rem;
-    color: white;
-    cursor: pointer;
-    opacity: 0.7;
-    transition: opacity 0.2s;
-  }
+  .lightbox img { max-width: 95%; max-height: 90vh; border-radius: 8px; box-shadow: 0 8px 40px rgba(0,0,0,0.5); }
+  .lightbox .close { position: absolute; top: 16px; right: 24px; font-size: 2rem; color: white; cursor: pointer; opacity: 0.7; transition: opacity 0.2s; }
   .lightbox .close:hover { opacity: 1; }
-  .lightbox .nav {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 2.5rem;
-    color: white;
-    cursor: pointer;
-    opacity: 0.6;
-    user-select: none;
-    padding: 20px;
-    transition: opacity 0.2s;
-    background: transparent;
-    left: auto;
-    right: auto;
-    border-bottom: none;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    box-shadow: none;
-    width: auto;
-    height: auto;
-  }
-  .lightbox .nav:hover { opacity: 1; }
-  .lightbox .nav.prev { left: 10px; }
-  .lightbox .nav.next { right: 10px; }
-  .lightbox .caption {
-    position: absolute;
-    bottom: 16px;
-    left: 50%;
-    transform: translateX(-50%);
-    color: white;
-    font-size: 0.9rem;
-    background: rgba(0,0,0,0.6);
-    padding: 8px 20px;
-    border-radius: 8px;
-  }
-  @media (max-width: 600px) {
-    .gallery { grid-template-columns: 1fr; }
-    .controls { padding: 12px 16px; }
-    main { padding: 16px; }
-  }
+  .lightbox .lb-nav { position: absolute; top: 50%; transform: translateY(-50%); font-size: 2.5rem; color: white; cursor: pointer; opacity: 0.6; user-select: none; padding: 20px; transition: opacity 0.2s; background: transparent; width: auto; height: auto; }
+  .lightbox .lb-nav:hover { opacity: 1; }
+  .lightbox .lb-nav.prev { left: 10px; }
+  .lightbox .lb-nav.next { right: 10px; }
+  .lightbox .caption { position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); color: white; font-size: 0.9rem; background: rgba(0,0,0,0.6); padding: 8px 20px; border-radius: 8px; white-space: nowrap; }
+
+  @media (max-width: 900px) { .nac-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 768px) { .tier-inner { padding: 36px 20px; } .controls { padding: 8px 16px; } .tier-nav { display: none; } }
 </style>
 </head>
 <body>
@@ -303,15 +256,6 @@
     </select>
   </div>
   <div class="filter-group">
-    <label>Nivel</label>
-    <select id="filterCat">
-      <option value="">Todos</option>
-      <option value="Nacional">Nacional</option>
-      <option value="Regional">Regional</option>
-      <option value="Estatal">Estatal</option>
-    </select>
-  </div>
-  <div class="filter-group">
     <label>Sexo</label>
     <select id="filterSexo">
       <option value="">Todos</option>
@@ -324,22 +268,63 @@
     <label>Buscar</label>
     <input type="search" id="searchBox" placeholder="Ej: Jalisco, Rural...">
   </div>
-  <div class="view-toggle">
-    <button id="viewNormal" class="active" onclick="setView('normal')">Normal</button>
-    <button id="viewCompact" onclick="setView('compact')">Compacto</button>
-  </div>
   <span class="badge badge-count" id="countBadge">312</span>
 </div>
 
+<div class="tier-nav">
+  <a href="#secNacional">★ Nacional <span class="pill-count" id="navCountNac">9</span></a>
+  <a href="#secRegional">◈ Regional <span class="pill-count" id="navCountReg">27</span></a>
+  <a href="#secEstatal">⊞ Estatal <span class="pill-count" id="navCountEst">276</span></a>
+</div>
+
 <main>
-  <div class="gallery" id="gallery"></div>
-  <div class="empty" id="emptyMsg" style="display:none;">No se encontraron gráficos con esos filtros.</div>
+
+  <!-- ── NACIONAL ─────────────────────────── -->
+  <section class="tier tier-nacional" id="secNacional">
+    <div class="tier-inner">
+      <div class="tier-header">
+        <span class="tier-badge">★ Cobertura Nacional</span>
+        <h2 class="tier-title">Nacional</h2>
+        <p class="tier-sub">Pronósticos agregados para todo México</p>
+      </div>
+      <div class="nac-grid" id="bodyNacional"></div>
+    </div>
+  </section>
+
+  <!-- ── REGIONAL ──────────────────────────── -->
+  <section class="tier tier-regional" id="secRegional">
+    <div class="tier-inner">
+      <div class="tier-header">
+        <span class="tier-badge">◈ Segmentación Regional</span>
+        <h2 class="tier-title">Regional</h2>
+        <p class="tier-sub">Clusters geográficos por perfil socioeconómico</p>
+      </div>
+      <div class="regional-groups" id="bodyRegional"></div>
+    </div>
+  </section>
+
+  <!-- ── ESTATAL ───────────────────────────── -->
+  <section class="tier tier-estatal" id="secEstatal">
+    <div class="tier-inner">
+      <div class="tier-header">
+        <span class="tier-badge">⊞ 32 Entidades</span>
+        <h2 class="tier-title">Estatal</h2>
+        <p class="tier-sub">Desagregación por entidad federativa</p>
+      </div>
+      <div class="estatal-toolbar">
+        <button class="btn-sm" onclick="expandAll()">Expandir todo</button>
+        <button class="btn-sm" onclick="collapseAll()">Colapsar todo</button>
+      </div>
+      <div class="accordion" id="bodyEstatal"></div>
+    </div>
+  </section>
+
 </main>
 
 <div class="lightbox" id="lightbox">
   <span class="close" onclick="closeLightbox()">&times;</span>
-  <span class="nav prev" onclick="navLightbox(-1)">&#8249;</span>
-  <span class="nav next" onclick="navLightbox(1)">&#8250;</span>
+  <span class="lb-nav prev" onclick="navLightbox(-1)">&#8249;</span>
+  <span class="lb-nav next" onclick="navLightbox(1)">&#8250;</span>
   <img id="lbImg" src="" alt="">
   <div class="caption" id="lbCaption"></div>
 </div>
@@ -347,110 +332,163 @@
 <script>
 const DATA = [{"p": "Alzheimer", "n": "Aguascalientes", "c": "Estatal", "s": "General", "f": "Alzheimer/Aguascalientes/Alzheimer_Aguascalientes_general.png"}, {"p": "Alzheimer", "n": "Aguascalientes", "c": "Estatal", "s": "Hombres", "f": "Alzheimer/Aguascalientes/Alzheimer_Aguascalientes_hombres.png"}, {"p": "Alzheimer", "n": "Aguascalientes", "c": "Estatal", "s": "Mujeres", "f": "Alzheimer/Aguascalientes/Alzheimer_Aguascalientes_mujeres.png"}, {"p": "Alzheimer", "n": "Baja California", "c": "Estatal", "s": "General", "f": "Alzheimer/Baja_California/Alzheimer_Baja_California_general.png"}, {"p": "Alzheimer", "n": "Baja California", "c": "Estatal", "s": "Hombres", "f": "Alzheimer/Baja_California/Alzheimer_Baja_California_hombres.png"}, {"p": "Alzheimer", "n": "Baja California", "c": "Estatal", "s": "Mujeres", "f": "Alzheimer/Baja_California/Alzheimer_Baja_California_mujeres.png"}, {"p": "Alzheimer", "n": "Baja California Sur", "c": "Estatal", "s": "General", "f": "Alzheimer/Baja_California_Sur/Alzheimer_Baja_California_Sur_general.png"}, {"p": "Alzheimer", "n": "Baja California Sur", "c": "Estatal", "s": "Hombres", "f": "Alzheimer/Baja_California_Sur/Alzheimer_Baja_California_Sur_hombres.png"}, {"p": "Alzheimer", "n": "Baja California Sur", "c": "Estatal", "s": "Mujeres", "f": "Alzheimer/Baja_California_Sur/Alzheimer_Baja_California_Sur_mujeres.png"}, {"p": "Alzheimer", "n": "Campeche", "c": "Estatal", "s": "General", "f": "Alzheimer/Campeche/Alzheimer_Campeche_general.png"}, {"p": "Alzheimer", "n": "Campeche", "c": "Estatal", "s": "Hombres", "f": "Alzheimer/Campeche/Alzheimer_Campeche_hombres.png"}, {"p": "Alzheimer", "n": "Campeche", "c": "Estatal", "s": "Mujeres", "f": "Alzheimer/Campeche/Alzheimer_Campeche_mujeres.png"}, {"p": "Alzheimer", "n": "Chiapas", "c": "Estatal", "s": "General", "f": "Alzheimer/Chiapas/Alzheimer_Chiapas_general.png"}, {"p": "Alzheimer", "n": "Chiapas", "c": "Estatal", "s": "Hombres", "f": "Alzheimer/Chiapas/Alzheimer_Chiapas_hombres.png"}, {"p": "Alzheimer", "n": "Chiapas", "c": "Estatal", "s": "Mujeres", "f": "Alzheimer/Chiapas/Alzheimer_Chiapas_mujeres.png"}, {"p": "Alzheimer", "n": "Chihuahua", "c": "Estatal", "s": "General", "f": "Alzheimer/Chihuahua/Alzheimer_Chihuahua_general.png"}, {"p": "Alzheimer", "n": "Chihuahua", "c": "Estatal", "s": "Hombres", "f": "Alzheimer/Chihuahua/Alzheimer_Chihuahua_hombres.png"}, {"p": "Alzheimer", "n": "Chihuahua", "c": "Estatal", "s": "Mujeres", "f": "Alzheimer/Chihuahua/Alzheimer_Chihuahua_mujeres.png"}, {"p": "Alzheimer", "n": "Ciudad de México", "c": "Estatal", "s": "General", "f": "Alzheimer/Ciudad_de_México/Alzheimer_Ciudad_de_México_general.png"}, {"p": "Alzheimer", "n": "Ciudad de México", "c": "Estatal", "s": "Hombres", "f": "Alzheimer/Ciudad_de_México/Alzheimer_Ciudad_de_México_hombres.png"}, {"p": "Alzheimer", "n": "Ciudad de México", "c": "Estatal", "s": "Mujeres", "f": "Alzheimer/Ciudad_de_México/Alzheimer_Ciudad_de_México_mujeres.png"}, {"p": "Alzheimer", "n": "Coahuila", "c": "Estatal", "s": "General", "f": "Alzheimer/Coahuila/Alzheimer_Coahuila_general.png"}, {"p": "Alzheimer", "n": "Coahuila", "c": "Estatal", "s": "Hombres", "f": "Alzheimer/Coahuila/Alzheimer_Coahuila_hombres.png"}, {"p": "Alzheimer", "n": "Coahuila", "c": "Estatal", "s": "Mujeres", "f": "Alzheimer/Coahuila/Alzheimer_Coahuila_mujeres.png"}, {"p": "Alzheimer", "n": "Colima", "c": "Estatal", "s": "General", "f": "Alzheimer/Colima/Alzheimer_Colima_general.png"}, {"p": "Alzheimer", "n": "Colima", "c": "Estatal", "s": "Hombres", "f": "Alzheimer/Colima/Alzheimer_Colima_hombres.png"}, {"p": "Alzheimer", "n": "Colima", "c": "Estatal", "s": "Mujeres", "f": "Alzheimer/Colima/Alzheimer_Colima_mujeres.png"}, {"p": "Alzheimer", "n": "Durango", "c": "Estatal", "s": "General", "f": "Alzheimer/Durango/Alzheimer_Durango_general.png"}, {"p": "Alzheimer", "n": "Durango", "c": "Estatal", "s": "Hombres", "f": "Alzheimer/Durango/Alzheimer_Durango_hombres.png"}, {"p": "Alzheimer", "n": "Durango", "c": "Estatal", "s": "Mujeres", "f": "Alzheimer/Durango/Alzheimer_Durango_mujeres.png"}, {"p": "Alzheimer", "n": "Guanajuato", "c": "Estatal", "s": "General", "f": "Alzheimer/Guanajuato/Alzheimer_Guanajuato_general.png"}, {"p": "Alzheimer", "n": "Guanajuato", "c": "Estatal", "s": "Hombres", "f": "Alzheimer/Guanajuato/Alzheimer_Guanajuato_hombres.png"}, {"p": "Alzheimer", "n": "Guanajuato", "c": "Estatal", "s": "Mujeres", "f": "Alzheimer/Guanajuato/Alzheimer_Guanajuato_mujeres.png"}, {"p": "Alzheimer", "n": "Guerrero", "c": "Estatal", "s": "General", "f": "Alzheimer/Guerrero/Alzheimer_Guerrero_general.png"}, {"p": "Alzheimer", "n": "Guerrero", "c": "Estatal", "s": "Hombres", "f": "Alzheimer/Guerrero/Alzheimer_Guerrero_hombres.png"}, {"p": "Alzheimer", "n": "Guerrero", "c": "Estatal", "s": "Mujeres", "f": "Alzheimer/Guerrero/Alzheimer_Guerrero_mujeres.png"}, {"p": "Alzheimer", "n": "Hidalgo", "c": "Estatal", "s": "General", "f": "Alzheimer/Hidalgo/Alzheimer_Hidalgo_general.png"}, {"p": "Alzheimer", "n": "Hidalgo", "c": "Estatal", "s": "Hombres", "f": "Alzheimer/Hidalgo/Alzheimer_Hidalgo_hombres.png"}, {"p": "Alzheimer", "n": "Hidalgo", "c": "Estatal", "s": "Mujeres", "f": "Alzheimer/Hidalgo/Alzheimer_Hidalgo_mujeres.png"}, {"p": "Alzheimer", "n": "Jalisco", "c": "Estatal", "s": "General", "f": "Alzheimer/Jalisco/Alzheimer_Jalisco_general.png"}, {"p": "Alzheimer", "n": "Jalisco", "c": "Estatal", "s": "Hombres", "f": "Alzheimer/Jalisco/Alzheimer_Jalisco_hombres.png"}, {"p": "Alzheimer", "n": "Jalisco", "c": "Estatal", "s": "Mujeres", "f": "Alzheimer/Jalisco/Alzheimer_Jalisco_mujeres.png"}, {"p": "Alzheimer", "n": "Michoacán", "c": "Estatal", "s": "General", "f": "Alzheimer/Michoacán/Alzheimer_Michoacán_general.png"}, {"p": "Alzheimer", "n": "Michoacán", "c": "Estatal", "s": "Hombres", "f": "Alzheimer/Michoacán/Alzheimer_Michoacán_hombres.png"}, {"p": "Alzheimer", "n": "Michoacán", "c": "Estatal", "s": "Mujeres", "f": "Alzheimer/Michoacán/Alzheimer_Michoacán_mujeres.png"}, {"p": "Alzheimer", "n": "Morelos", "c": "Estatal", "s": "General", "f": "Alzheimer/Morelos/Alzheimer_Morelos_general.png"}, {"p": "Alzheimer", "n": "Morelos", "c": "Estatal", "s": "Hombres", "f": "Alzheimer/Morelos/Alzheimer_Morelos_hombres.png"}, {"p": "Alzheimer", "n": "Morelos", "c": "Estatal", "s": "Mujeres", "f": "Alzheimer/Morelos/Alzheimer_Morelos_mujeres.png"}, {"p": "Alzheimer", "n": "México", "c": "Estatal", "s": "General", "f": "Alzheimer/México/Alzheimer_México_general.png"}, {"p": "Alzheimer", "n": "México", "c": "Estatal", "s": "Hombres", "f": "Alzheimer/México/Alzheimer_México_hombres.png"}, {"p": "Alzheimer", "n": "México", "c": "Estatal", "s": "Mujeres", "f": "Alzheimer/México/Alzheimer_México_mujeres.png"}, {"p": "Alzheimer", "n": "Nacional", "c": "Nacional", "s": "General", "f": "Alzheimer/Nacional/Alzheimer_Nacional_general.png"}, {"p": "Alzheimer", "n": "Nacional", "c": "Nacional", "s": "Hombres", "f": "Alzheimer/Nacional/Alzheimer_Nacional_hombres.png"}, {"p": "Alzheimer", "n": "Nacional", "c": "Nacional", "s": "Mujeres", "f": "Alzheimer/Nacional/Alzheimer_Nacional_mujeres.png"}, {"p": "Alzheimer", "n": "Nayarit", "c": "Estatal", "s": "General", "f": "Alzheimer/Nayarit/Alzheimer_Nayarit_general.png"}, {"p": "Alzheimer", "n": "Nayarit", "c": "Estatal", "s": "Hombres", "f": "Alzheimer/Nayarit/Alzheimer_Nayarit_hombres.png"}, {"p": "Alzheimer", "n": "Nayarit", "c": "Estatal", "s": "Mujeres", "f": "Alzheimer/Nayarit/Alzheimer_Nayarit_mujeres.png"}, {"p": "Alzheimer", "n": "Nuevo León", "c": "Estatal", "s": "General", "f": "Alzheimer/Nuevo_León/Alzheimer_Nuevo_León_general.png"}, {"p": "Alzheimer", "n": "Nuevo León", "c": "Estatal", "s": "Hombres", "f": "Alzheimer/Nuevo_León/Alzheimer_Nuevo_León_hombres.png"}, {"p": "Alzheimer", "n": "Nuevo León", "c": "Estatal", "s": "Mujeres", "f": "Alzheimer/Nuevo_León/Alzheimer_Nuevo_León_mujeres.png"}, {"p": "Alzheimer", "n": "Oaxaca", "c": "Estatal", "s": "General", "f": "Alzheimer/Oaxaca/Alzheimer_Oaxaca_general.png"}, {"p": "Alzheimer", "n": "Oaxaca", "c": "Estatal", "s": "Hombres", "f": "Alzheimer/Oaxaca/Alzheimer_Oaxaca_hombres.png"}, {"p": "Alzheimer", "n": "Oaxaca", "c": "Estatal", "s": "Mujeres", "f": "Alzheimer/Oaxaca/Alzheimer_Oaxaca_mujeres.png"}, {"p": "Alzheimer", "n": "Puebla", "c": "Estatal", "s": "General", "f": "Alzheimer/Puebla/Alzheimer_Puebla_general.png"}, {"p": "Alzheimer", "n": "Puebla", "c": "Estatal", "s": "Hombres", "f": "Alzheimer/Puebla/Alzheimer_Puebla_hombres.png"}, {"p": "Alzheimer", "n": "Puebla", "c": "Estatal", "s": "Mujeres", "f": "Alzheimer/Puebla/Alzheimer_Puebla_mujeres.png"}, {"p": "Alzheimer", "n": "Querétaro", "c": "Estatal", "s": "General", "f": "Alzheimer/Querétaro/Alzheimer_Querétaro_general.png"}, {"p": "Alzheimer", "n": "Querétaro", "c": "Estatal", "s": "Hombres", "f": "Alzheimer/Querétaro/Alzheimer_Querétaro_hombres.png"}, {"p": "Alzheimer", "n": "Querétaro", "c": "Estatal", "s": "Mujeres", "f": "Alzheimer/Querétaro/Alzheimer_Querétaro_mujeres.png"}, {"p": "Alzheimer", "n": "Quintana Roo", "c": "Estatal", "s": "General", "f": "Alzheimer/Quintana_Roo/Alzheimer_Quintana_Roo_general.png"}, {"p": "Alzheimer", "n": "Quintana Roo", "c": "Estatal", "s": "Hombres", "f": "Alzheimer/Quintana_Roo/Alzheimer_Quintana_Roo_hombres.png"}, {"p": "Alzheimer", "n": "Quintana Roo", "c": "Estatal", "s": "Mujeres", "f": "Alzheimer/Quintana_Roo/Alzheimer_Quintana_Roo_mujeres.png"}, {"p": "Alzheimer", "n": "Region Rural - dispersa", "c": "Regional", "s": "General", "f": "Alzheimer/Region_Rural_-_dispersa/Alzheimer_Region_Rural_-_dispersa_general.png"}, {"p": "Alzheimer", "n": "Region Rural - dispersa", "c": "Regional", "s": "Hombres", "f": "Alzheimer/Region_Rural_-_dispersa/Alzheimer_Region_Rural_-_dispersa_hombres.png"}, {"p": "Alzheimer", "n": "Region Rural - dispersa", "c": "Regional", "s": "Mujeres", "f": "Alzheimer/Region_Rural_-_dispersa/Alzheimer_Region_Rural_-_dispersa_mujeres.png"}, {"p": "Alzheimer", "n": "Region Sur-Sureste vulnerable", "c": "Regional", "s": "General", "f": "Alzheimer/Region_Sur-Sureste_vulnerable/Alzheimer_Region_Sur-Sureste_vulnerable_general.png"}, {"p": "Alzheimer", "n": "Region Sur-Sureste vulnerable", "c": "Regional", "s": "Hombres", "f": "Alzheimer/Region_Sur-Sureste_vulnerable/Alzheimer_Region_Sur-Sureste_vulnerable_hombres.png"}, {"p": "Alzheimer", "n": "Region Sur-Sureste vulnerable", "c": "Regional", "s": "Mujeres", "f": "Alzheimer/Region_Sur-Sureste_vulnerable/Alzheimer_Region_Sur-Sureste_vulnerable_mujeres.png"}, {"p": "Alzheimer", "n": "Region Urbana media", "c": "Regional", "s": "General", "f": "Alzheimer/Region_Urbana_media/Alzheimer_Region_Urbana_media_general.png"}, {"p": "Alzheimer", "n": "Region Urbana media", "c": "Regional", "s": "Hombres", "f": "Alzheimer/Region_Urbana_media/Alzheimer_Region_Urbana_media_hombres.png"}, {"p": "Alzheimer", "n": "Region Urbana media", "c": "Regional", "s": "Mujeres", "f": "Alzheimer/Region_Urbana_media/Alzheimer_Region_Urbana_media_mujeres.png"}, {"p": "Alzheimer", "n": "San Luis Potosí", "c": "Estatal", "s": "General", "f": "Alzheimer/San_Luis_Potosí/Alzheimer_San_Luis_Potosí_general.png"}, {"p": "Alzheimer", "n": "San Luis Potosí", "c": "Estatal", "s": "Hombres", "f": "Alzheimer/San_Luis_Potosí/Alzheimer_San_Luis_Potosí_hombres.png"}, {"p": "Alzheimer", "n": "San Luis Potosí", "c": "Estatal", "s": "Mujeres", "f": "Alzheimer/San_Luis_Potosí/Alzheimer_San_Luis_Potosí_mujeres.png"}, {"p": "Alzheimer", "n": "Sinaloa", "c": "Estatal", "s": "General", "f": "Alzheimer/Sinaloa/Alzheimer_Sinaloa_general.png"}, {"p": "Alzheimer", "n": "Sinaloa", "c": "Estatal", "s": "Hombres", "f": "Alzheimer/Sinaloa/Alzheimer_Sinaloa_hombres.png"}, {"p": "Alzheimer", "n": "Sinaloa", "c": "Estatal", "s": "Mujeres", "f": "Alzheimer/Sinaloa/Alzheimer_Sinaloa_mujeres.png"}, {"p": "Alzheimer", "n": "Sonora", "c": "Estatal", "s": "General", "f": "Alzheimer/Sonora/Alzheimer_Sonora_general.png"}, {"p": "Alzheimer", "n": "Sonora", "c": "Estatal", "s": "Hombres", "f": "Alzheimer/Sonora/Alzheimer_Sonora_hombres.png"}, {"p": "Alzheimer", "n": "Sonora", "c": "Estatal", "s": "Mujeres", "f": "Alzheimer/Sonora/Alzheimer_Sonora_mujeres.png"}, {"p": "Alzheimer", "n": "Tabasco", "c": "Estatal", "s": "General", "f": "Alzheimer/Tabasco/Alzheimer_Tabasco_general.png"}, {"p": "Alzheimer", "n": "Tabasco", "c": "Estatal", "s": "Hombres", "f": "Alzheimer/Tabasco/Alzheimer_Tabasco_hombres.png"}, {"p": "Alzheimer", "n": "Tabasco", "c": "Estatal", "s": "Mujeres", "f": "Alzheimer/Tabasco/Alzheimer_Tabasco_mujeres.png"}, {"p": "Alzheimer", "n": "Tamaulipas", "c": "Estatal", "s": "General", "f": "Alzheimer/Tamaulipas/Alzheimer_Tamaulipas_general.png"}, {"p": "Alzheimer", "n": "Tamaulipas", "c": "Estatal", "s": "Hombres", "f": "Alzheimer/Tamaulipas/Alzheimer_Tamaulipas_hombres.png"}, {"p": "Alzheimer", "n": "Tamaulipas", "c": "Estatal", "s": "Mujeres", "f": "Alzheimer/Tamaulipas/Alzheimer_Tamaulipas_mujeres.png"}, {"p": "Alzheimer", "n": "Tlaxcala", "c": "Estatal", "s": "General", "f": "Alzheimer/Tlaxcala/Alzheimer_Tlaxcala_general.png"}, {"p": "Alzheimer", "n": "Tlaxcala", "c": "Estatal", "s": "Hombres", "f": "Alzheimer/Tlaxcala/Alzheimer_Tlaxcala_hombres.png"}, {"p": "Alzheimer", "n": "Tlaxcala", "c": "Estatal", "s": "Mujeres", "f": "Alzheimer/Tlaxcala/Alzheimer_Tlaxcala_mujeres.png"}, {"p": "Alzheimer", "n": "Veracruz", "c": "Estatal", "s": "General", "f": "Alzheimer/Veracruz/Alzheimer_Veracruz_general.png"}, {"p": "Alzheimer", "n": "Veracruz", "c": "Estatal", "s": "Hombres", "f": "Alzheimer/Veracruz/Alzheimer_Veracruz_hombres.png"}, {"p": "Alzheimer", "n": "Veracruz", "c": "Estatal", "s": "Mujeres", "f": "Alzheimer/Veracruz/Alzheimer_Veracruz_mujeres.png"}, {"p": "Alzheimer", "n": "Yucatán", "c": "Estatal", "s": "General", "f": "Alzheimer/Yucatán/Alzheimer_Yucatán_general.png"}, {"p": "Alzheimer", "n": "Yucatán", "c": "Estatal", "s": "Hombres", "f": "Alzheimer/Yucatán/Alzheimer_Yucatán_hombres.png"}, {"p": "Alzheimer", "n": "Yucatán", "c": "Estatal", "s": "Mujeres", "f": "Alzheimer/Yucatán/Alzheimer_Yucatán_mujeres.png"}, {"p": "Alzheimer", "n": "Zacatecas", "c": "Estatal", "s": "General", "f": "Alzheimer/Zacatecas/Alzheimer_Zacatecas_general.png"}, {"p": "Alzheimer", "n": "Zacatecas", "c": "Estatal", "s": "Hombres", "f": "Alzheimer/Zacatecas/Alzheimer_Zacatecas_hombres.png"}, {"p": "Alzheimer", "n": "Zacatecas", "c": "Estatal", "s": "Mujeres", "f": "Alzheimer/Zacatecas/Alzheimer_Zacatecas_mujeres.png"}, {"p": "Depresión", "n": "Aguascalientes", "c": "Estatal", "s": "General", "f": "Depresión/Aguascalientes/Depresión_Aguascalientes_general.png"}, {"p": "Depresión", "n": "Aguascalientes", "c": "Estatal", "s": "Hombres", "f": "Depresión/Aguascalientes/Depresión_Aguascalientes_hombres.png"}, {"p": "Depresión", "n": "Aguascalientes", "c": "Estatal", "s": "Mujeres", "f": "Depresión/Aguascalientes/Depresión_Aguascalientes_mujeres.png"}, {"p": "Depresión", "n": "Baja California", "c": "Estatal", "s": "General", "f": "Depresión/Baja_California/Depresión_Baja_California_general.png"}, {"p": "Depresión", "n": "Baja California", "c": "Estatal", "s": "Hombres", "f": "Depresión/Baja_California/Depresión_Baja_California_hombres.png"}, {"p": "Depresión", "n": "Baja California", "c": "Estatal", "s": "Mujeres", "f": "Depresión/Baja_California/Depresión_Baja_California_mujeres.png"}, {"p": "Depresión", "n": "Baja California Sur", "c": "Estatal", "s": "General", "f": "Depresión/Baja_California_Sur/Depresión_Baja_California_Sur_general.png"}, {"p": "Depresión", "n": "Baja California Sur", "c": "Estatal", "s": "Hombres", "f": "Depresión/Baja_California_Sur/Depresión_Baja_California_Sur_hombres.png"}, {"p": "Depresión", "n": "Baja California Sur", "c": "Estatal", "s": "Mujeres", "f": "Depresión/Baja_California_Sur/Depresión_Baja_California_Sur_mujeres.png"}, {"p": "Depresión", "n": "Campeche", "c": "Estatal", "s": "General", "f": "Depresión/Campeche/Depresión_Campeche_general.png"}, {"p": "Depresión", "n": "Campeche", "c": "Estatal", "s": "Hombres", "f": "Depresión/Campeche/Depresión_Campeche_hombres.png"}, {"p": "Depresión", "n": "Campeche", "c": "Estatal", "s": "Mujeres", "f": "Depresión/Campeche/Depresión_Campeche_mujeres.png"}, {"p": "Depresión", "n": "Chiapas", "c": "Estatal", "s": "General", "f": "Depresión/Chiapas/Depresión_Chiapas_general.png"}, {"p": "Depresión", "n": "Chiapas", "c": "Estatal", "s": "Hombres", "f": "Depresión/Chiapas/Depresión_Chiapas_hombres.png"}, {"p": "Depresión", "n": "Chiapas", "c": "Estatal", "s": "Mujeres", "f": "Depresión/Chiapas/Depresión_Chiapas_mujeres.png"}, {"p": "Depresión", "n": "Chihuahua", "c": "Estatal", "s": "General", "f": "Depresión/Chihuahua/Depresión_Chihuahua_general.png"}, {"p": "Depresión", "n": "Chihuahua", "c": "Estatal", "s": "Hombres", "f": "Depresión/Chihuahua/Depresión_Chihuahua_hombres.png"}, {"p": "Depresión", "n": "Chihuahua", "c": "Estatal", "s": "Mujeres", "f": "Depresión/Chihuahua/Depresión_Chihuahua_mujeres.png"}, {"p": "Depresión", "n": "Ciudad de México", "c": "Estatal", "s": "General", "f": "Depresión/Ciudad_de_México/Depresión_Ciudad_de_México_general.png"}, {"p": "Depresión", "n": "Ciudad de México", "c": "Estatal", "s": "Hombres", "f": "Depresión/Ciudad_de_México/Depresión_Ciudad_de_México_hombres.png"}, {"p": "Depresión", "n": "Ciudad de México", "c": "Estatal", "s": "Mujeres", "f": "Depresión/Ciudad_de_México/Depresión_Ciudad_de_México_mujeres.png"}, {"p": "Depresión", "n": "Coahuila", "c": "Estatal", "s": "General", "f": "Depresión/Coahuila/Depresión_Coahuila_general.png"}, {"p": "Depresión", "n": "Coahuila", "c": "Estatal", "s": "Hombres", "f": "Depresión/Coahuila/Depresión_Coahuila_hombres.png"}, {"p": "Depresión", "n": "Coahuila", "c": "Estatal", "s": "Mujeres", "f": "Depresión/Coahuila/Depresión_Coahuila_mujeres.png"}, {"p": "Depresión", "n": "Colima", "c": "Estatal", "s": "General", "f": "Depresión/Colima/Depresión_Colima_general.png"}, {"p": "Depresión", "n": "Colima", "c": "Estatal", "s": "Hombres", "f": "Depresión/Colima/Depresión_Colima_hombres.png"}, {"p": "Depresión", "n": "Colima", "c": "Estatal", "s": "Mujeres", "f": "Depresión/Colima/Depresión_Colima_mujeres.png"}, {"p": "Depresión", "n": "Durango", "c": "Estatal", "s": "General", "f": "Depresión/Durango/Depresión_Durango_general.png"}, {"p": "Depresión", "n": "Durango", "c": "Estatal", "s": "Hombres", "f": "Depresión/Durango/Depresión_Durango_hombres.png"}, {"p": "Depresión", "n": "Durango", "c": "Estatal", "s": "Mujeres", "f": "Depresión/Durango/Depresión_Durango_mujeres.png"}, {"p": "Depresión", "n": "Guanajuato", "c": "Estatal", "s": "General", "f": "Depresión/Guanajuato/Depresión_Guanajuato_general.png"}, {"p": "Depresión", "n": "Guanajuato", "c": "Estatal", "s": "Hombres", "f": "Depresión/Guanajuato/Depresión_Guanajuato_hombres.png"}, {"p": "Depresión", "n": "Guanajuato", "c": "Estatal", "s": "Mujeres", "f": "Depresión/Guanajuato/Depresión_Guanajuato_mujeres.png"}, {"p": "Depresión", "n": "Guerrero", "c": "Estatal", "s": "General", "f": "Depresión/Guerrero/Depresión_Guerrero_general.png"}, {"p": "Depresión", "n": "Guerrero", "c": "Estatal", "s": "Hombres", "f": "Depresión/Guerrero/Depresión_Guerrero_hombres.png"}, {"p": "Depresión", "n": "Guerrero", "c": "Estatal", "s": "Mujeres", "f": "Depresión/Guerrero/Depresión_Guerrero_mujeres.png"}, {"p": "Depresión", "n": "Hidalgo", "c": "Estatal", "s": "General", "f": "Depresión/Hidalgo/Depresión_Hidalgo_general.png"}, {"p": "Depresión", "n": "Hidalgo", "c": "Estatal", "s": "Hombres", "f": "Depresión/Hidalgo/Depresión_Hidalgo_hombres.png"}, {"p": "Depresión", "n": "Hidalgo", "c": "Estatal", "s": "Mujeres", "f": "Depresión/Hidalgo/Depresión_Hidalgo_mujeres.png"}, {"p": "Depresión", "n": "Jalisco", "c": "Estatal", "s": "General", "f": "Depresión/Jalisco/Depresión_Jalisco_general.png"}, {"p": "Depresión", "n": "Jalisco", "c": "Estatal", "s": "Hombres", "f": "Depresión/Jalisco/Depresión_Jalisco_hombres.png"}, {"p": "Depresión", "n": "Jalisco", "c": "Estatal", "s": "Mujeres", "f": "Depresión/Jalisco/Depresión_Jalisco_mujeres.png"}, {"p": "Depresión", "n": "Michoacán", "c": "Estatal", "s": "General", "f": "Depresión/Michoacán/Depresión_Michoacán_general.png"}, {"p": "Depresión", "n": "Michoacán", "c": "Estatal", "s": "Hombres", "f": "Depresión/Michoacán/Depresión_Michoacán_hombres.png"}, {"p": "Depresión", "n": "Michoacán", "c": "Estatal", "s": "Mujeres", "f": "Depresión/Michoacán/Depresión_Michoacán_mujeres.png"}, {"p": "Depresión", "n": "Morelos", "c": "Estatal", "s": "General", "f": "Depresión/Morelos/Depresión_Morelos_general.png"}, {"p": "Depresión", "n": "Morelos", "c": "Estatal", "s": "Hombres", "f": "Depresión/Morelos/Depresión_Morelos_hombres.png"}, {"p": "Depresión", "n": "Morelos", "c": "Estatal", "s": "Mujeres", "f": "Depresión/Morelos/Depresión_Morelos_mujeres.png"}, {"p": "Depresión", "n": "México", "c": "Estatal", "s": "General", "f": "Depresión/México/Depresión_México_general.png"}, {"p": "Depresión", "n": "México", "c": "Estatal", "s": "Hombres", "f": "Depresión/México/Depresión_México_hombres.png"}, {"p": "Depresión", "n": "México", "c": "Estatal", "s": "Mujeres", "f": "Depresión/México/Depresión_México_mujeres.png"}, {"p": "Depresión", "n": "Nacional", "c": "Nacional", "s": "General", "f": "Depresión/Nacional/Depresión_Nacional_general.png"}, {"p": "Depresión", "n": "Nacional", "c": "Nacional", "s": "Hombres", "f": "Depresión/Nacional/Depresión_Nacional_hombres.png"}, {"p": "Depresión", "n": "Nacional", "c": "Nacional", "s": "Mujeres", "f": "Depresión/Nacional/Depresión_Nacional_mujeres.png"}, {"p": "Depresión", "n": "Nayarit", "c": "Estatal", "s": "General", "f": "Depresión/Nayarit/Depresión_Nayarit_general.png"}, {"p": "Depresión", "n": "Nayarit", "c": "Estatal", "s": "Hombres", "f": "Depresión/Nayarit/Depresión_Nayarit_hombres.png"}, {"p": "Depresión", "n": "Nayarit", "c": "Estatal", "s": "Mujeres", "f": "Depresión/Nayarit/Depresión_Nayarit_mujeres.png"}, {"p": "Depresión", "n": "Nuevo León", "c": "Estatal", "s": "General", "f": "Depresión/Nuevo_León/Depresión_Nuevo_León_general.png"}, {"p": "Depresión", "n": "Nuevo León", "c": "Estatal", "s": "Hombres", "f": "Depresión/Nuevo_León/Depresión_Nuevo_León_hombres.png"}, {"p": "Depresión", "n": "Nuevo León", "c": "Estatal", "s": "Mujeres", "f": "Depresión/Nuevo_León/Depresión_Nuevo_León_mujeres.png"}, {"p": "Depresión", "n": "Oaxaca", "c": "Estatal", "s": "General", "f": "Depresión/Oaxaca/Depresión_Oaxaca_general.png"}, {"p": "Depresión", "n": "Oaxaca", "c": "Estatal", "s": "Hombres", "f": "Depresión/Oaxaca/Depresión_Oaxaca_hombres.png"}, {"p": "Depresión", "n": "Oaxaca", "c": "Estatal", "s": "Mujeres", "f": "Depresión/Oaxaca/Depresión_Oaxaca_mujeres.png"}, {"p": "Depresión", "n": "Puebla", "c": "Estatal", "s": "General", "f": "Depresión/Puebla/Depresión_Puebla_general.png"}, {"p": "Depresión", "n": "Puebla", "c": "Estatal", "s": "Hombres", "f": "Depresión/Puebla/Depresión_Puebla_hombres.png"}, {"p": "Depresión", "n": "Puebla", "c": "Estatal", "s": "Mujeres", "f": "Depresión/Puebla/Depresión_Puebla_mujeres.png"}, {"p": "Depresión", "n": "Querétaro", "c": "Estatal", "s": "General", "f": "Depresión/Querétaro/Depresión_Querétaro_general.png"}, {"p": "Depresión", "n": "Querétaro", "c": "Estatal", "s": "Hombres", "f": "Depresión/Querétaro/Depresión_Querétaro_hombres.png"}, {"p": "Depresión", "n": "Querétaro", "c": "Estatal", "s": "Mujeres", "f": "Depresión/Querétaro/Depresión_Querétaro_mujeres.png"}, {"p": "Depresión", "n": "Quintana Roo", "c": "Estatal", "s": "General", "f": "Depresión/Quintana_Roo/Depresión_Quintana_Roo_general.png"}, {"p": "Depresión", "n": "Quintana Roo", "c": "Estatal", "s": "Hombres", "f": "Depresión/Quintana_Roo/Depresión_Quintana_Roo_hombres.png"}, {"p": "Depresión", "n": "Quintana Roo", "c": "Estatal", "s": "Mujeres", "f": "Depresión/Quintana_Roo/Depresión_Quintana_Roo_mujeres.png"}, {"p": "Depresión", "n": "San Luis Potosí", "c": "Estatal", "s": "General", "f": "Depresión/San_Luis_Potosí/Depresión_San_Luis_Potosí_general.png"}, {"p": "Depresión", "n": "San Luis Potosí", "c": "Estatal", "s": "Hombres", "f": "Depresión/San_Luis_Potosí/Depresión_San_Luis_Potosí_hombres.png"}, {"p": "Depresión", "n": "San Luis Potosí", "c": "Estatal", "s": "Mujeres", "f": "Depresión/San_Luis_Potosí/Depresión_San_Luis_Potosí_mujeres.png"}, {"p": "Depresión", "n": "Sinaloa", "c": "Estatal", "s": "General", "f": "Depresión/Sinaloa/Depresión_Sinaloa_general.png"}, {"p": "Depresión", "n": "Sinaloa", "c": "Estatal", "s": "Hombres", "f": "Depresión/Sinaloa/Depresión_Sinaloa_hombres.png"}, {"p": "Depresión", "n": "Sinaloa", "c": "Estatal", "s": "Mujeres", "f": "Depresión/Sinaloa/Depresión_Sinaloa_mujeres.png"}, {"p": "Depresión", "n": "Sonora", "c": "Estatal", "s": "General", "f": "Depresión/Sonora/Depresión_Sonora_general.png"}, {"p": "Depresión", "n": "Sonora", "c": "Estatal", "s": "Hombres", "f": "Depresión/Sonora/Depresión_Sonora_hombres.png"}, {"p": "Depresión", "n": "Sonora", "c": "Estatal", "s": "Mujeres", "f": "Depresión/Sonora/Depresión_Sonora_mujeres.png"}, {"p": "Depresión", "n": "Tabasco", "c": "Estatal", "s": "General", "f": "Depresión/Tabasco/Depresión_Tabasco_general.png"}, {"p": "Depresión", "n": "Tabasco", "c": "Estatal", "s": "Hombres", "f": "Depresión/Tabasco/Depresión_Tabasco_hombres.png"}, {"p": "Depresión", "n": "Tabasco", "c": "Estatal", "s": "Mujeres", "f": "Depresión/Tabasco/Depresión_Tabasco_mujeres.png"}, {"p": "Depresión", "n": "Tamaulipas", "c": "Estatal", "s": "General", "f": "Depresión/Tamaulipas/Depresión_Tamaulipas_general.png"}, {"p": "Depresión", "n": "Tamaulipas", "c": "Estatal", "s": "Hombres", "f": "Depresión/Tamaulipas/Depresión_Tamaulipas_hombres.png"}, {"p": "Depresión", "n": "Tamaulipas", "c": "Estatal", "s": "Mujeres", "f": "Depresión/Tamaulipas/Depresión_Tamaulipas_mujeres.png"}, {"p": "Depresión", "n": "Tlaxcala", "c": "Estatal", "s": "General", "f": "Depresión/Tlaxcala/Depresión_Tlaxcala_general.png"}, {"p": "Depresión", "n": "Tlaxcala", "c": "Estatal", "s": "Hombres", "f": "Depresión/Tlaxcala/Depresión_Tlaxcala_hombres.png"}, {"p": "Depresión", "n": "Tlaxcala", "c": "Estatal", "s": "Mujeres", "f": "Depresión/Tlaxcala/Depresión_Tlaxcala_mujeres.png"}, {"p": "Depresión", "n": "Veracruz", "c": "Estatal", "s": "General", "f": "Depresión/Veracruz/Depresión_Veracruz_general.png"}, {"p": "Depresión", "n": "Veracruz", "c": "Estatal", "s": "Hombres", "f": "Depresión/Veracruz/Depresión_Veracruz_hombres.png"}, {"p": "Depresión", "n": "Veracruz", "c": "Estatal", "s": "Mujeres", "f": "Depresión/Veracruz/Depresión_Veracruz_mujeres.png"}, {"p": "Depresión", "n": "Yucatán", "c": "Estatal", "s": "General", "f": "Depresión/Yucatán/Depresión_Yucatán_general.png"}, {"p": "Depresión", "n": "Yucatán", "c": "Estatal", "s": "Hombres", "f": "Depresión/Yucatán/Depresión_Yucatán_hombres.png"}, {"p": "Depresión", "n": "Yucatán", "c": "Estatal", "s": "Mujeres", "f": "Depresión/Yucatán/Depresión_Yucatán_mujeres.png"}, {"p": "Depresión", "n": "Zacatecas", "c": "Estatal", "s": "General", "f": "Depresión/Zacatecas/Depresión_Zacatecas_general.png"}, {"p": "Depresión", "n": "Zacatecas", "c": "Estatal", "s": "Hombres", "f": "Depresión/Zacatecas/Depresión_Zacatecas_hombres.png"}, {"p": "Depresión", "n": "Zacatecas", "c": "Estatal", "s": "Mujeres", "f": "Depresión/Zacatecas/Depresión_Zacatecas_mujeres.png"}, {"p": "Parkinson", "n": "Aguascalientes", "c": "Estatal", "s": "General", "f": "Parkinson/Aguascalientes/Parkinson_Aguascalientes_general.png"}, {"p": "Parkinson", "n": "Aguascalientes", "c": "Estatal", "s": "Hombres", "f": "Parkinson/Aguascalientes/Parkinson_Aguascalientes_hombres.png"}, {"p": "Parkinson", "n": "Aguascalientes", "c": "Estatal", "s": "Mujeres", "f": "Parkinson/Aguascalientes/Parkinson_Aguascalientes_mujeres.png"}, {"p": "Parkinson", "n": "Baja California", "c": "Estatal", "s": "General", "f": "Parkinson/Baja_California/Parkinson_Baja_California_general.png"}, {"p": "Parkinson", "n": "Baja California", "c": "Estatal", "s": "Hombres", "f": "Parkinson/Baja_California/Parkinson_Baja_California_hombres.png"}, {"p": "Parkinson", "n": "Baja California", "c": "Estatal", "s": "Mujeres", "f": "Parkinson/Baja_California/Parkinson_Baja_California_mujeres.png"}, {"p": "Parkinson", "n": "Baja California Sur", "c": "Estatal", "s": "General", "f": "Parkinson/Baja_California_Sur/Parkinson_Baja_California_Sur_general.png"}, {"p": "Parkinson", "n": "Baja California Sur", "c": "Estatal", "s": "Hombres", "f": "Parkinson/Baja_California_Sur/Parkinson_Baja_California_Sur_hombres.png"}, {"p": "Parkinson", "n": "Baja California Sur", "c": "Estatal", "s": "Mujeres", "f": "Parkinson/Baja_California_Sur/Parkinson_Baja_California_Sur_mujeres.png"}, {"p": "Parkinson", "n": "Campeche", "c": "Estatal", "s": "General", "f": "Parkinson/Campeche/Parkinson_Campeche_general.png"}, {"p": "Parkinson", "n": "Campeche", "c": "Estatal", "s": "Hombres", "f": "Parkinson/Campeche/Parkinson_Campeche_hombres.png"}, {"p": "Parkinson", "n": "Campeche", "c": "Estatal", "s": "Mujeres", "f": "Parkinson/Campeche/Parkinson_Campeche_mujeres.png"}, {"p": "Parkinson", "n": "Chiapas", "c": "Estatal", "s": "General", "f": "Parkinson/Chiapas/Parkinson_Chiapas_general.png"}, {"p": "Parkinson", "n": "Chiapas", "c": "Estatal", "s": "Hombres", "f": "Parkinson/Chiapas/Parkinson_Chiapas_hombres.png"}, {"p": "Parkinson", "n": "Chiapas", "c": "Estatal", "s": "Mujeres", "f": "Parkinson/Chiapas/Parkinson_Chiapas_mujeres.png"}, {"p": "Parkinson", "n": "Chihuahua", "c": "Estatal", "s": "General", "f": "Parkinson/Chihuahua/Parkinson_Chihuahua_general.png"}, {"p": "Parkinson", "n": "Chihuahua", "c": "Estatal", "s": "Hombres", "f": "Parkinson/Chihuahua/Parkinson_Chihuahua_hombres.png"}, {"p": "Parkinson", "n": "Chihuahua", "c": "Estatal", "s": "Mujeres", "f": "Parkinson/Chihuahua/Parkinson_Chihuahua_mujeres.png"}, {"p": "Parkinson", "n": "Ciudad de México", "c": "Estatal", "s": "General", "f": "Parkinson/Ciudad_de_México/Parkinson_Ciudad_de_México_general.png"}, {"p": "Parkinson", "n": "Ciudad de México", "c": "Estatal", "s": "Hombres", "f": "Parkinson/Ciudad_de_México/Parkinson_Ciudad_de_México_hombres.png"}, {"p": "Parkinson", "n": "Ciudad de México", "c": "Estatal", "s": "Mujeres", "f": "Parkinson/Ciudad_de_México/Parkinson_Ciudad_de_México_mujeres.png"}, {"p": "Parkinson", "n": "Coahuila", "c": "Estatal", "s": "General", "f": "Parkinson/Coahuila/Parkinson_Coahuila_general.png"}, {"p": "Parkinson", "n": "Coahuila", "c": "Estatal", "s": "Hombres", "f": "Parkinson/Coahuila/Parkinson_Coahuila_hombres.png"}, {"p": "Parkinson", "n": "Coahuila", "c": "Estatal", "s": "Mujeres", "f": "Parkinson/Coahuila/Parkinson_Coahuila_mujeres.png"}, {"p": "Parkinson", "n": "Colima", "c": "Estatal", "s": "General", "f": "Parkinson/Colima/Parkinson_Colima_general.png"}, {"p": "Parkinson", "n": "Colima", "c": "Estatal", "s": "Hombres", "f": "Parkinson/Colima/Parkinson_Colima_hombres.png"}, {"p": "Parkinson", "n": "Colima", "c": "Estatal", "s": "Mujeres", "f": "Parkinson/Colima/Parkinson_Colima_mujeres.png"}, {"p": "Parkinson", "n": "Durango", "c": "Estatal", "s": "General", "f": "Parkinson/Durango/Parkinson_Durango_general.png"}, {"p": "Parkinson", "n": "Durango", "c": "Estatal", "s": "Hombres", "f": "Parkinson/Durango/Parkinson_Durango_hombres.png"}, {"p": "Parkinson", "n": "Durango", "c": "Estatal", "s": "Mujeres", "f": "Parkinson/Durango/Parkinson_Durango_mujeres.png"}, {"p": "Parkinson", "n": "Guanajuato", "c": "Estatal", "s": "General", "f": "Parkinson/Guanajuato/Parkinson_Guanajuato_general.png"}, {"p": "Parkinson", "n": "Guanajuato", "c": "Estatal", "s": "Hombres", "f": "Parkinson/Guanajuato/Parkinson_Guanajuato_hombres.png"}, {"p": "Parkinson", "n": "Guanajuato", "c": "Estatal", "s": "Mujeres", "f": "Parkinson/Guanajuato/Parkinson_Guanajuato_mujeres.png"}, {"p": "Parkinson", "n": "Guerrero", "c": "Estatal", "s": "General", "f": "Parkinson/Guerrero/Parkinson_Guerrero_general.png"}, {"p": "Parkinson", "n": "Guerrero", "c": "Estatal", "s": "Hombres", "f": "Parkinson/Guerrero/Parkinson_Guerrero_hombres.png"}, {"p": "Parkinson", "n": "Guerrero", "c": "Estatal", "s": "Mujeres", "f": "Parkinson/Guerrero/Parkinson_Guerrero_mujeres.png"}, {"p": "Parkinson", "n": "Hidalgo", "c": "Estatal", "s": "General", "f": "Parkinson/Hidalgo/Parkinson_Hidalgo_general.png"}, {"p": "Parkinson", "n": "Hidalgo", "c": "Estatal", "s": "Hombres", "f": "Parkinson/Hidalgo/Parkinson_Hidalgo_hombres.png"}, {"p": "Parkinson", "n": "Hidalgo", "c": "Estatal", "s": "Mujeres", "f": "Parkinson/Hidalgo/Parkinson_Hidalgo_mujeres.png"}, {"p": "Parkinson", "n": "Jalisco", "c": "Estatal", "s": "General", "f": "Parkinson/Jalisco/Parkinson_Jalisco_general.png"}, {"p": "Parkinson", "n": "Jalisco", "c": "Estatal", "s": "Hombres", "f": "Parkinson/Jalisco/Parkinson_Jalisco_hombres.png"}, {"p": "Parkinson", "n": "Jalisco", "c": "Estatal", "s": "Mujeres", "f": "Parkinson/Jalisco/Parkinson_Jalisco_mujeres.png"}, {"p": "Parkinson", "n": "Michoacán", "c": "Estatal", "s": "General", "f": "Parkinson/Michoacán/Parkinson_Michoacán_general.png"}, {"p": "Parkinson", "n": "Michoacán", "c": "Estatal", "s": "Hombres", "f": "Parkinson/Michoacán/Parkinson_Michoacán_hombres.png"}, {"p": "Parkinson", "n": "Michoacán", "c": "Estatal", "s": "Mujeres", "f": "Parkinson/Michoacán/Parkinson_Michoacán_mujeres.png"}, {"p": "Parkinson", "n": "Morelos", "c": "Estatal", "s": "General", "f": "Parkinson/Morelos/Parkinson_Morelos_general.png"}, {"p": "Parkinson", "n": "Morelos", "c": "Estatal", "s": "Hombres", "f": "Parkinson/Morelos/Parkinson_Morelos_hombres.png"}, {"p": "Parkinson", "n": "Morelos", "c": "Estatal", "s": "Mujeres", "f": "Parkinson/Morelos/Parkinson_Morelos_mujeres.png"}, {"p": "Parkinson", "n": "México", "c": "Estatal", "s": "General", "f": "Parkinson/México/Parkinson_México_general.png"}, {"p": "Parkinson", "n": "México", "c": "Estatal", "s": "Hombres", "f": "Parkinson/México/Parkinson_México_hombres.png"}, {"p": "Parkinson", "n": "México", "c": "Estatal", "s": "Mujeres", "f": "Parkinson/México/Parkinson_México_mujeres.png"}, {"p": "Parkinson", "n": "Nacional", "c": "Nacional", "s": "General", "f": "Parkinson/Nacional/Parkinson_Nacional_general.png"}, {"p": "Parkinson", "n": "Nacional", "c": "Nacional", "s": "Hombres", "f": "Parkinson/Nacional/Parkinson_Nacional_hombres.png"}, {"p": "Parkinson", "n": "Nacional", "c": "Nacional", "s": "Mujeres", "f": "Parkinson/Nacional/Parkinson_Nacional_mujeres.png"}, {"p": "Parkinson", "n": "Nayarit", "c": "Estatal", "s": "General", "f": "Parkinson/Nayarit/Parkinson_Nayarit_general.png"}, {"p": "Parkinson", "n": "Nayarit", "c": "Estatal", "s": "Hombres", "f": "Parkinson/Nayarit/Parkinson_Nayarit_hombres.png"}, {"p": "Parkinson", "n": "Nayarit", "c": "Estatal", "s": "Mujeres", "f": "Parkinson/Nayarit/Parkinson_Nayarit_mujeres.png"}, {"p": "Parkinson", "n": "Nuevo León", "c": "Estatal", "s": "General", "f": "Parkinson/Nuevo_León/Parkinson_Nuevo_León_general.png"}, {"p": "Parkinson", "n": "Nuevo León", "c": "Estatal", "s": "Hombres", "f": "Parkinson/Nuevo_León/Parkinson_Nuevo_León_hombres.png"}, {"p": "Parkinson", "n": "Nuevo León", "c": "Estatal", "s": "Mujeres", "f": "Parkinson/Nuevo_León/Parkinson_Nuevo_León_mujeres.png"}, {"p": "Parkinson", "n": "Oaxaca", "c": "Estatal", "s": "General", "f": "Parkinson/Oaxaca/Parkinson_Oaxaca_general.png"}, {"p": "Parkinson", "n": "Oaxaca", "c": "Estatal", "s": "Hombres", "f": "Parkinson/Oaxaca/Parkinson_Oaxaca_hombres.png"}, {"p": "Parkinson", "n": "Oaxaca", "c": "Estatal", "s": "Mujeres", "f": "Parkinson/Oaxaca/Parkinson_Oaxaca_mujeres.png"}, {"p": "Parkinson", "n": "Puebla", "c": "Estatal", "s": "General", "f": "Parkinson/Puebla/Parkinson_Puebla_general.png"}, {"p": "Parkinson", "n": "Puebla", "c": "Estatal", "s": "Hombres", "f": "Parkinson/Puebla/Parkinson_Puebla_hombres.png"}, {"p": "Parkinson", "n": "Puebla", "c": "Estatal", "s": "Mujeres", "f": "Parkinson/Puebla/Parkinson_Puebla_mujeres.png"}, {"p": "Parkinson", "n": "Querétaro", "c": "Estatal", "s": "General", "f": "Parkinson/Querétaro/Parkinson_Querétaro_general.png"}, {"p": "Parkinson", "n": "Querétaro", "c": "Estatal", "s": "Hombres", "f": "Parkinson/Querétaro/Parkinson_Querétaro_hombres.png"}, {"p": "Parkinson", "n": "Querétaro", "c": "Estatal", "s": "Mujeres", "f": "Parkinson/Querétaro/Parkinson_Querétaro_mujeres.png"}, {"p": "Parkinson", "n": "Quintana Roo", "c": "Estatal", "s": "General", "f": "Parkinson/Quintana_Roo/Parkinson_Quintana_Roo_general.png"}, {"p": "Parkinson", "n": "Quintana Roo", "c": "Estatal", "s": "Hombres", "f": "Parkinson/Quintana_Roo/Parkinson_Quintana_Roo_hombres.png"}, {"p": "Parkinson", "n": "Quintana Roo", "c": "Estatal", "s": "Mujeres", "f": "Parkinson/Quintana_Roo/Parkinson_Quintana_Roo_mujeres.png"}, {"p": "Parkinson", "n": "Region Sur-Sureste vulnerable", "c": "Regional", "s": "General", "f": "Parkinson/Region_Sur-Sureste_vulnerable/Parkinson_Region_Sur-Sureste_vulnerable_general.png"}, {"p": "Parkinson", "n": "Region Sur-Sureste vulnerable", "c": "Regional", "s": "Hombres", "f": "Parkinson/Region_Sur-Sureste_vulnerable/Parkinson_Region_Sur-Sureste_vulnerable_hombres.png"}, {"p": "Parkinson", "n": "Region Sur-Sureste vulnerable", "c": "Regional", "s": "Mujeres", "f": "Parkinson/Region_Sur-Sureste_vulnerable/Parkinson_Region_Sur-Sureste_vulnerable_mujeres.png"}, {"p": "Parkinson", "n": "Region Urbana media", "c": "Regional", "s": "General", "f": "Parkinson/Region_Urbana_media/Parkinson_Region_Urbana_media_general.png"}, {"p": "Parkinson", "n": "Region Urbana media", "c": "Regional", "s": "Hombres", "f": "Parkinson/Region_Urbana_media/Parkinson_Region_Urbana_media_hombres.png"}, {"p": "Parkinson", "n": "Region Urbana media", "c": "Regional", "s": "Mujeres", "f": "Parkinson/Region_Urbana_media/Parkinson_Region_Urbana_media_mujeres.png"}, {"p": "Parkinson", "n": "San Luis Potosí", "c": "Estatal", "s": "General", "f": "Parkinson/San_Luis_Potosí/Parkinson_San_Luis_Potosí_general.png"}, {"p": "Parkinson", "n": "San Luis Potosí", "c": "Estatal", "s": "Hombres", "f": "Parkinson/San_Luis_Potosí/Parkinson_San_Luis_Potosí_hombres.png"}, {"p": "Parkinson", "n": "San Luis Potosí", "c": "Estatal", "s": "Mujeres", "f": "Parkinson/San_Luis_Potosí/Parkinson_San_Luis_Potosí_mujeres.png"}, {"p": "Parkinson", "n": "Sinaloa", "c": "Estatal", "s": "General", "f": "Parkinson/Sinaloa/Parkinson_Sinaloa_general.png"}, {"p": "Parkinson", "n": "Sinaloa", "c": "Estatal", "s": "Hombres", "f": "Parkinson/Sinaloa/Parkinson_Sinaloa_hombres.png"}, {"p": "Parkinson", "n": "Sinaloa", "c": "Estatal", "s": "Mujeres", "f": "Parkinson/Sinaloa/Parkinson_Sinaloa_mujeres.png"}, {"p": "Parkinson", "n": "Sonora", "c": "Estatal", "s": "General", "f": "Parkinson/Sonora/Parkinson_Sonora_general.png"}, {"p": "Parkinson", "n": "Sonora", "c": "Estatal", "s": "Hombres", "f": "Parkinson/Sonora/Parkinson_Sonora_hombres.png"}, {"p": "Parkinson", "n": "Sonora", "c": "Estatal", "s": "Mujeres", "f": "Parkinson/Sonora/Parkinson_Sonora_mujeres.png"}, {"p": "Parkinson", "n": "Tabasco", "c": "Estatal", "s": "General", "f": "Parkinson/Tabasco/Parkinson_Tabasco_general.png"}, {"p": "Parkinson", "n": "Tabasco", "c": "Estatal", "s": "Hombres", "f": "Parkinson/Tabasco/Parkinson_Tabasco_hombres.png"}, {"p": "Parkinson", "n": "Tabasco", "c": "Estatal", "s": "Mujeres", "f": "Parkinson/Tabasco/Parkinson_Tabasco_mujeres.png"}, {"p": "Parkinson", "n": "Tamaulipas", "c": "Estatal", "s": "General", "f": "Parkinson/Tamaulipas/Parkinson_Tamaulipas_general.png"}, {"p": "Parkinson", "n": "Tamaulipas", "c": "Estatal", "s": "Hombres", "f": "Parkinson/Tamaulipas/Parkinson_Tamaulipas_hombres.png"}, {"p": "Parkinson", "n": "Tamaulipas", "c": "Estatal", "s": "Mujeres", "f": "Parkinson/Tamaulipas/Parkinson_Tamaulipas_mujeres.png"}, {"p": "Parkinson", "n": "Tlaxcala", "c": "Estatal", "s": "General", "f": "Parkinson/Tlaxcala/Parkinson_Tlaxcala_general.png"}, {"p": "Parkinson", "n": "Tlaxcala", "c": "Estatal", "s": "Hombres", "f": "Parkinson/Tlaxcala/Parkinson_Tlaxcala_hombres.png"}, {"p": "Parkinson", "n": "Tlaxcala", "c": "Estatal", "s": "Mujeres", "f": "Parkinson/Tlaxcala/Parkinson_Tlaxcala_mujeres.png"}, {"p": "Parkinson", "n": "Veracruz", "c": "Estatal", "s": "General", "f": "Parkinson/Veracruz/Parkinson_Veracruz_general.png"}, {"p": "Parkinson", "n": "Veracruz", "c": "Estatal", "s": "Hombres", "f": "Parkinson/Veracruz/Parkinson_Veracruz_hombres.png"}, {"p": "Parkinson", "n": "Veracruz", "c": "Estatal", "s": "Mujeres", "f": "Parkinson/Veracruz/Parkinson_Veracruz_mujeres.png"}, {"p": "Parkinson", "n": "Yucatán", "c": "Estatal", "s": "General", "f": "Parkinson/Yucatán/Parkinson_Yucatán_general.png"}, {"p": "Parkinson", "n": "Yucatán", "c": "Estatal", "s": "Hombres", "f": "Parkinson/Yucatán/Parkinson_Yucatán_hombres.png"}, {"p": "Parkinson", "n": "Yucatán", "c": "Estatal", "s": "Mujeres", "f": "Parkinson/Yucatán/Parkinson_Yucatán_mujeres.png"}, {"p": "Parkinson", "n": "Zacatecas", "c": "Estatal", "s": "General", "f": "Parkinson/Zacatecas/Parkinson_Zacatecas_general.png"}, {"p": "Parkinson", "n": "Zacatecas", "c": "Estatal", "s": "Hombres", "f": "Parkinson/Zacatecas/Parkinson_Zacatecas_hombres.png"}, {"p": "Parkinson", "n": "Zacatecas", "c": "Estatal", "s": "Mujeres", "f": "Parkinson/Zacatecas/Parkinson_Zacatecas_mujeres.png"}];
 
-const gallery = document.getElementById('gallery');
-const emptyMsg = document.getElementById('emptyMsg');
-const countBadge = document.getElementById('countBadge');
-const filterPad = document.getElementById('filterPad');
-const filterCat = document.getElementById('filterCat');
+const filterPad  = document.getElementById('filterPad');
 const filterSexo = document.getElementById('filterSexo');
-const searchBox = document.getElementById('searchBox');
+const searchBox  = document.getElementById('searchBox');
+const countBadge = document.getElementById('countBadge');
 
-let currentView = 'normal';
 let filtered = [...DATA];
-let lbIndex = 0;
+let lbIndex  = 0;
 
-function padClass(p) {
-  if (p.includes('Depresi')) return 'pad-Depresion';
-  return 'pad-' + p;
-}
+// ── Helpers ──────────────────────────────────
+function padClass(p) { return p.includes('Depresi') ? 'pad-Depresion' : 'pad-' + p; }
 function padMatch(p, val) {
   if (!val) return true;
   if (val === 'Depresion') return p.includes('Depresi');
   return p === val;
 }
-
-function catTag(c) {
-  return `<span class="tag tag-${c.toLowerCase()}">${c}</span>`;
+function padSlug(p) { return p.includes('Depresi') ? 'depresion' : p.toLowerCase(); }
+function catTag(c)  { return `<span class="tag tag-${c.toLowerCase()}">${c}</span>`; }
+function sexoTag(s) { return `<span class="tag tag-${s.toLowerCase()}">${s}</span>`; }
+function groupBy(arr, key) {
+  return arr.reduce((acc, item) => { (acc[item[key]] = acc[item[key]] || []).push(item); return acc; }, {});
 }
-function sexoTag(s) {
-  return `<span class="tag tag-${s.toLowerCase()}">${s}</span>`;
+function cardHTML(d, idx) {
+  return `<div class="card ${padClass(d.p)}" onclick="openLightbox(${idx})">
+    <img src="${d.f}" alt="${d.p} · ${d.n} · ${d.s}" loading="lazy">
+    <div class="info"><span class="title">${d.p} · ${d.s}</span><div class="tags">${catTag(d.c)}${sexoTag(d.s)}</div></div>
+  </div>`;
 }
 
+// ── Filters ───────────────────────────────────
 function applyFilters() {
-  const pad = filterPad.value;
-  const cat = filterCat.value;
+  const pad  = filterPad.value;
   const sexo = filterSexo.value;
-  const q = searchBox.value.toLowerCase().trim();
-
+  const q    = searchBox.value.toLowerCase().trim();
   filtered = DATA.filter(d => {
     if (!padMatch(d.p, pad)) return false;
-    if (cat && d.c !== cat) return false;
     if (sexo && d.s !== sexo) return false;
     if (q && !d.n.toLowerCase().includes(q) && !d.p.toLowerCase().includes(q)) return false;
     return true;
   });
-
-  render();
+  renderAll();
 }
 
-function render() {
+// ── Render all tiers ─────────────────────────
+function renderAll() {
+  const nac = filtered.filter(d => d.c === 'Nacional');
+  const reg = filtered.filter(d => d.c === 'Regional');
+  const est = filtered.filter(d => d.c === 'Estatal');
+
   countBadge.textContent = filtered.length;
-  if (filtered.length === 0) {
-    gallery.innerHTML = '';
-    emptyMsg.style.display = 'block';
-    return;
-  }
-  emptyMsg.style.display = 'none';
+  const nn = document.getElementById('navCountNac'); if (nn) nn.textContent = nac.length;
+  const nr = document.getElementById('navCountReg'); if (nr) nr.textContent = reg.length;
+  const ne = document.getElementById('navCountEst'); if (ne) ne.textContent = est.length;
 
-  gallery.innerHTML = filtered.map((d, i) => `
-    <div class="card ${padClass(d.p)}" onclick="openLightbox(${i})">
-      <img src="${d.f}" alt="${d.n}" loading="lazy">
-      <div class="info">
-        <span class="title">${d.p} &middot; ${d.n}</span>
-        <div class="tags">${catTag(d.c)}${sexoTag(d.s)}</div>
+  document.getElementById('secNacional').style.display = nac.length ? '' : 'none';
+  document.getElementById('secRegional').style.display = reg.length ? '' : 'none';
+  document.getElementById('secEstatal').style.display  = est.length ? '' : 'none';
+
+  renderNacional(nac);
+  renderRegional(reg);
+  renderEstatal(est);
+}
+
+function renderNacional(data) {
+  const body = document.getElementById('bodyNacional');
+  if (!data.length) { body.innerHTML = ''; return; }
+  const PAD_ORDER = ['Alzheimer', 'Depresión', 'Parkinson'];
+  const byPad = groupBy(data, 'p');
+  const pads  = PAD_ORDER.filter(p => byPad[p]);
+  body.innerHTML = pads.map(pad => {
+    const cards = byPad[pad];
+    const slug  = padSlug(pad);
+    return `<div class="nac-pad-group">
+      <div class="nac-pad-divider">
+        <span class="nac-pad-dot ${slug}"></span>
+        <span class="nac-pad-name">${pad}</span>
       </div>
-    </div>
-  `).join('');
+      ${cards.map(d => `<div class="nac-card" onclick="openLightbox(${filtered.indexOf(d)})">
+        <img src="${d.f}" alt="${pad} Nacional ${d.s}" loading="lazy">
+        <div class="nac-card-label">${d.s}</div>
+      </div>`).join('')}
+    </div>`;
+  }).join('');
 }
 
-function setView(v) {
-  currentView = v;
-  gallery.classList.toggle('compact', v === 'compact');
-  document.getElementById('viewNormal').classList.toggle('active', v === 'normal');
-  document.getElementById('viewCompact').classList.toggle('active', v === 'compact');
+function renderRegional(data) {
+  const body = document.getElementById('bodyRegional');
+  if (!data.length) { body.innerHTML = ''; return; }
+  const byRegion = groupBy(data, 'n');
+  const regions  = Object.keys(byRegion).sort();
+  body.innerHTML = regions.map(region => {
+    const cards = byRegion[region];
+    const label = region.replace(/^Region\s+/i, '');
+    return `<div class="region-group">
+      <div class="region-label">
+        <span class="region-accent"></span>
+        <span class="region-name">${label}</span>
+        <span class="region-count">${cards.length} gráfico${cards.length !== 1 ? 's' : ''}</span>
+      </div>
+      <div class="region-cards">${cards.map(d => cardHTML(d, filtered.indexOf(d))).join('')}</div>
+    </div>`;
+  }).join('');
 }
 
-// Lightbox
+function renderEstatal(data) {
+  const body = document.getElementById('bodyEstatal');
+  if (!data.length) { body.innerHTML = ''; return; }
+  const openStates = new Set([...document.querySelectorAll('.state-item.open')].map(el => el.dataset.state));
+  const byState = groupBy(data, 'n');
+  const states  = Object.keys(byState).sort();
+  body.innerHTML = states.map(state => {
+    const cards  = byState[state];
+    const isOpen = openStates.has(state);
+    return `<div class="state-item${isOpen ? ' open' : ''}" data-state="${state}">
+      <div class="state-header" onclick="toggleState(this)">
+        <span class="state-dot"></span>
+        <span class="state-name">${state}</span>
+        <span class="state-count">${cards.length} gráfico${cards.length !== 1 ? 's' : ''}</span>
+        <svg class="chevron" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg>
+      </div>
+      <div class="state-body">
+        <div class="state-cards">${cards.map(d => cardHTML(d, filtered.indexOf(d))).join('')}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── Accordion ─────────────────────────────────
+function toggleState(header) { header.parentElement.classList.toggle('open'); }
+function expandAll()  { document.querySelectorAll('.state-item').forEach(el => el.classList.add('open')); }
+function collapseAll(){ document.querySelectorAll('.state-item').forEach(el => el.classList.remove('open')); }
+
+// ── Lightbox ──────────────────────────────────
 function openLightbox(idx) {
   lbIndex = idx;
   const d = filtered[idx];
   document.getElementById('lbImg').src = d.f;
-  document.getElementById('lbCaption').textContent = `${d.p} \u00b7 ${d.n} \u00b7 ${d.s} (${idx+1}/${filtered.length})`;
+  document.getElementById('lbCaption').textContent = `${d.p} · ${d.n} · ${d.s}  (${idx + 1} / ${filtered.length})`;
   document.getElementById('lightbox').classList.add('open');
 }
-function closeLightbox() {
-  document.getElementById('lightbox').classList.remove('open');
-}
-function navLightbox(dir) {
-  lbIndex = (lbIndex + dir + filtered.length) % filtered.length;
-  openLightbox(lbIndex);
-}
+function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
+function navLightbox(dir) { lbIndex = (lbIndex + dir + filtered.length) % filtered.length; openLightbox(lbIndex); }
 document.addEventListener('keydown', e => {
   if (!document.getElementById('lightbox').classList.contains('open')) return;
-  if (e.key === 'Escape') closeLightbox();
-  if (e.key === 'ArrowLeft') navLightbox(-1);
+  if (e.key === 'Escape')     closeLightbox();
+  if (e.key === 'ArrowLeft')  navLightbox(-1);
   if (e.key === 'ArrowRight') navLightbox(1);
 });
 
 filterPad.addEventListener('change', applyFilters);
-filterCat.addEventListener('change', applyFilters);
 filterSexo.addEventListener('change', applyFilters);
 searchBox.addEventListener('input', applyFilters);
 
-render();
-
 // Nav scroll effect
-const navEl=document.getElementById('nav');if(navEl)window.addEventListener('scroll',()=>navEl.classList.toggle('scrolled',window.scrollY>40));
+const navEl = document.getElementById('nav');
+if (navEl) window.addEventListener('scroll', () => navEl.classList.toggle('scrolled', window.scrollY > 40));
+
+renderAll();
 </script>
 
 </body>
